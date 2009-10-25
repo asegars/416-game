@@ -1,0 +1,28 @@
+Luke Segars
+October 7, 2009
+Milestone 3
+
+This milestone was designed to experiment with scrolling backgrounds.  I took advantage of
+the opportunity and tested player movement along with more advanced camera behavior at 
+the same time as extensions to the base assignment.
+
+Usage
+ - To build, type make.  SDL and SDL_image development libraries are required.
+
+Directions
+ - Use the arrow keys to move the dark blue flying saucer.
+ - Hit the space bar to toggle between which unit the camera is "focusing" on.
+
+Sprite Creation
+ - All of my sprites were hand-drawn in GIMP 2.6.6.  The original GIMP files in XCF format
+   were also included in the images/ folder of the submission.
+
+Extensions
+ - The camera was adjusted to center on the camera "focus" (initially the player) whenever
+    possible.  If the focused piece is in a corner or against an edge, the viewport will
+    bump up against the wall.
+ - X & Y direction movement for player's saucer.  The camera will adjust as necessary to
+    accomodate the player's movements.
+ - The camera's focus can be switched on demand while the game is being played.  An extra
+    "enemy" was added to the game that can be tracked by the camera alternatively to the
+    player's piece.  To toggle between the unit being tracked, press <SPACE>.
