@@ -48,6 +48,7 @@ Manager::~Manager() {
 	if (enemy != NULL) { delete enemy; }
 }
 
+/*
 void Manager::handle_keydown(const SDLKey& key) {
 	switch(key) {
 	case SDLK_UP:
@@ -106,6 +107,7 @@ void Manager::handle_keyup(const SDLKey& key) {
 		break;
 	}
 }
+*/
 
 void Manager::move_enemy() {
 	int padding_size = 110;
@@ -146,8 +148,33 @@ void Manager::play() {
 		}
 
 		SDL_Flip(screen);
+   
+    SDL_PollEvent(&event);
+    Uint8 *keystate = SDL_GetKeyState(NULL);
 
-		while (SDL_PollEvent(&event)) {
+    if(event.type == SDL_QUIT)
+      done = true;
+    if(event.type == SDL_KEYDOWN && keystate[SDLK_ESCAPE]) 
+      done = true;
+    if(event.type == SDL_KEYDOWN && keystate[SDLK_q])
+      done = true;
+
+    if (keystate[SDLK_LEFT])
+      player->decrSpeedX();
+    if (keystate[SDLK_RIGHT])
+      player->incrSpeedX();
+    if (keystate[SDLK_UP])
+      player->decrSpeedY();
+    if (keystate[SDLK_DOWN])
+      player->incrSpeedY();
+    // if (keystate[SDLK_SPACE])
+    //   player.setYSpeed(-300);
+    if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT])
+      player->decelX();
+    if (!keystate[SDLK_UP] && !keystate[SDLK_DOWN])
+      player->decelY();
+
+		/* while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_QUIT:
 				done = true;
@@ -161,7 +188,7 @@ void Manager::play() {
 			default:
 				break;
 			}
-		}
+		} */
 		move_enemy();
 	}
 }

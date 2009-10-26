@@ -118,7 +118,6 @@ void Player::decelY() {
     ySpeed *= DECEL;
   else
     ySpeed = 0;
-
 }
 
 

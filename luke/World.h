@@ -12,6 +12,8 @@
 #ifndef WORLD_H_
 #define WORLD_H_
 
+const int NUM_BACKGROUNDS = 3;
+
 class World : public Drawable {
 public:
 	World(std::string filename);

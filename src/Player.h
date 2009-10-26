@@ -10,6 +10,9 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+const int MAX_SPEED = 300;
+const int DECEL = 0.97;
+
 class Player : public Character {
 public:
 	Player(Sprite* sprite);
@@ -19,6 +22,13 @@ public:
 	void draw();
 	void update(Uint32 ticks);
 	void move(int x, int y);
+
+  void incrSpeedX();
+	void decrSpeedX();
+	void incrSpeedY();
+	void decrSpeedY();
+	void decelX();
+	void decelY();
 
 	int getX() const { return sprite->getX(); }
 	int getY() const { return sprite->getY(); }

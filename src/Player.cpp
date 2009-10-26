@@ -12,7 +12,6 @@
 
 Player::Player(Sprite* spr) :
 	sprite(spr), xMovement(0), yMovement(0), xSpeed(0), ySpeed(0), loadedSprite(false) {
-
 }
 
 Player::Player(std::string filename, float x, float y) :
@@ -54,6 +53,40 @@ void Player::updatePosition(Uint32 ticks) {
 	}
 	incr = xSpeed * static_cast<float> (ticks) * 0.001;
 	sprite->setX(sprite->getX() + incr);
+}
+
+void Player::incrSpeedX() {
+  if(xSpeed < MAX_SPEED)
+    xSpeed += 10;
+}
+
+void Player::decrSpeedX() {
+  if(xSpeed > -MAX_SPEED)
+    xSpeed -= 10;
+}
+
+void Player::incrSpeedY() {
+  if(ySpeed < MAX_SPEED)
+    ySpeed += 10;
+}
+
+void Player::decrSpeedY() {
+  if(ySpeed > -MAX_SPEED)
+    ySpeed -= 10;
+}
+
+void Player::decelX() {
+  if(xSpeed != 0 && (abs(xSpeed) > 10))
+    xSpeed *= DECEL;
+  else
+    xSpeed = 0;
+}
+
+void Player::decelY() {
+  if(ySpeed != 0 && (abs(ySpeed) > 10))
+    ySpeed *= DECEL;
+  else
+    ySpeed = 0;
 }
 
 void Player::move(int x, int y) {

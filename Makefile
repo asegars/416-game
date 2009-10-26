@@ -10,4 +10,4 @@ all:
 	
 clean:
 	rm -f $(EXEC_NAME)
-	rm -f *~
+	rm -f src/*~

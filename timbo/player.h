@@ -29,6 +29,7 @@ public:
 
   float getXSpeed() const { return xSpeed; }
   float getYSpeed() const { return ySpeed; }
+  void setYSpeed(int s) { ySpeed = s; }
 
 private:
   Viewport *view;

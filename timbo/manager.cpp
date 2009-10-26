@@ -117,17 +117,19 @@ void Manager::play() {
       done = true;
 
     if (keystate[SDLK_LEFT])
-        player.decrSpeedX();
+      player.decrSpeedX();
     if (keystate[SDLK_RIGHT])
-        player.incrSpeedX();
+      player.incrSpeedX();
     if (keystate[SDLK_UP])
-        player.decrSpeedY();
+      player.decrSpeedY();
     if (keystate[SDLK_DOWN])
-        player.incrSpeedY();
+      player.incrSpeedY();
+    // if (keystate[SDLK_SPACE])
+    //   player.setYSpeed(-300);
     if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT])
-        player.decelX();
+      player.decelX();
     if (!keystate[SDLK_UP] && !keystate[SDLK_DOWN])
-        player.decelY();
+      player.decelY();
   }
 }
 
