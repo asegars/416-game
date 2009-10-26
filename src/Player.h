@@ -11,6 +11,7 @@
 #define PLAYER_H_
 
 const int MAX_SPEED = 300;
+const int MAX_JUMP = 500;
 const int DECEL = 0.97;
 
 class Player : public Character {

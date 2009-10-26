@@ -92,7 +92,7 @@ void Player::decelY() {
 
 void Player::jump() {
   if (!falling) {
-    ySpeed = -350;
+    ySpeed = -MAX_JUMP;
     falling = true;
   }
 }
