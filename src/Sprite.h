@@ -13,6 +13,8 @@
 class Sprite {
 public:
 	Sprite(std::string filename, float x, float y);
+  Sprite(float posX, float posY, int w, int h, SDL_Surface* i) : x(posX), 
+     y(posY), width(w), height(h), image(i) {}
 	virtual ~Sprite();
 
 	unsigned int getWidth() const { return width; }

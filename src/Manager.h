@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "World.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "FontLibrary.h"
 
 #ifndef MANAGER_H_
@@ -25,11 +26,13 @@ public:
 
 	World* getWorld() const { return world; }
 	Player* getPlayer() const { return player; }
+  Enemy* getEnemy() const { return enemy; }
 	Camera* getCamera() const { return camera; }
 	FontLibrary* getFontLibrary() const { return fontLibrary; }
 
 private:
 	Manager();
+  void loadHero();
 	void handle_keydown(const SDLKey& key);
 	void handle_keyup(const SDLKey& key);
 	void move_enemy();
@@ -38,7 +41,7 @@ private:
 	Camera* camera;
 	World* world;
 	Player* player;
-	Player* enemy;
+	Enemy* enemy;
 	FontLibrary* fontLibrary;
 
 	Uint32 cur_ticks;
@@ -46,8 +49,8 @@ private:
 	Uint32 ticks;
 
 	bool done;
-
 	static Manager* instance;
+  vector<Sprite*> *heroSprites;
 
 	int xVel;	// passed as a parameter to move()
 	int yVel;	// passed as a parameter to move()

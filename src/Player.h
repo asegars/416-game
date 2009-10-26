@@ -6,6 +6,8 @@
  */
 #include "Sprite.h"
 #include "Character.h"
+#include <vector>
+using std::vector;
 
 #ifndef PLAYER_H_
 #define PLAYER_H_
@@ -19,6 +21,7 @@ public:
 	Player(Sprite* sprite);
 	Player(std::string filename, float x, float y);
 	virtual ~Player();
+  void setSprites(vector<Sprite*> *s);
 
 	void draw();
 	void update(Uint32 ticks);
@@ -43,11 +46,14 @@ public:
   void setYSpeed(float s) { ySpeed = s; }
   bool isFalling() const { return falling; }
 
-	virtual Sprite* getSprite() const { return sprite; }
+  virtual SDL_Surface* getPlayer() const { return sprite->getSurface(); }
+  virtual Sprite* getSprite() const { return sprites->at(curSprite); }
 	virtual void updatePosition(Uint32 ticks);
 
 private:
 	void adjustViewport();
+  vector<Sprite*> *sprites;
+  int curSprite;
 	Sprite* sprite;
 	int xMovement;
 	int yMovement;

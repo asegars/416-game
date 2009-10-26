@@ -25,6 +25,15 @@ Player::~Player() {
 	}
 }
 
+void Player::setSprites(vector<Sprite*> *s) {
+  sprites = new vector<Sprite*>;
+  for(unsigned int i = 0; i < s->size(); ++i) {
+    sprites->push_back(s->at(i));
+  }
+  curSprite = 0;
+  std::cout << sprites->size() << std::endl;
+}
+
 void Player::updatePosition(Uint32 ticks) {
 	float height = static_cast<float> (sprite->getHeight());
 	// Cap the player's motion if they are trying to move off of the

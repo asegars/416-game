@@ -27,16 +27,16 @@ Manager::Manager() {
 
 	world = new World("images/background-full.png");
 	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/flying-saucer.png", 50, 150);
+	player = new Player("images/hero.png", 288, 48);
 	fontLibrary = FontLibrary::getInstance();
+  loadHero();
 
 	// Create a red circle that will move in a rectangular pattern
-	enemy = new Player("images/other-saucer.png", 200, 200);
+	enemy = new Enemy("images/other-saucer.png", 200, 200);
 	enemy->move(0, -1);
 
 	camera->observe(enemy);
 	camera->observe(player);
-
 	camera->follow(player);
 
 //	atexit(SDL_Quit);
@@ -50,6 +50,17 @@ Manager::~Manager() {
 	if (camera != NULL) { delete camera; }
 	if (player != NULL) { delete player; }
 	if (enemy != NULL) { delete enemy; }
+}
+
+void Manager::loadHero() {
+  heroSprites = new vector<Sprite*>;
+  heroSprites->push_back( new Sprite(0, 0, 48, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(48, 0, 48, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(92, 0, 48, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(144, 0, 48, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(192, 0, 48, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(240, 0, 48, 48, player->getPlayer()));
+  player->setSprites(heroSprites);
 }
 
 /*

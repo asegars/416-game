@@ -19,6 +19,7 @@
 
 #include <SDL/SDL_ttf.h>
 #include <vector>
+using std::vector;
 
 enum Font { FREE_SANS = 0 };
 
