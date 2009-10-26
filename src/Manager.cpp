@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include "Manager.h"
+#include "FontLibrary.h"
 
 #define WORLD_WIDTH 	800
 #define WORLD_HEIGHT 	600
@@ -25,6 +26,7 @@ Manager::Manager() {
 	world = new World("images/background-full.png");
 	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
 	player = new Player("images/flying-saucer.png", 50, 150);
+	fontLibrary = FontLibrary::getInstance();
 
 	// Create a red circle that will move in a rectangular pattern
 	enemy = new Player("images/other-saucer.png", 200, 200);
