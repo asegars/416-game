@@ -5,12 +5,12 @@
  *      Author: luke
  */
 #include "Sprite.h"
-#include "Drawable.h"
+#include "Character.h"
 
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
-class Player : public Drawable {
+class Player : public Character {
 public:
 	Player(Sprite* sprite);
 	Player(std::string filename, float x, float y);
