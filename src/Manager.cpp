@@ -6,15 +6,17 @@
  */
 #include <SDL/SDL.h>
 #include <string>
+#include <sstream>
 #include <iostream>
 #include "Manager.h"
 #include "FontLibrary.h"
+#include "TextWriter.h"
 
 #define WORLD_WIDTH 	800
 #define WORLD_HEIGHT 	600
 
 Manager::Manager() {
-	screen = SDL_SetVideoMode(WORLD_WIDTH, WORLD_HEIGHT, 16, SDL_HWSURFACE);
+	screen = SDL_SetVideoMode(WORLD_WIDTH, WORLD_HEIGHT, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw std::string("Unable to initialize SDL: ");
@@ -134,11 +136,17 @@ void Manager::move_enemy() {
 
 void Manager::play() {
 	SDL_Event event;
+	TextWriter writer;
 	cur_ticks = SDL_GetTicks();
+	Uint32 start_ticks = cur_ticks;
 
 	done = false;
 	bool pause = false;
 	unsigned int tick_sum = 0;
+	unsigned int frameCount = 0;
+
+	std::stringstream outputStream;
+
 	while (!done) {
 		prev_ticks = cur_ticks;
 		cur_ticks = SDL_GetTicks();
@@ -147,9 +155,19 @@ void Manager::play() {
 
 		if (!pause) {
 			camera->snapshot(screen, ticks);
+
+			// Print the runtime & framerate
+			outputStream << "Sec: " << (cur_ticks - start_ticks) * .001;
+			writer.write(outputStream.str().c_str(), screen, 650, 50);
+			outputStream.str("");
+
+			outputStream << "FPS: " << frameCount / ((cur_ticks - start_ticks) * .001);
+			writer.write(outputStream.str().c_str(), screen, 650, 70);
+			outputStream.str("");
 		}
 
 		SDL_Flip(screen);
+		frameCount++;
    
     SDL_PollEvent(&event);
     Uint8 *keystate = SDL_GetKeyState(NULL);
