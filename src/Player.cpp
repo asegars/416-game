@@ -16,7 +16,7 @@ Player::Player(Sprite* spr) :
 
 Player::Player(std::string filename, float x, float y) :
 	sprite(new Sprite(filename, x, y)), xMovement(0), yMovement(0),
-	xSpeed(0), ySpeed(0), loadedSprite(true) {
+	xSpeed(0), ySpeed(0), loadedSprite(true), falling(true) {
 }
 
 Player::~Player() {
@@ -36,6 +36,7 @@ void Player::updatePosition(Uint32 ticks) {
 	//   right border of the world.
 	if (sprite->getY() > Manager::getInstance()->getWorld()->getHeight() - height && ySpeed > 0) {
 		ySpeed = 0;
+    falling = false;
 	}
 	float incr = ySpeed * static_cast<float> (ticks) * 0.001;
 	sprite->setY(sprite->getY() + incr);
@@ -56,24 +57,26 @@ void Player::updatePosition(Uint32 ticks) {
 }
 
 void Player::incrSpeedX() {
-  if(xSpeed < MAX_SPEED)
+  if(xSpeed < MAX_SPEED && !falling)
     xSpeed += 10;
 }
 
 void Player::decrSpeedX() {
-  if(xSpeed > -MAX_SPEED)
+  if(xSpeed > -MAX_SPEED && !falling)
     xSpeed -= 10;
 }
 
+/*
 void Player::incrSpeedY() {
-  if(ySpeed < MAX_SPEED)
+  if(ySpeed < MAX_SPEED && !falling)
     ySpeed += 10;
 }
 
 void Player::decrSpeedY() {
-  if(ySpeed > -MAX_SPEED)
+  if(ySpeed > -MAX_SPEED && !falling)
     ySpeed -= 10;
 }
+*/
 
 void Player::decelX() {
   if(xSpeed != 0 && (abs(xSpeed) > 10))
@@ -82,11 +85,16 @@ void Player::decelX() {
     xSpeed = 0;
 }
 
+// decelY() is only called when after a player jumps
 void Player::decelY() {
-  if(ySpeed != 0 && (abs(ySpeed) > 10))
-    ySpeed *= DECEL;
-  else
-    ySpeed = 0;
+    ySpeed += 10;
+}
+
+void Player::jump() {
+  if (!falling) {
+    ySpeed = -350;
+    falling = true;
+  }
 }
 
 void Player::move(int x, int y) {

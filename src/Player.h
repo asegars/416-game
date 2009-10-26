@@ -23,12 +23,14 @@ public:
 	void update(Uint32 ticks);
 	void move(int x, int y);
 
+  // Functions specific to user key movements
   void incrSpeedX();
 	void decrSpeedX();
 	void incrSpeedY();
 	void decrSpeedY();
 	void decelX();
 	void decelY();
+  void jump();
 
 	int getX() const { return sprite->getX(); }
 	int getY() const { return sprite->getY(); }
@@ -36,6 +38,9 @@ public:
 	float getYSpeed() const { return ySpeed; }
 	int getWidth() const { return sprite->getWidth(); }
 	int getHeight() const { return sprite->getHeight(); }
+
+  void setYSpeed(float s) { ySpeed = s; }
+  bool isFalling() const { return falling; }
 
 	virtual Sprite* getSprite() const { return sprite; }
 	virtual void updatePosition(Uint32 ticks);
@@ -52,6 +57,7 @@ private:
 	static const float playerSpeed = 300;
 
 	bool loadedSprite;
+  bool falling;
 };
 
 #endif /* PLAYER_H_ */
