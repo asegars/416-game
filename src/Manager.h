@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "World.h"
 #include "Player.h"
+#include "FontLibrary.h"
 
 #ifndef MANAGER_H_
 #define MANAGER_H_
@@ -25,6 +26,7 @@ public:
 	World* getWorld() const { return world; }
 	Player* getPlayer() const { return player; }
 	Camera* getCamera() const { return camera; }
+	FontLibrary* getFontLibrary() const { return fontLibrary; }
 
 private:
 	Manager();
@@ -37,6 +39,7 @@ private:
 	World* world;
 	Player* player;
 	Player* enemy;
+	FontLibrary* fontLibrary;
 
 	Uint32 cur_ticks;
 	Uint32 prev_ticks;
