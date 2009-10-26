@@ -163,15 +163,17 @@ void Manager::play() {
       player->decrSpeedX();
     if (keystate[SDLK_RIGHT])
       player->incrSpeedX();
-    if (keystate[SDLK_UP])
+    /* if (keystate[SDLK_UP])
       player->decrSpeedY();
     if (keystate[SDLK_DOWN])
-      player->incrSpeedY();
-    // if (keystate[SDLK_SPACE])
-    //   player.setYSpeed(-300);
-    if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT])
+      player->incrSpeedY(); */
+    if (keystate[SDLK_SPACE] && !player->isFalling())
+      player->jump();
+    if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT] && !player->isFalling())
       player->decelX();
-    if (!keystate[SDLK_UP] && !keystate[SDLK_DOWN])
+    /* if (!keystate[SDLK_UP] && !keystate[SDLK_DOWN])
+      player->decelY(); */
+    if(player->isFalling())
       player->decelY();
 
 		/* while (SDL_PollEvent(&event)) {
