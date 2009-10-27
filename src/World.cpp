@@ -8,7 +8,7 @@
 #include "World.h"
 
 World::World(std::string filename) {
-	background = new Sprite(filename, 0, 0);
+	background = new Sprite(filename);
 }
 
 World::~World() {

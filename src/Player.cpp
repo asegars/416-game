@@ -6,18 +6,17 @@
  */
 
 #include <iostream>
-
+#include <cmath>
 #include "Player.h"
 #include "Manager.h"
 
 Player::Player(Sprite* spr) :
-	sprite(spr), xMovement(0), yMovement(0), xSpeed(0), ySpeed(0), loadedSprite(false) {
-}
+	sprite(spr), xMovement(0), yMovement(0), xSpeed(0), ySpeed(0), 
+  loadedSprite(false) { interval = 0; }
 
-Player::Player(std::string filename, float x, float y) :
-	sprite(new Sprite(filename, x, y)), xMovement(0), yMovement(0),
-	xSpeed(0), ySpeed(0), loadedSprite(true), falling(true) {
-}
+Player::Player(std::string filename, float xw, float yw) :
+	sprite(new Sprite(filename)), x(xw), y(yw), xMovement(0), yMovement(0),
+	xSpeed(0), ySpeed(0), loadedSprite(true), falling(true) { interval = 0; }
 
 Player::~Player() {
 	if (loadedSprite) {
@@ -31,38 +30,47 @@ void Player::setSprites(vector<Sprite*> *s) {
     sprites->push_back(s->at(i));
   }
   curSprite = 0;
-  std::cout << sprites->size() << std::endl;
 }
 
 void Player::updatePosition(Uint32 ticks) {
 	float height = static_cast<float> (sprite->getHeight());
 	// Cap the player's motion if they are trying to move off of the
 	//   left border of the world.
-	if (sprite->getY() < 0 && ySpeed < 0) {
+	if (y < 0 && ySpeed < 0) {
 		ySpeed = 0;
 	}
 	// Cap the player's motion if they are trying to move off of the
 	//   right border of the world.
-	if (sprite->getY() > Manager::getInstance()->getWorld()->getHeight() - height && ySpeed > 0) {
+	if (y > Manager::getInstance()->getWorld()->getHeight() - height && ySpeed > 0) {
 		ySpeed = 0;
+    y = Manager::getInstance()->getWorld()->getHeight() - height;
     falling = false;
 	}
 	float incr = ySpeed * static_cast<float> (ticks) * 0.001;
-	sprite->setY(sprite->getY() + incr);
+	y += incr;
 
 	float width = static_cast<float> (sprite->getWidth());
 	// Cap the player's motion if they are trying to move off of the
 	//   top  border of the world.
-	if (sprite->getX() < 0 && xSpeed < 0) {
+	if (x < 0 && xSpeed < 0) {
 		xSpeed = 0;
 	}
 	// Cap the player's motion if they are trying to move off of the
 	//   bottom border of the world.
-	if (sprite->getX() > Manager::getInstance()->getWorld()->getWidth() - width && xSpeed > 0) {
+	if (x > Manager::getInstance()->getWorld()->getWidth() - width && xSpeed > 0) {
 		xSpeed = 0;
 	}
 	incr = xSpeed * static_cast<float> (ticks) * 0.001;
-	sprite->setX(sprite->getX() + incr);
+	x += incr;
+  advanceFrame(ticks);
+}
+
+void Player::advanceFrame(Uint32 ticks) {
+  interval += ticks;
+  if (fabs(interval * xSpeed) > 20000) {
+    curSprite = (++curSprite) % sprites->size();
+    interval = 0;
+  }
 }
 
 void Player::incrSpeedX() {
@@ -106,20 +114,20 @@ void Player::jump() {
   }
 }
 
-void Player::move(int x, int y) {
+void Player::move(int moveX, int moveY) {
 	// Adjust the x speed depending on the keypress
-	if (x > 0) {
+	if (moveX > 0) {
 		xSpeed = playerSpeed;
-	} else if (x < 0) {
+	} else if (moveX < 0) {
 		xSpeed = -1 * playerSpeed;
 	} else {
 		xSpeed = 0;
 	}
 
 	// Adjust the y speed depending on the keypress
-	if (y > 0) {
+	if (moveY > 0) {
 		ySpeed = -1 * playerSpeed;
-	} else if (y < 0) {
+	} else if (moveY < 0) {
 		ySpeed = playerSpeed;
 	} else {
 		ySpeed = 0;

@@ -59,15 +59,17 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 		(*iter)->updatePosition(ticks);
 
 		Sprite* sprite = (*iter)->getSprite();
-		unsigned int x = sprite->getX();
-		unsigned int y = sprite->getY();
+		unsigned int x = (*iter)->getX();
+		unsigned int y = (*iter)->getY();
 
+    srcBounds.x = sprite->getPosX();
+    srcBounds.y = sprite->getPosY();
 		srcBounds.w = sprite->getWidth();
 		srcBounds.h = sprite->getHeight();
 		destBounds.x = x - cameraX;
 		destBounds.y = y - cameraY;
 
-		SDL_BlitSurface(sprite->getSurface(), NULL, screen, &destBounds);
+		SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
 		iter++;
 	}
 }

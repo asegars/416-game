@@ -7,11 +7,6 @@
 
 #include "Character.h"
 
-Character::Character() {
-	// TODO Auto-generated constructor stub
+Character::Character() {}
 
-}
-
-Character::~Character() {
-	// TODO Auto-generated destructor stub
-}
+Character::~Character() {}

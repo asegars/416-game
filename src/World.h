@@ -17,6 +17,8 @@ public:
 	World(std::string filename);
 	virtual ~World();
 
+  float getX() const { return 0; }
+  float getY() const { return 0; }
 	int getWidth() const { return background->getWidth(); }
 	int getHeight() const { return background->getHeight(); }
 	Sprite* getSprite() const { return background; }

@@ -8,11 +8,10 @@
 #include <SDL/SDL_image.h>
 #include "Sprite.h"
 
-Sprite::Sprite(std::string filename, float x, float y) {
+Sprite::Sprite(std::string filename) {
 	image = IMG_Load(filename.c_str());
-
-	this->x = x;
-	this->y = y;
+  posX = 0;
+  posY = 0;
 
 	width = image->w;
 	height = image->h;

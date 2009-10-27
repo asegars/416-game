@@ -27,7 +27,7 @@ Manager::Manager() {
 
 	world = new World("images/background-full.png");
 	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/hero.png", 288, 48);
+	player = new Player("images/hero.png", 50, WORLD_HEIGHT - 50);
 	fontLibrary = FontLibrary::getInstance();
   loadHero();
 
@@ -178,7 +178,7 @@ void Manager::play() {
 		}
 
 		SDL_Flip(screen);
-		frameCount++;
+		++frameCount;
    
     SDL_PollEvent(&event);
     Uint8 *keystate = SDL_GetKeyState(NULL);

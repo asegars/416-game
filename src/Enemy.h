@@ -14,15 +14,17 @@
 class Enemy : public Character {
 public:
 	Enemy(Sprite* sprite);
-	Enemy(std::string filename, float x, float y);
+	Enemy(std::string filename, float xw, float yw);
 	virtual ~Enemy();
 
 	void draw();
 	void update(Uint32 ticks);
-	void move(int x, int y);
+	void move(int, int);
 
-	int getX() const { return sprite->getX(); }
-	int getY() const { return sprite->getY(); }
+	float getX() const { return x; }
+	float getY() const { return y; }
+	void setX(float nx) { x = nx; }
+	void setY(float ny) { y = ny; }
 	float getXSpeed() const { return xSpeed; }
 	float getYSpeed() const { return ySpeed; }
 	int getWidth() const { return sprite->getWidth(); }
@@ -37,6 +39,8 @@ private:
 	int xMovement;
 	int yMovement;
 
+	float x; 
+  float y;
 	float xSpeed;
 	float ySpeed;
 

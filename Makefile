@@ -1,6 +1,6 @@
 # Compiler flags
 SDL_LIB = `sdl-config --libs` -lSDL_ttf -lSDL_image
-CFLAGS = `sdl-config --cflags` -W -Wall -ggdb -O0 -pg
+CFLAGS = `sdl-config --cflags` -W -Wall -ggdb -O0
 
 # The name of the executable to make.
 EXEC_NAME = run

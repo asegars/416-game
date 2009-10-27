@@ -14,6 +14,9 @@ class Character : public Drawable {
 public:
 	Character();
 	virtual ~Character();
+
+  virtual float getX() const { return 0; }
+  virtual float getY() const { return 0; }
 };
 
 #endif /* CHARACTER_H_ */

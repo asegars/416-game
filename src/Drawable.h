@@ -15,6 +15,8 @@ public:
 	virtual ~Drawable();
 
 	virtual Sprite* getSprite() const = 0;
+  virtual float getX() const = 0;
+  virtual float getY() const = 0;
 	virtual void updatePosition(Uint32 ticks) = 0;
 };
 

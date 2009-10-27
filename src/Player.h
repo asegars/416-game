@@ -25,7 +25,8 @@ public:
 
 	void draw();
 	void update(Uint32 ticks);
-	void move(int x, int y);
+  void advanceFrame(Uint32 ticks);
+	void move(int, int);
 
   // Functions specific to user key movements
   void incrSpeedX();
@@ -36,8 +37,10 @@ public:
 	void decelY();
   void jump();
 
-	int getX() const { return sprite->getX(); }
-	int getY() const { return sprite->getY(); }
+	float getX() const { return x; }
+	float getY() const { return y; }
+	void setX(float nx) { x = nx; }
+	void setY(float ny) { y = ny; }
 	float getXSpeed() const { return xSpeed; }
 	float getYSpeed() const { return ySpeed; }
 	int getWidth() const { return sprite->getWidth(); }
@@ -54,10 +57,13 @@ private:
 	void adjustViewport();
   vector<Sprite*> *sprites;
   int curSprite;
+  int interval;
 	Sprite* sprite;
 	int xMovement;
 	int yMovement;
 
+	float x; 
+  float y;
 	float xSpeed;
 	float ySpeed;
 

@@ -12,21 +12,19 @@
 
 class Sprite {
 public:
-	Sprite(std::string filename, float x, float y);
-  Sprite(float posX, float posY, int w, int h, SDL_Surface* i) : x(posX), 
-     y(posY), width(w), height(h), image(i) {}
+	Sprite(std::string filename);
+  Sprite(float x, float y, int w, int h, SDL_Surface* i) : posX(x), 
+     posY(y), width(w), height(h), image(i) {}
 	virtual ~Sprite();
 
 	unsigned int getWidth() const { return width; }
 	unsigned int getHeight() const { return height; }
-	float getX() const { return x; }
-	float getY() const { return y; }
-	void setX(float nx) { x = nx; }
-	void setY(float ny) { y = ny; }
+  float getPosX() const { return posX; }
+  float getPosY() const { return posY; }
 	SDL_Surface* getSurface() const { return image; }
 private:
-	float x;
-	float y;
+  float posX; 
+  float posY;
 	unsigned int width;
 	unsigned int height;
 	SDL_Surface* image;
