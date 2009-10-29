@@ -33,8 +33,6 @@ public:
 private:
 	Manager();
   void loadHero();
-	void handle_keydown(const SDLKey& key);
-	void handle_keyup(const SDLKey& key);
 	void move_enemy();
 
 	SDL_Surface* screen;

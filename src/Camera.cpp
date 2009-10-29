@@ -7,14 +7,15 @@
 #include <iostream>
 #include "Camera.h"
 
-Camera::Camera(World* world, unsigned int width, unsigned int height) : cameraX(0), cameraY(0) {
+Camera::Camera(World* world, unsigned int width, unsigned int height) : 
+     cameraX(0), cameraY(0) {
 	this->world = world;
 	viewWidth = width;
 	viewHeight = height;
 }
 
 Camera::~Camera() {
-	// TODO Auto-generated destructor stub
+	//delete world;
 }
 
 void Camera::relocate() {

@@ -33,15 +33,15 @@ void Player::setSprites(vector<Sprite*> *s) {
 }
 
 void Player::updatePosition(Uint32 ticks) {
-	float height = static_cast<float> (sprite->getHeight());
+	float height = static_cast<float> (sprites->at(curSprite)->getHeight());
 	// Cap the player's motion if they are trying to move off of the
-	//   left border of the world.
-	if (y < 0 && ySpeed < 0) {
+	//   top  border of the world.
+	if (y <= 0 && ySpeed < 0) {
 		ySpeed = 0;
 	}
 	// Cap the player's motion if they are trying to move off of the
-	//   right border of the world.
-	if (y > Manager::getInstance()->getWorld()->getHeight() - height && ySpeed > 0) {
+	//   bottom border of the world.
+	if (y >= Manager::getInstance()->getWorld()->getHeight() - height && ySpeed > 0) {
 		ySpeed = 0;
     y = Manager::getInstance()->getWorld()->getHeight() - height;
     falling = false;
@@ -49,15 +49,15 @@ void Player::updatePosition(Uint32 ticks) {
 	float incr = ySpeed * static_cast<float> (ticks) * 0.001;
 	y += incr;
 
-	float width = static_cast<float> (sprite->getWidth());
+	float width = static_cast<float> (sprites->at(curSprite)->getWidth());
 	// Cap the player's motion if they are trying to move off of the
-	//   top  border of the world.
-	if (x < 0 && xSpeed < 0) {
+	//   left border of the world.
+	if (x <= 0 && xSpeed < 0) {
 		xSpeed = 0;
 	}
 	// Cap the player's motion if they are trying to move off of the
-	//   bottom border of the world.
-	if (x > Manager::getInstance()->getWorld()->getWidth() - width && xSpeed > 0) {
+	//   right border of the world.
+	if (x >= Manager::getInstance()->getWorld()->getWidth() - width && xSpeed > 0) {
 		xSpeed = 0;
 	}
 	incr = xSpeed * static_cast<float> (ticks) * 0.001;
@@ -67,9 +67,23 @@ void Player::updatePosition(Uint32 ticks) {
 
 void Player::advanceFrame(Uint32 ticks) {
   interval += ticks;
-  if (fabs(interval * xSpeed) > 20000) {
-    curSprite = (++curSprite) % sprites->size();
+  if (fabs(interval * xSpeed) > 15000 && xSpeed > 0) {   
+    curSprite = (++curSprite) % (sprites->size()/2);
+    if(curSprite > 6 || curSprite == 0)
+      curSprite = 1;
     interval = 0;
+  }
+  else if (fabs(interval * xSpeed) > 15000 && xSpeed < 0) { 
+    curSprite = (++curSprite) % (sprites->size());
+    if(curSprite < 8 || curSprite == 0)
+      curSprite = 8;
+    interval = 0;
+  }
+  else if (xSpeed == 0) {
+    if(curSprite < 7)
+      curSprite = 0;
+    else
+      curSprite = 7;
   }
 }
 

@@ -36,11 +36,11 @@ public:
 private:
 	void adjustViewport();
 	Sprite* sprite;
-	int xMovement;
-	int yMovement;
 
 	float x; 
   float y;
+	int xMovement;
+	int yMovement;
 	float xSpeed;
 	float ySpeed;
 

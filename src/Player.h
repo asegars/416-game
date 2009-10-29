@@ -12,9 +12,9 @@ using std::vector;
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
-const int MAX_SPEED = 300;
-const int MAX_JUMP = 500;
-const int DECEL = 0.97;
+const int MAX_SPEED = 200;
+const int MAX_JUMP = 400;
+const int DECEL = 0.94;
 
 class Player : public Character {
 public:
@@ -56,14 +56,14 @@ public:
 private:
 	void adjustViewport();
   vector<Sprite*> *sprites;
-  int curSprite;
+  unsigned int curSprite;
   int interval;
 	Sprite* sprite;
-	int xMovement;
-	int yMovement;
 
 	float x; 
   float y;
+	int xMovement;
+	int yMovement;
 	float xSpeed;
 	float ySpeed;
 
