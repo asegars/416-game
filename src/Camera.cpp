@@ -6,6 +6,8 @@
  */
 #include <iostream>
 #include "Camera.h"
+#include "terrain/Terrain.h"
+#include "terrain/SolidTerrain.h"
 
 Camera::Camera(World* world, unsigned int width, unsigned int height) : 
      cameraX(0), cameraY(0) {
@@ -48,7 +50,8 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	SDL_Rect srcBounds = {cameraX, cameraY, viewWidth, viewHeight};
 	SDL_Rect destBounds = {0, 0, 0, 0};
 
-  unsigned int i = 0;
+	SolidTerrain* terrain = new SolidTerrain(200, 650);
+  	unsigned int i = 0;
 
 	// If the item that was just updated is what's being tracked,
 	//   readjust the camera location.
@@ -56,6 +59,9 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 
 	SDL_BlitSurface(worldSprite->getSurface(), &srcBounds, screen, NULL);
 
+	SDL_Rect terrainBounds = {0, 0, 80, 80};
+	SDL_Rect terrainPos = {terrain->getX() - cameraX, terrain->getY() - cameraY, 0, 0};
+	SDL_BlitSurface(terrain->getSprite()->getSurface(), &terrainBounds, screen, &terrainPos);
 	// Blit each drawable figure onto the world.
 	std::vector<Drawable *>::const_iterator iter = subjects.begin();
 	while (iter != subjects.end()) {

@@ -5,9 +5,11 @@
  *      Author: luke
  */
 #include <string>
+#include <vector>
 
 #include "Sprite.h"
 #include "Drawable.h"
+#include "terrain/Terrain.h"
 
 #ifndef WORLD_H_
 #define WORLD_H_
@@ -25,6 +27,7 @@ public:
 	virtual void updatePosition(Uint32) {}
 private:
 	Sprite* background;
+	std::vector<Terrain *> terrain;
 };
 
 #endif /* WORLD_H_ */
