@@ -12,7 +12,7 @@
 
 class SolidTerrain : public Terrain {
 public:
-	SolidTerrain(int x, int y);
+	SolidTerrain();
 	virtual ~SolidTerrain();
 };
 

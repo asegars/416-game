@@ -13,20 +13,21 @@
 
 class Terrain : public Drawable {
 public:
-	Terrain(Sprite* terrainSprite, int x, int y);
+	Terrain(Sprite* terrainSprite);
 	virtual ~Terrain();
 
+//	int getX() { return xLoc; }
+//	int getY() { return yLoc; }
 	int getWidth() { return width; }
 	int getHeight() { return height; }
-    virtual float getX() const { return xLoc; }
-    virtual float getY() const { return yLoc; }
+    virtual float getX() const { return 0; }
+    virtual float getY() const { return 0; }
 	virtual Sprite* getSprite() const { return sprite; }
 	virtual void updatePosition(Uint32 ticks) {}
 
 	static int getSize() { return width; }
 protected:
 	Sprite* sprite;
-	int xLoc, yLoc;
 	static int width, height;
 };
 

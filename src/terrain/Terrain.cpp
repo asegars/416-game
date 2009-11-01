@@ -10,8 +10,9 @@
 int Terrain::width = 80;
 int Terrain::height = 80;
 
-Terrain::Terrain(Sprite* terrainSprite, int x, int y) : sprite(terrainSprite), xLoc(x), yLoc(y) {
-
+Terrain::Terrain(Sprite* terrainSprite) : sprite(terrainSprite) {
+	width = sprite->getWidth();
+	height = sprite->getHeight();
 }
 
 Terrain::~Terrain() {

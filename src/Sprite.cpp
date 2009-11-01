@@ -5,6 +5,7 @@
  *      Author: luke
  */
 
+#include <iostream>
 #include <SDL/SDL_image.h>
 #include "Sprite.h"
 
@@ -18,6 +19,7 @@ Sprite::Sprite(std::string filename) {
 
 	// For future use.  This is currently always true.
 	loadedImage = true;
+	std::cout << "Loaded sprite [" << filename << "]" << std::endl;
 }
 
 Sprite::~Sprite() {

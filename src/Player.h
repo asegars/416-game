@@ -21,7 +21,7 @@ public:
 	Player(Sprite* sprite);
 	Player(std::string filename, float x, float y);
 	virtual ~Player();
-  void setSprites(vector<Sprite*> *s);
+	void setSprites(std::vector<Sprite*> *s);
 
 	void draw();
 	void update(Uint32 ticks);
@@ -34,14 +34,6 @@ public:
 	void decelY();
   void jump();
 
-	float getX() const { return x; }
-	float getY() const { return y; }
-	void setX(float nx) { x = nx; }
-	void setY(float ny) { y = ny; }
-	float getXSpeed() const { return xSpeed; }
-	float getYSpeed() const { return ySpeed; }
-	int getWidth() const { return sprites->at(curSprite)->getWidth(); }
-	int getHeight() const { return sprites->at(curSprite)->getHeight(); }
   int getSize() const { return sprites->size(); }
 
   void setYSpeed(float s) { ySpeed = s; }
@@ -53,15 +45,8 @@ public:
 
 private:
 	void adjustViewport();
-  vector<Sprite*> *sprites;
-  unsigned int curSprite;
   int interval;
 	Sprite* sprite;
-
-	float x; 
-  float y;
-	float xSpeed;
-	float ySpeed;
 
 	bool loadedSprite;
   bool falling;

@@ -11,6 +11,7 @@
 #include <time.h>
 #include "Manager.h"
 #include "FontLibrary.h"
+#include "terrain/SolidTerrain.h"
 #include "TextWriter.h"
 
 #define WORLD_WIDTH 	800
@@ -27,44 +28,47 @@ Manager::Manager() {
 		throw std::string("Unable to set video mode!");
 	}
 
-  srand(time(NULL));
+	srand(time(NULL));
 	world = new World("images/background-full.png");
 	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
 	player = new Player("images/heros.png", 50, 800);
-  enemy = new Enemy("images/heckran.png", 0, 0);
+	enemy = new Enemy("images/heckran.png", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
-  loadHero();
-  loadEnemies();
-  for(unsigned int i = 0; i < enemies.size(); ++i) {
+	loadHero();
+	loadEnemies();
+	loadTerrain();
+	for(unsigned int i = 0; i < enemies.size(); ++i) {
 	  camera->observe(enemies.at(i));
-  }
+	}
 	camera->observe(player);
 	camera->follow(player);
-
-//	atexit(SDL_Quit);
 }
 
+// TODO: Fix segfault here.
 Manager::~Manager() {
 	SDL_Quit();
 
+	std::cout << "Clearing" << std::endl;
 //	if (screen != NULL) { delete screen; }
 	if (world != NULL) { delete world; }
 	if (camera != NULL) { delete camera; }
 	if (player != NULL) { delete player; }
-  if (enemy != NULL) { delete enemy; }
+    if (enemy != NULL) { delete enemy; }
 
   for(unsigned int i = 0; i < heroSprites->size(); ++i) {
-    delete (heroSprites->at(i));
+	  if (heroSprites->at(i) != NULL) delete heroSprites->at(i);
   }
-  delete heroSprites;
-  for(unsigned int j = 0; j < enemySprites->size(); ++j) {
-    delete (enemySprites->at(j));
-  }
-  delete enemySprites;
-  for(unsigned int k = 0; k < enemies.size(); ++k) {
-    delete (enemies.at(k));
-  }
+  if (heroSprites != NULL) delete heroSprites;
 
+  for(unsigned int j = 0; j < enemySprites->size(); ++j) {
+    if (enemySprites->at(j) != NULL) delete enemySprites->at(j);
+  }
+  if (enemySprites != NULL) delete enemySprites;
+
+  for(unsigned int k = 0; k < enemies.size(); ++k) {
+    if (enemies.at(k) != NULL) delete enemies.at(k);
+  }
+   std::cout << "Clearing" << std::endl;
 }
 
 void Manager::loadHero() {
@@ -128,6 +132,11 @@ bool Manager::collision() {
   }
   
   return false;
+}
+
+void Manager::loadTerrain() {
+	SolidTerrain* terrain = new SolidTerrain();
+	world->add(terrain, 2, 9);
 }
 
 void Manager::play() {
