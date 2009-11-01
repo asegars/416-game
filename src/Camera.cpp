@@ -48,6 +48,8 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	SDL_Rect srcBounds = {cameraX, cameraY, viewWidth, viewHeight};
 	SDL_Rect destBounds = {0, 0, 0, 0};
 
+  unsigned int i = 0;
+
 	// If the item that was just updated is what's being tracked,
 	//   readjust the camera location.
 	relocate();
@@ -71,7 +73,8 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 		destBounds.y = y - cameraY;
 
 		SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
-		iter++;
+		++iter;
+    ++i;
 	}
 }
 
@@ -92,4 +95,8 @@ void Camera::setY(int y) {
 	if (y > viewHeight) { y = viewHeight; return; }
 
 	cameraY = y;
+}
+
+void Camera::setCollision(bool indicator) {
+  playerCollision = indicator;
 }

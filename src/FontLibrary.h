@@ -21,7 +21,7 @@
 #include <vector>
 using std::vector;
 
-enum Font { FREE_SANS = 0 };
+enum Font { FREE_SANS = 0, AGENT = 1 };
 
 class FontLibrary {
 public:

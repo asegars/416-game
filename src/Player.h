@@ -14,7 +14,7 @@ using std::vector;
 
 const int MAX_SPEED = 200;
 const int MAX_JUMP = 400;
-const int DECEL = 0.94;
+const int DECEL = 0.95;
 
 class Player : public Character {
 public:
@@ -26,13 +26,10 @@ public:
 	void draw();
 	void update(Uint32 ticks);
   void advanceFrame(Uint32 ticks);
-	void move(int, int);
 
   // Functions specific to user key movements
   void incrSpeedX();
 	void decrSpeedX();
-	void incrSpeedY();
-	void decrSpeedY();
 	void decelX();
 	void decelY();
   void jump();
@@ -43,8 +40,9 @@ public:
 	void setY(float ny) { y = ny; }
 	float getXSpeed() const { return xSpeed; }
 	float getYSpeed() const { return ySpeed; }
-	int getWidth() const { return sprite->getWidth(); }
-	int getHeight() const { return sprite->getHeight(); }
+	int getWidth() const { return sprites->at(curSprite)->getWidth(); }
+	int getHeight() const { return sprites->at(curSprite)->getHeight(); }
+  int getSize() const { return sprites->size(); }
 
   void setYSpeed(float s) { ySpeed = s; }
   bool isFalling() const { return falling; }
@@ -62,12 +60,8 @@ private:
 
 	float x; 
   float y;
-	int xMovement;
-	int yMovement;
 	float xSpeed;
 	float ySpeed;
-
-	static const float playerSpeed = 300;
 
 	bool loadedSprite;
   bool falling;

@@ -6,22 +6,21 @@
  */
 
 #include <iostream>
-#include <cmath>
 #include "Player.h"
 #include "Manager.h"
 
 Player::Player(Sprite* spr) :
-	sprite(spr), xMovement(0), yMovement(0), xSpeed(0), ySpeed(0), 
-  loadedSprite(false) { interval = 0; }
+	sprite(spr), x(0), y(48), xSpeed(0), ySpeed(0), loadedSprite(false) 
+  { interval = 0; }
 
 Player::Player(std::string filename, float xw, float yw) :
-	sprite(new Sprite(filename)), x(xw), y(yw), xMovement(0), yMovement(0),
-	xSpeed(0), ySpeed(0), loadedSprite(true), falling(true) { interval = 0; }
+	sprite(new Sprite(filename)), x(xw), y(yw), xSpeed(0), ySpeed(0), 
+  loadedSprite(true), falling(true) { interval = 0; }
 
 Player::~Player() {
-	if (loadedSprite) {
+	if (loadedSprite)
 		delete sprite;
-	}
+  delete sprites;
 }
 
 void Player::setSprites(vector<Sprite*> *s) {
@@ -90,24 +89,17 @@ void Player::advanceFrame(Uint32 ticks) {
 void Player::incrSpeedX() {
   if(xSpeed < MAX_SPEED && !falling)
     xSpeed += 10;
+  else if(xSpeed < MAX_SPEED && (abs(xSpeed) > 20))
+    xSpeed += 2;
 }
 
 void Player::decrSpeedX() {
   if(xSpeed > -MAX_SPEED && !falling)
     xSpeed -= 10;
+  else if(xSpeed > -MAX_SPEED && (abs(xSpeed) > 20))
+    xSpeed -= 2;
 }
 
-/*
-void Player::incrSpeedY() {
-  if(ySpeed < MAX_SPEED && !falling)
-    ySpeed += 10;
-}
-
-void Player::decrSpeedY() {
-  if(ySpeed > -MAX_SPEED && !falling)
-    ySpeed -= 10;
-}
-*/
 
 void Player::decelX() {
   if(xSpeed != 0 && (abs(xSpeed) > 10))
@@ -126,24 +118,4 @@ void Player::jump() {
     ySpeed = -MAX_JUMP;
     falling = true;
   }
-}
-
-void Player::move(int moveX, int moveY) {
-	// Adjust the x speed depending on the keypress
-	if (moveX > 0) {
-		xSpeed = playerSpeed;
-	} else if (moveX < 0) {
-		xSpeed = -1 * playerSpeed;
-	} else {
-		xSpeed = 0;
-	}
-
-	// Adjust the y speed depending on the keypress
-	if (moveY > 0) {
-		ySpeed = -1 * playerSpeed;
-	} else if (moveY < 0) {
-		ySpeed = playerSpeed;
-	} else {
-		ySpeed = 0;
-	}
 }

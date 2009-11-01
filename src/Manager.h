@@ -33,13 +33,15 @@ public:
 private:
 	Manager();
   void loadHero();
-	void move_enemy();
+  void loadEnemies();
+  bool collision();
 
 	SDL_Surface* screen;
 	Camera* camera;
 	World* world;
 	Player* player;
-	Enemy* enemy;
+  Enemy* enemy;
+	vector<Enemy*> enemies;
 	FontLibrary* fontLibrary;
 
 	Uint32 cur_ticks;
@@ -49,6 +51,7 @@ private:
 	bool done;
 	static Manager* instance;
   vector<Sprite*> *heroSprites;
+  vector<Sprite*> *enemySprites;
 
 	int xVel;	// passed as a parameter to move()
 	int yVel;	// passed as a parameter to move()

@@ -9,6 +9,8 @@
 #define CHARACTER_H_
 
 #include "Drawable.h"
+#include <cmath>
+
 
 class Character : public Drawable {
 public:
