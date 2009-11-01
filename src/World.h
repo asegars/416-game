@@ -24,7 +24,7 @@ public:
 	int getWidth() const { return background->getWidth(); }
 	int getHeight() const { return background->getHeight(); }
 	Sprite* getSprite() const { return background; }
-	virtual void updatePosition(Uint32 ticks) {}
+	virtual void updatePosition(Uint32) {}
 private:
 	Sprite* background;
 	std::vector<Terrain *> terrain;

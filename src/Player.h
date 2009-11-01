@@ -12,9 +12,9 @@ using std::vector;
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
-const int MAX_SPEED = 300;
-const int MAX_JUMP = 500;
-const int DECEL = 0.97;
+const int MAX_SPEED = 200;
+const int MAX_JUMP = 400;
+const int DECEL = 0.95;
 
 class Player : public Character {
 public:
@@ -26,13 +26,10 @@ public:
 	void draw();
 	void update(Uint32 ticks);
   void advanceFrame(Uint32 ticks);
-	void move(int, int);
 
   // Functions specific to user key movements
   void incrSpeedX();
 	void decrSpeedX();
-	void incrSpeedY();
-	void decrSpeedY();
 	void decelX();
 	void decelY();
   void jump();
@@ -43,8 +40,9 @@ public:
 	void setY(float ny) { y = ny; }
 	float getXSpeed() const { return xSpeed; }
 	float getYSpeed() const { return ySpeed; }
-	int getWidth() const { return sprite->getWidth(); }
-	int getHeight() const { return sprite->getHeight(); }
+	int getWidth() const { return sprites->at(curSprite)->getWidth(); }
+	int getHeight() const { return sprites->at(curSprite)->getHeight(); }
+  int getSize() const { return sprites->size(); }
 
   void setYSpeed(float s) { ySpeed = s; }
   bool isFalling() const { return falling; }
@@ -56,18 +54,14 @@ public:
 private:
 	void adjustViewport();
   vector<Sprite*> *sprites;
-  int curSprite;
+  unsigned int curSprite;
   int interval;
 	Sprite* sprite;
-	int xMovement;
-	int yMovement;
 
 	float x; 
   float y;
 	float xSpeed;
 	float ySpeed;
-
-	static const float playerSpeed = 300;
 
 	bool loadedSprite;
   bool falling;

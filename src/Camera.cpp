@@ -9,14 +9,15 @@
 #include "terrain/Terrain.h"
 #include "terrain/SolidTerrain.h"
 
-Camera::Camera(World* world, unsigned int width, unsigned int height) : cameraX(0), cameraY(0) {
+Camera::Camera(World* world, unsigned int width, unsigned int height) : 
+     cameraX(0), cameraY(0) {
 	this->world = world;
 	viewWidth = width;
 	viewHeight = height;
 }
 
 Camera::~Camera() {
-	// TODO Auto-generated destructor stub
+	//delete world;
 }
 
 void Camera::relocate() {
@@ -50,6 +51,8 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	SDL_Rect destBounds = {0, 0, 0, 0};
 
 	SolidTerrain* terrain = new SolidTerrain(200, 650);
+  	unsigned int i = 0;
+
 	// If the item that was just updated is what's being tracked,
 	//   readjust the camera location.
 	relocate();
@@ -76,7 +79,8 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 		destBounds.y = y - cameraY;
 
 		SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
-		iter++;
+		++iter;
+    ++i;
 	}
 }
 
@@ -97,4 +101,8 @@ void Camera::setY(int y) {
 	if (y > viewHeight) { y = viewHeight; return; }
 
 	cameraY = y;
+}
+
+void Camera::setCollision(bool indicator) {
+  playerCollision = indicator;
 }

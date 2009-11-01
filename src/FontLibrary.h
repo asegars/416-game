@@ -21,14 +21,14 @@
 #include <vector>
 using std::vector;
 
-enum Font { FREE_SANS = 0 };
+enum Font { FREE_SANS = 0, AGENT = 1 };
 
 class FontLibrary {
 public:
 	static FontLibrary* getInstance();
 	virtual ~FontLibrary();
 
-	TTF_Font* getFont(Font font, int size) const;
+	TTF_Font* getFont(Font, int) const;
 
 private:
 	std::vector<TTF_Font *> fonts;

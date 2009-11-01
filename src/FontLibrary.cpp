@@ -40,9 +40,10 @@ FontLibrary* FontLibrary::getInstance() {
 
 void FontLibrary::loadFonts() {
 	fonts.push_back(TTF_OpenFont("fonts/FreeSansBold.ttf", 16));
+  fonts.push_back(TTF_OpenFont("fonts/AgentOrange.ttf", 20));
 }
 
-/**
+/*
  * Returns the specified font in the given pixel size.
  *
  * Note: the pixel size is currently ignored.

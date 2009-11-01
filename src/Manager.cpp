@@ -8,12 +8,14 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <time.h>
 #include "Manager.h"
 #include "FontLibrary.h"
 #include "TextWriter.h"
 
 #define WORLD_WIDTH 	800
 #define WORLD_HEIGHT 	600
+#define NUM_ENEMIES   5
 
 Manager::Manager() {
 	screen = SDL_SetVideoMode(WORLD_WIDTH, WORLD_HEIGHT, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
@@ -25,17 +27,17 @@ Manager::Manager() {
 		throw std::string("Unable to set video mode!");
 	}
 
+  srand(time(NULL));
 	world = new World("images/background-full.png");
 	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/hero.png", 50, WORLD_HEIGHT - 50);
+	player = new Player("images/heros.png", 50, 800);
+  enemy = new Enemy("images/heckran.png", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
   loadHero();
-
-	// Create a red circle that will move in a rectangular pattern
-	enemy = new Enemy("images/other-saucer.png", 200, 200);
-	enemy->move(0, -1);
-
-	camera->observe(enemy);
+  loadEnemies();
+  for(unsigned int i = 0; i < enemies.size(); ++i) {
+	  camera->observe(enemies.at(i));
+  }
 	camera->observe(player);
 	camera->follow(player);
 
@@ -49,100 +51,83 @@ Manager::~Manager() {
 	if (world != NULL) { delete world; }
 	if (camera != NULL) { delete camera; }
 	if (player != NULL) { delete player; }
-	if (enemy != NULL) { delete enemy; }
+  if (enemy != NULL) { delete enemy; }
+
+  for(unsigned int i = 0; i < heroSprites->size(); ++i) {
+    delete (heroSprites->at(i));
+  }
+  delete heroSprites;
+  for(unsigned int j = 0; j < enemySprites->size(); ++j) {
+    delete (enemySprites->at(j));
+  }
+  delete enemySprites;
+  for(unsigned int k = 0; k < enemies.size(); ++k) {
+    delete (enemies.at(k));
+  }
+
 }
 
 void Manager::loadHero() {
   heroSprites = new vector<Sprite*>;
-  heroSprites->push_back( new Sprite(0, 0, 48, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(48, 0, 48, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(92, 0, 48, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(144, 0, 48, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(192, 0, 48, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(240, 0, 48, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(0, 0, 12, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(12, 0, 36, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(48, 0, 35, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(83, 0, 22, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(105, 0, 37, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(142, 0, 33, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(175, 0, 25, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(388, 0, 12, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(352, 0, 36, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(317, 0, 35, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(295, 0, 22, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(258, 0, 37, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(225, 0, 33, 48, player->getPlayer()));
+  heroSprites->push_back( new Sprite(200, 0, 25, 48, player->getPlayer()));
   player->setSprites(heroSprites);
 }
 
-/*
-void Manager::handle_keydown(const SDLKey& key) {
-	switch(key) {
-	case SDLK_UP:
-		yVel = 1;
-		player->move(xVel, yVel);
-		break;
-	case SDLK_DOWN:
-		yVel = -1;
-		player->move(xVel, yVel);
-		break;
-	case SDLK_RIGHT:
-		xVel = 1;
-		player->move(xVel, yVel);
-		break;
-	case SDLK_LEFT:
-		xVel = -1;
-		player->move(xVel, yVel);
-		break;
-	case SDLK_q:
-		done = true;
-	case SDLK_SPACE:
-		// If the player is currently being followed, follow the enemy.
-		if (camera->getFollowedPlayer() == player) {
-			camera->follow(enemy);
-			std::cout << "Now following enemy." << std::endl;
-		}
-		// If the enemy is currently being followed, follow the player.
-		else if (camera->getFollowedPlayer() == enemy) {
-			camera->follow(player);
-			std::cout << "Now following player." << std::endl;
-		}
-	default:
-		break;
-	}
+void Manager::loadEnemies() {
+  enemySprites = new vector<Sprite*>;
+  enemySprites->push_back( new Sprite(0, 0, 43, 48, enemy->getEnemy()));
+  enemySprites->push_back( new Sprite(43, 0, 43, 48, enemy->getEnemy()));
+  enemySprites->push_back( new Sprite(86, 0, 43, 48, enemy->getEnemy()));
+  enemySprites->push_back( new Sprite(129, 0, 43, 48, enemy->getEnemy()));
+  enemySprites->push_back( new Sprite(172, 0, 43, 48, enemy->getEnemy()));
+  enemySprites->push_back( new Sprite(215, 0, 43, 48, enemy->getEnemy()));
+  for(unsigned int i = 0; i < NUM_ENEMIES; ++i) {
+    enemies.push_back(new Enemy("images/heckran.png", 
+                                (rand() % 2400), 912));
+    enemies.at(i)->setSprites(enemySprites);
+  }
 }
 
-void Manager::handle_keyup(const SDLKey& key) {
-	switch(key) {
-	case SDLK_UP:
-		yVel = 0 ;
-		player->move(xVel, yVel);
-		break;
-	case SDLK_DOWN:
-		yVel = 0;
-		player->move(xVel, yVel);
-		break;
-	case SDLK_RIGHT:
-		xVel = 0;
-		player->move(xVel, yVel);
-		break;
-	case SDLK_LEFT:
-		xVel = 0;
-		player->move(xVel, yVel);
-		break;
-	default:
-		break;
-	}
-}
-*/
+bool Manager::collision() {
 
-void Manager::move_enemy() {
-	int padding_size = 110;
-	// If the enemy reaches the bottom pad, turn right.
-	if (enemy->getY() > world->getHeight() - padding_size && enemy->getYSpeed() > 0) {
-		enemy->move(1, 0);
-	}
-	// If the enemy reaches the top pad, turn left.
-	if (enemy->getY() < padding_size && enemy->getYSpeed() < 0) {
-		enemy->move(-1, 0);
-	}
-
-	// If the enemy reaches the right pad, turn up.
-	if (enemy->getX() > world->getWidth() - padding_size && enemy->getXSpeed() > 0) {
-		enemy->move(0, 1);
-	}
-	// If the enemy reaches the left pad, turn down.
-	if (enemy->getX() < padding_size && enemy->getXSpeed() < 0) {
-		enemy->move(0, -1);
-	}
+  float enemyWidth;
+  float enemyHeight;
+  float playerWidth = player->getWidth();
+  float playerHeight = player->getHeight();
+  
+  for(unsigned int i = 0; i < enemies.size(); ++i) {
+    Enemy *current = enemies.at(i);
+    enemyWidth = current->getWidth();
+    enemyHeight = current->getHeight();   
+    if(current->getX() + enemyWidth - 2 < player->getX()) {
+      continue;
+    }
+    if(current->getX() > player->getX() + playerWidth - 2) {
+      continue;
+    }
+    if(current->getY() + enemyHeight - 2 < player->getY()) {
+      continue;
+    }
+    if(current->getY() > player->getY() + playerHeight - 2) {
+      continue;
+    }
+    return true;
+  }
+  
+  return false;
 }
 
 void Manager::play() {
@@ -165,6 +150,10 @@ void Manager::play() {
 		tick_sum += ticks;
 
 		if (!pause) {
+      if(collision())
+        camera->setCollision(true);
+      else
+        camera->setCollision(false);
 			camera->snapshot(screen, ticks);
 
 			// Print the runtime & framerate
@@ -194,34 +183,11 @@ void Manager::play() {
       player->decrSpeedX();
     if (keystate[SDLK_RIGHT])
       player->incrSpeedX();
-    /* if (keystate[SDLK_UP])
-      player->decrSpeedY();
-    if (keystate[SDLK_DOWN])
-      player->incrSpeedY(); */
     if (keystate[SDLK_SPACE] && !player->isFalling())
       player->jump();
     if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT] && !player->isFalling())
       player->decelX();
-    /* if (!keystate[SDLK_UP] && !keystate[SDLK_DOWN])
-      player->decelY(); */
     if(player->isFalling())
       player->decelY();
-
-		/* while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-			case SDL_QUIT:
-				done = true;
-				break;
-			case SDL_KEYDOWN:
-				handle_keydown(event.key.keysym.sym);
-				break;
-			case SDL_KEYUP:
-				handle_keyup(event.key.keysym.sym);
-				break;
-			default:
-				break;
-			}
-		} */
-		move_enemy();
 	}
 }

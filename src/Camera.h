@@ -10,6 +10,7 @@
 #include "World.h"
 #include "Player.h"
 #include "Drawable.h"
+#include "TextWriter.h"
 
 #ifndef CAMERA_H_
 #define CAMERA_H_
@@ -31,20 +32,22 @@ public:
 	void snapshot(SDL_Surface* screen, Uint32 ticks);
 	void observe(Drawable* item);
 	void follow(Player* player);
+  void setCollision(bool);
 
 	Player* getFollowedPlayer() const { return tracker; }
 
 private:
 	void relocate();
 
-	std::vector<Drawable*> subjects;
+	vector<Drawable*> subjects;
 	World* world;
 	Player* tracker;	// the unit that the camera is following
 	int viewWidth;
 	int viewHeight;
-
 	int cameraX;
 	int cameraY;
+
+  bool playerCollision;
 };
 
 #endif /* CAMERA_H_ */
