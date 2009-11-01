@@ -6,7 +6,7 @@ CFLAGS = `sdl-config --cflags` -W -Wall -ggdb -O0
 EXEC_NAME = run
 
 all:
-	g++ $(CFLAGS) $(SDL_LIB) -o $(EXEC_NAME) src/*.cpp
+	g++ $(CFLAGS) $(SDL_LIB) -o $(EXEC_NAME) src/*.cpp src/terrain/*.cpp
 	
 clean:
 	rm -f $(EXEC_NAME)
