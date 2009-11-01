@@ -20,8 +20,4 @@ Sprite::Sprite(std::string filename) {
 	loadedImage = true;
 }
 
-Sprite::~Sprite() {
-	if (loadedImage) {
-		SDL_FreeSurface(image);
-	}
-}
+Sprite::~Sprite() { }

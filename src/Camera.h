@@ -11,13 +11,14 @@
 #include "Player.h"
 #include "Drawable.h"
 #include "TextWriter.h"
+#include "Background.h"
 
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
 class Camera {
 public:
-	Camera(World* world, unsigned int width, unsigned int height);
+	Camera(World* world, Background* back, unsigned int width, unsigned int height);
 	virtual ~Camera();
 
 	unsigned int getWidth() const { return viewWidth; }
@@ -41,6 +42,7 @@ private:
 
 	vector<Drawable*> subjects;
 	World* world;
+  Background *background;
 	Player* tracker;	// the unit that the camera is following
 	int viewWidth;
 	int viewHeight;

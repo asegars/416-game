@@ -21,7 +21,7 @@ public:
     virtual float getX() const { return xLoc; }
     virtual float getY() const { return yLoc; }
 	virtual Sprite* getSprite() const { return sprite; }
-	virtual void updatePosition(Uint32 ticks) {}
+	virtual void updatePosition(Uint32) {}
 
 	static int getSize() { return width; }
 protected:

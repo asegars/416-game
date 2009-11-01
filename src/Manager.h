@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "FontLibrary.h"
+#include "Background.h"
 
 #ifndef MANAGER_H_
 #define MANAGER_H_
@@ -25,6 +26,7 @@ public:
 	void play();
 
 	World* getWorld() const { return world; }
+  Background* getBack() const { return background; }
 	Player* getPlayer() const { return player; }
   Enemy* getEnemy() const { return enemy; }
 	Camera* getCamera() const { return camera; }
@@ -39,6 +41,7 @@ private:
 	SDL_Surface* screen;
 	Camera* camera;
 	World* world;
+  Background* background;
 	Player* player;
   Enemy* enemy;
 	vector<Enemy*> enemies;
