@@ -10,6 +10,7 @@
 #include "Sprite.h"
 #include "Drawable.h"
 #include "terrain/Terrain.h"
+#include "terrain/WorldMap.h"
 
 #ifndef WORLD_H_
 #define WORLD_H_
@@ -19,15 +20,21 @@ public:
 	World(std::string filename);
 	virtual ~World();
 
+	void add(Terrain* t, int cellX, int cellY);
   float getX() const { return 0; }
   float getY() const { return 0; }
+  int getXCells() { return worldMap->getCellWidth(); }
+  int getYCells() { return worldMap->getCellHeight(); }
 	int getWidth() const { return background->getWidth(); }
 	int getHeight() const { return background->getHeight(); }
 	Sprite* getSprite() const { return background; }
 	virtual void updatePosition(Uint32) {}
+
+	Terrain** getTerrain() { return worldMap->getMap(); }
 private:
 	Sprite* background;
-	std::vector<Terrain *> terrain;
+//	std::vector<Terrain *> terrain;
+	WorldMap* worldMap;
 };
 
 #endif /* WORLD_H_ */

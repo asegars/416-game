@@ -5,6 +5,7 @@
  *      Author: luke
  */
 
+#include <cmath>
 #include "Enemy.h"
 #include "Manager.h"
 

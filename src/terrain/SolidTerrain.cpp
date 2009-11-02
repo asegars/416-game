@@ -7,7 +7,7 @@
 
 #include "SolidTerrain.h"
 
-SolidTerrain::SolidTerrain(int x, int y) : Terrain(new Sprite("images/solid-terrain.png"), x, y) {
+SolidTerrain::SolidTerrain() : Terrain(new Sprite("images/solid-terrain.png")) {
 }
 
 SolidTerrain::~SolidTerrain() {

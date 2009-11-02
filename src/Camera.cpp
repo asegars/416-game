@@ -61,12 +61,7 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
   destBounds.y = viewHeight - background->getHeight();
   SDL_BlitSurface(background->getSprite()->getSurface(), &srcBounds, screen, &destBounds);
 
-	SolidTerrain* terrain = new SolidTerrain(200, 650);
   unsigned int i = 0;
-
-	SDL_Rect terrainBounds = {0, 0, 80, 80};
-	SDL_Rect terrainPos = {terrain->getX() - cameraX, terrain->getY() - cameraY, 0, 0};
-	SDL_BlitSurface(terrain->getSprite()->getSurface(), &terrainBounds, screen, &terrainPos);
 	// Blit each drawable figure onto the world.
 	std::vector<Drawable *>::const_iterator iter = subjects.begin();
 	while (iter != subjects.end()) {

@@ -7,11 +7,17 @@
 
 #include "WorldMap.h"
 
-WorldMap::WorldMap() {
-	// TODO Auto-generated constructor stub
+WorldMap::WorldMap(int w, int h, int cd) {
+	cellWidth = w;
+	cellHeight = h;
+	cellDim = cd;
 
+	map = new Terrain*[cellHeight * cellWidth];
+	for (int i = 0; i < cellHeight * cellWidth; ++i) {
+		map[i] = NULL;
+	}
 }
 
 WorldMap::~WorldMap() {
-	// TODO Auto-generated destructor stub
+	if (map != NULL) delete map;
 }

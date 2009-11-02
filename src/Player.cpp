@@ -6,16 +6,30 @@
  */
 
 #include <iostream>
+#include <cmath>
 #include "Player.h"
 #include "Manager.h"
 
 Player::Player(Sprite* spr) :
-	sprite(spr), x(0), y(48), xSpeed(0), ySpeed(0), loadedSprite(false) 
-  { interval = 0; }
+	sprite(spr), loadedSprite(false) {
+	x = 0;
+	y = 48;
 
-Player::Player(std::string filename, float xw, float yw) :
-	sprite(new Sprite(filename)), x(xw), y(yw), xSpeed(0), ySpeed(0), 
-  loadedSprite(true), falling(true) { interval = 0; }
+	xSpeed = 0;
+	ySpeed = 0;
+
+	interval = 0;
+}
+
+Player::Player(std::string filename, float xw, float yw) : Character(),
+	sprite(new Sprite(filename)), loadedSprite(true), falling(true) {
+	interval = 0;
+	x = xw;
+	y = yw;
+	xSpeed = 0;
+	ySpeed = 0;
+	std::cout << "Creating player" << std::endl;
+}
 
 Player::~Player() {
 	if (loadedSprite)
@@ -45,8 +59,7 @@ void Player::updatePosition(Uint32 ticks) {
     y = Manager::getInstance()->getWorld()->getHeight() - height;
     falling = false;
 	}
-	float incr = ySpeed * static_cast<float> (ticks) * 0.001;
-	y += incr;
+	float yIncr = ySpeed * static_cast<float> (ticks) * 0.001;
 
 	float width = static_cast<float> (sprites->at(curSprite)->getWidth());
 	// Cap the player's motion if they are trying to move off of the
@@ -59,8 +72,23 @@ void Player::updatePosition(Uint32 ticks) {
 	if (x >= Manager::getInstance()->getWorld()->getWidth() - width && xSpeed > 0) {
 		xSpeed = 0;
 	}
-	incr = xSpeed * static_cast<float> (ticks) * 0.001;
-	x += incr;
+	float xIncr = xSpeed * static_cast<float> (ticks) * 0.001;
+
+	// If the player isn't colliding with terrain, proceed like normal.
+	if (!collidesWithWorld(xIncr, yIncr)) {
+		x += xIncr;
+		y += yIncr;
+	}
+	// If the player does collide, bounce off.
+	else {
+		if (abs(xIncr) > abs(yIncr)) {
+			xSpeed = -xSpeed;
+		}
+		else {
+			ySpeed = -ySpeed;
+		}
+	}
+
   advanceFrame(ticks);
 }
 

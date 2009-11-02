@@ -4,6 +4,7 @@
  *  Created on: Oct 6, 2009
  *      Author: luke
  */
+#include <iostream>
 #include "Camera.h"
 #include "World.h"
 #include "Player.h"
@@ -18,6 +19,7 @@ class Manager {
 public:
 	static Manager* getInstance() {
 		if (instance == NULL) {
+			std::cout << "Creating new manager" << std::endl;
 			instance = new Manager();
 		}
 		return instance;
@@ -36,6 +38,7 @@ private:
 	Manager();
   void loadHero();
   void loadEnemies();
+  void loadTerrain();
   bool collision();
 
 	SDL_Surface* screen;
