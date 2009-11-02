@@ -6,6 +6,6 @@ Background::Background() {
 
 Background::~Background() {
   for(unsigned int i = 0; i < bgs.size(); ++i) {
-    delete (bgs.at(i));
+    if (bgs.at(i) != NULL) delete bgs.at(i);
   }
 }

@@ -31,21 +31,20 @@ Player::Player(std::string filename, float xw, float yw) : Character(),
 }
 
 Player::~Player() {
-	if (loadedSprite)
-		delete sprite;
-  delete sprites;
+	if (sprite != NULL) { delete sprite; }
+//	if (sprites != NULL) { delete sprites; }
 }
 
-void Player::setSprites(vector<Sprite*> *s) {
-  sprites = new vector<Sprite*>;
-  for(unsigned int i = 0; i < s->size(); ++i) {
-    sprites->push_back(s->at(i));
+void Player::setSprites(vector<Sprite*> &s) {
+//  sprites = new vector<Sprite*>;
+  for(unsigned int i = 0; i < s.size(); ++i) {
+    sprites.push_back(s.at(i));
   }
   curSprite = 0;
 }
 
 void Player::updatePosition(Uint32 ticks) {
-	float height = static_cast<float> (sprites->at(curSprite)->getHeight());
+	float height = static_cast<float> (sprites.at(curSprite)->getHeight());
 	// Cap the player's motion if they are trying to move off of the
 	//   top  border of the world.
 	if (y <= 0 && ySpeed < 0) {
@@ -60,7 +59,7 @@ void Player::updatePosition(Uint32 ticks) {
 	}
 	float yIncr = ySpeed * static_cast<float> (ticks) * 0.001;
 
-	float width = static_cast<float> (sprites->at(curSprite)->getWidth());
+	float width = static_cast<float> (sprites.at(curSprite)->getWidth());
 	// Cap the player's motion if they are trying to move off of the
 	//   left border of the world.
 	if (x <= 0 && xSpeed < 0) {
@@ -94,13 +93,13 @@ void Player::updatePosition(Uint32 ticks) {
 void Player::advanceFrame(Uint32 ticks) {
   interval += ticks;
   if (fabs(interval * xSpeed) > 15000 && xSpeed > 0) {   
-    curSprite = (++curSprite) % (sprites->size()/2);
+    curSprite = (++curSprite) % (sprites.size()/2);
     if(curSprite > 6 || curSprite == 0)
       curSprite = 1;
     interval = 0;
   }
   else if (fabs(interval * xSpeed) > 15000 && xSpeed < 0) { 
-    curSprite = (++curSprite) % (sprites->size());
+    curSprite = (++curSprite) % (sprites.size());
     if(curSprite < 8 || curSprite == 0)
       curSprite = 8;
     interval = 0;

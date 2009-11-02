@@ -16,12 +16,20 @@ Character::~Character() {
 }
 
 bool Character::checkLocationForCollision(float xLoc, float yLoc) {
-	int cellIndex = world->getMap()->locationToCell(xLoc, yLoc);
-
-	if (world->getTerrain()[cellIndex] == NULL) {
-		return false;
+	if (world == NULL) {
+		world = Manager::getInstance()->getWorld();
 	}
-	return true;
+	WorldMap* map = world->getMap();
+
+	if (map != NULL) {
+		int cellIndex = map->locationToCell(xLoc, yLoc);
+
+		if (world->getTerrain()[cellIndex] == NULL) {
+			return false;
+		}
+		return true;
+	}
+	return false;
 }
 
 bool Character::collidesWithWorld(float xIncr, float yIncr) {

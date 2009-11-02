@@ -13,9 +13,9 @@
 World::World(std::string filename) {
 	background = new Sprite(filename);
 
-	int widthCells = ceil(static_cast<float>(background->getWidth()) / Terrain::getSize());
-	int heightCells = ceil(static_cast<float>(background->getHeight()) / Terrain::getSize());
-	std::cout << "World is composed of " << widthCells * heightCells << " cells." << std::endl;
+//	int widthCells = ceil(static_cast<float>(background->getWidth()) / Terrain::getSize());
+//	int heightCells = ceil(static_cast<float>(background->getHeight()) / Terrain::getSize());
+//	std::cout << "World is composed of " << widthCells * heightCells << " cells." << std::endl;
 
 	worldMap = NULL;
 }

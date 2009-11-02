@@ -44,9 +44,9 @@ private:
 	SDL_Surface* screen;
 	Camera* camera;
 	World* world;
-  Background* background;
+	Background* background;
 	Player* player;
-  Enemy* enemy;
+	Enemy* enemy;
 	vector<Enemy*> enemies;
 	FontLibrary* fontLibrary;
 
@@ -56,8 +56,8 @@ private:
 
 	bool done;
 	static Manager* instance;
-  vector<Sprite*> *heroSprites;
-  vector<Sprite*> *enemySprites;
+	vector<Sprite*> heroSprites;
+	vector<Sprite*> enemySprites;
 
 	int xVel;	// passed as a parameter to move()
 	int yVel;	// passed as a parameter to move()

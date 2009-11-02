@@ -21,7 +21,7 @@ public:
 	Player(Sprite* sprite);
 	Player(std::string filename, float x, float y);
 	virtual ~Player();
-	void setSprites(std::vector<Sprite*> *s);
+	void setSprites(std::vector<Sprite*> &s);
 
 	void draw();
 	void update(Uint32 ticks);
@@ -34,22 +34,22 @@ public:
 	void decelY();
   void jump();
 
-  int getSize() const { return sprites->size(); }
+  int getSize() const { return sprites.size(); }
 
   void setYSpeed(float s) { ySpeed = s; }
   bool isFalling() const { return falling; }
 
   virtual SDL_Surface* getPlayer() const { return sprite->getSurface(); }
-  virtual Sprite* getSprite() const { return sprites->at(curSprite); }
+  virtual Sprite* getSprite() const { return sprites.at(curSprite); }
 	virtual void updatePosition(Uint32 ticks);
 
 private:
 	void adjustViewport();
-  int interval;
+	int interval;
 	Sprite* sprite;
 
 	bool loadedSprite;
-  bool falling;
+	bool falling;
 };
 
 #endif /* PLAYER_H_ */

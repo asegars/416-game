@@ -28,8 +28,8 @@ public:
   void setY(float ny) { y = ny; }
   float getXSpeed() const { return xSpeed; }
   float getYSpeed() const { return ySpeed; }
-  int getWidth() const { return sprites->at(curSprite)->getWidth(); }
-  int getHeight() const { return sprites->at(curSprite)->getHeight(); }
+  int getWidth() const { return sprites.at(curSprite)->getWidth(); }
+  int getHeight() const { return sprites.at(curSprite)->getHeight(); }
 
 protected:
   float x;
@@ -38,7 +38,7 @@ protected:
   float xSpeed;
   float ySpeed;
 
-  std::vector<Sprite*> *sprites;
+  std::vector<Sprite*> sprites;
   unsigned int curSprite;
 private:
   bool checkLocationForCollision(float xLoc, float yLoc);

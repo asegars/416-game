@@ -20,7 +20,10 @@ WorldMap::WorldMap(int w, int h, int cd) {
 }
 
 WorldMap::~WorldMap() {
-	if (map != NULL) delete map;
+	for (int i = 0; i < cellHeight * cellWidth; ++i) {
+		delete map[i];
+	}
+	if (map != NULL) delete [] map;
 }
 
 int WorldMap::locationToCell(float x, float y) {

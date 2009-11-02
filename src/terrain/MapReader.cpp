@@ -35,7 +35,6 @@ Terrain* MapReader::getTileType(int mapVal) {
 WorldMap* MapReader::readMap(std::string filename) {
 	std::ifstream infile(filename.c_str());
 	int cellWidth, cellHeight;
-//	char mapline[4096];
 	int nextTileVal;
 	std::stringstream lineStream;
 

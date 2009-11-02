@@ -11,15 +11,21 @@
 
 Sprite::Sprite(std::string filename) {
 	image = IMG_Load(filename.c_str());
-  posX = 0;
-  posY = 0;
+	if (!image) { throw std::string("Error loading image file: ") + filename; }
 
+	posX = 0;
+	posY = 0;
 	width = image->w;
 	height = image->h;
 
 	// For future use.  This is currently always true.
 	loadedImage = true;
-	std::cout << "Loaded sprite [" << filename << "]" << std::endl;
+	//	std::cout << "Loaded sprite [" << filename << "]" << std::endl;
 }
 
-Sprite::~Sprite() { }
+Sprite::~Sprite() {
+	if (image != NULL) {
+		SDL_FreeSurface(image);
+		image = NULL;
+	}
+}

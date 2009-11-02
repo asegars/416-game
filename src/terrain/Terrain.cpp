@@ -16,5 +16,5 @@ Terrain::Terrain(Sprite* terrainSprite) : sprite(terrainSprite) {
 }
 
 Terrain::~Terrain() {
-
+	if (sprite != NULL) { delete sprite; }
 }

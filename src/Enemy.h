@@ -20,7 +20,7 @@ public:
 	Enemy(Sprite* sprite);
 	Enemy(std::string filename, float xw, float yw);
 	virtual ~Enemy();
-  void setSprites(vector<Sprite*> *s);
+  void setSprites(vector<Sprite*> &s);
 
 	void draw();
 	void update(Uint32 ticks);
@@ -32,17 +32,17 @@ public:
 	void setY(float ny) { y = ny; }
 	float getXSpeed() const { return xSpeed; }
 	float getYSpeed() const { return ySpeed; }
-	int getWidth() const { return sprites->at(curSprite)->getWidth(); }
-	int getHeight() const { return sprites->at(curSprite)->getHeight(); }
-  int getSize() const { return sprites->size(); }
+	int getWidth() const { return sprites.at(curSprite)->getWidth(); }
+	int getHeight() const { return sprites.at(curSprite)->getHeight(); }
+  int getSize() const { return sprites.size(); }
 
   virtual SDL_Surface* getEnemy() const { return sprite->getSurface(); }
-  virtual Sprite* getSprite() const { return sprites->at(curSprite); }
+  virtual Sprite* getSprite() const { return sprites.at(curSprite); }
 	virtual void updatePosition(Uint32 ticks);
 
 private:
 	void adjustViewport();
-  vector<Sprite*> *sprites;
+  vector<Sprite*> sprites;
   unsigned int curSprite;
   int interval;
 	Sprite* sprite;

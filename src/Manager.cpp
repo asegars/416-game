@@ -47,58 +47,56 @@ Manager::Manager() {
 
 // TODO: Fix segfault here.
 Manager::~Manager() {
-	SDL_Quit();
-
-	std::cout << "Clearing." << std::endl;
+	std::cout << "Cleaning up...";
 	if (world != NULL) { delete world; }
-  if (background != NULL) { delete background; }
+	if (background != NULL) { delete background; }
 	if (camera != NULL) { delete camera; }
 	if (player != NULL) { delete player; }
     if (enemy != NULL) { delete enemy; }
+    if (fontLibrary != NULL) { delete fontLibrary; }
 
-  for(unsigned int i = 0; i < heroSprites->size(); ++i) {
-	  if (heroSprites->at(i) != NULL) delete heroSprites->at(i);
-  }
-  if (heroSprites != NULL) delete heroSprites;
+    for(unsigned int i = 0; i < heroSprites.size(); ++i) {
+		if (heroSprites.at(i) != NULL) delete heroSprites.at(i);
+	}
 
-  for(unsigned int j = 0; j < enemySprites->size(); ++j) {
-    if (enemySprites->at(j) != NULL) delete enemySprites->at(j);
-  }
-  if (enemySprites != NULL) delete enemySprites;
+    for(unsigned int j = 0; j < enemySprites.size(); ++j) {
+		if (enemySprites.at(j) != NULL) delete enemySprites.at(j);
+	}
 
-  for(unsigned int k = 0; k < enemies.size(); ++k) {
-    if (enemies.at(k) != NULL) delete enemies.at(k);
-  }
-   std::cout << "Memory cleared." << std::endl;
+  	for(unsigned int k = 0; k < enemies.size(); ++k) {
+  		if (enemies.at(k) != NULL) delete enemies.at(k);
+  	}
+	SDL_Quit();
+  	std::cout << "done." << std::endl;
 }
 
 void Manager::loadHero() {
-  heroSprites = new vector<Sprite*>;
-  heroSprites->push_back( new Sprite(0, 0, 12, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(12, 0, 36, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(48, 0, 35, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(83, 0, 22, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(105, 0, 37, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(142, 0, 33, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(175, 0, 25, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(388, 0, 12, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(352, 0, 36, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(317, 0, 35, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(295, 0, 22, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(258, 0, 37, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(225, 0, 33, 48, player->getPlayer()));
-  heroSprites->push_back( new Sprite(200, 0, 25, 48, player->getPlayer()));
+//  heroSprites = new vector<Sprite*>;
+  heroSprites.push_back( new Sprite(0, 0, 12, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(12, 0, 36, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(48, 0, 35, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(83, 0, 22, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(105, 0, 37, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(142, 0, 33, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(175, 0, 25, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(388, 0, 12, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(352, 0, 36, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(317, 0, 35, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(295, 0, 22, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(258, 0, 37, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(225, 0, 33, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(200, 0, 25, 48, player->getPlayer()));
   player->setSprites(heroSprites);
 }
 
 void Manager::loadEnemies() {
-  enemySprites = new vector<Sprite*>;
-  enemySprites->push_back( new Sprite(0, 0, 43, 48, enemy->getEnemy()));
-  enemySprites->push_back( new Sprite(43, 0, 43, 48, enemy->getEnemy()));
-  enemySprites->push_back( new Sprite(86, 0, 43, 48, enemy->getEnemy()));
-  enemySprites->push_back( new Sprite(129, 0, 43, 48, enemy->getEnemy()));
-  enemySprites->push_back( new Sprite(172, 0, 43, 48, enemy->getEnemy()));
-  enemySprites->push_back( new Sprite(215, 0, 43, 48, enemy->getEnemy()));
+//  enemySprites = new vector<Sprite*>;
+  enemySprites.push_back( new Sprite(0, 0, 43, 48, enemy->getEnemy()));
+  enemySprites.push_back( new Sprite(43, 0, 43, 48, enemy->getEnemy()));
+  enemySprites.push_back( new Sprite(86, 0, 43, 48, enemy->getEnemy()));
+  enemySprites.push_back( new Sprite(129, 0, 43, 48, enemy->getEnemy()));
+  enemySprites.push_back( new Sprite(172, 0, 43, 48, enemy->getEnemy()));
+  enemySprites.push_back( new Sprite(215, 0, 43, 48, enemy->getEnemy()));
   for(unsigned int i = 0; i < NUM_ENEMIES; ++i) {
     enemies.push_back(new Enemy("images/heckran.png", 
                                 (rand() % 2400), 1152));
