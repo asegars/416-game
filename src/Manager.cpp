@@ -28,11 +28,11 @@ Manager::Manager() {
 		throw std::string("Unable to set video mode!");
 	}
 
-	srand(time(NULL));
-	world = new World("images/background-full.png");
-
-	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/heros.png", 175, 400);
+  	srand(time(NULL));
+	world = new World("images/background1.png");
+  	background = new Background();
+	camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
+	player = new Player("images/heros.png", 50, 800);
 	enemy = new Enemy("images/heckran.png", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
 	loadHero();
@@ -52,6 +52,7 @@ Manager::~Manager() {
 
 	std::cout << "Clearing." << std::endl;
 	if (world != NULL) { delete world; }
+  if (background != NULL) { delete background; }
 	if (camera != NULL) { delete camera; }
 	if (player != NULL) { delete player; }
     if (enemy != NULL) { delete enemy; }
@@ -101,7 +102,7 @@ void Manager::loadEnemies() {
   enemySprites->push_back( new Sprite(215, 0, 43, 48, enemy->getEnemy()));
   for(unsigned int i = 0; i < NUM_ENEMIES; ++i) {
     enemies.push_back(new Enemy("images/heckran.png", 
-                                (rand() % 2400), 912));
+                                (rand() % 2400), 1152));
     enemies.at(i)->setSprites(enemySprites);
   }
 }

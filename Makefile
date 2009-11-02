@@ -11,3 +11,4 @@ all:
 clean:
 	rm -f $(EXEC_NAME)
 	rm -f src/*~
+	rm -f src/terrain/*~

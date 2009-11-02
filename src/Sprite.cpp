@@ -22,8 +22,4 @@ Sprite::Sprite(std::string filename) {
 	std::cout << "Loaded sprite [" << filename << "]" << std::endl;
 }
 
-Sprite::~Sprite() {
-	if (loadedImage) {
-		SDL_FreeSurface(image);
-	}
-}
+Sprite::~Sprite() { }

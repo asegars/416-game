@@ -23,7 +23,7 @@ public:
     virtual float getX() const { return 0; }
     virtual float getY() const { return 0; }
 	virtual Sprite* getSprite() const { return sprite; }
-	virtual void updatePosition(Uint32 ticks) {}
+	virtual void updatePosition(Uint32) {}
 
 	static int getSize() { return width; }
 protected:

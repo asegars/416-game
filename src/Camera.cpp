@@ -9,16 +9,15 @@
 #include "terrain/Terrain.h"
 #include "terrain/SolidTerrain.h"
 
-Camera::Camera(World* world, unsigned int width, unsigned int height) : 
-     cameraX(0), cameraY(0) {
+Camera::Camera(World* world, Background* back, unsigned int width, 
+     unsigned int height) : cameraX(0), cameraY(0) {
 	this->world = world;
+  this->background = back;
 	viewWidth = width;
 	viewHeight = height;
 }
 
-Camera::~Camera() {
-	//delete world;
-}
+Camera::~Camera() {}
 
 void Camera::relocate() {
 	cameraX = tracker->getX() - (viewWidth / 2);
@@ -49,15 +48,20 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	Sprite* worldSprite = world->getSprite();
 	SDL_Rect srcBounds = {cameraX, cameraY, viewWidth, viewHeight};
 	SDL_Rect destBounds = {0, 0, 0, 0};
-
-  	unsigned int i = 0;
-
-	// If the item that was just updated is what's being tracked,
-	//   readjust the camera location.
-	relocate();
-
 	SDL_BlitSurface(worldSprite->getSurface(), &srcBounds, screen, NULL);
 
+	// If the item that was just updated is what's being tracked,
+	// readjust the camera location.
+	relocate();
+
+  srcBounds.x = float(cameraX)/2.2;
+  srcBounds.y = 0;
+  srcBounds.w = background->getWidth();
+  srcBounds.h = background->getHeight();
+  destBounds.y = viewHeight - background->getHeight();
+  SDL_BlitSurface(background->getSprite()->getSurface(), &srcBounds, screen, &destBounds);
+
+  unsigned int i = 0;
 	// Blit each drawable figure onto the world.
 	std::vector<Drawable *>::const_iterator iter = subjects.begin();
 	while (iter != subjects.end()) {
