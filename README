@@ -1,0 +1,24 @@
+Tim Curtis & Luke Segars
+November 2, 2009
+
+Platform Jumper
+
+** Build & Execution Instructions **
+To use this application, first type 'make' and then './run'.  The application will require
+libSDL, libSDL_ttf, and libSDL_image to build.
+
+** Goal **
+Control the player with the arrow keys.  You can jump with space bar.  Explore around the world,
+watching out for the monsters (even though they won't hurt you yet...)
+
+** Extra Features **
+Maps can be loaded from files (examples in maps/ subdirectory).  The map to load can be
+specified as a parameter to the executable.  NOTE: the maps/ directory is assumed and should
+not be specified as part of the parameter.
+	Ex: ./run level2.map
+
+** Known Flaws **
+- Occasionally the game will crash as it is starting up.  The cause has been traced to
+  a particular function but has not yet been resolved.
+- Occasionally the game will crash as it is exiting.  The causes appears to be related
+  to a pointer that is being freed multiple times, but has not yet been resolved.
