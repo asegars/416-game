@@ -32,11 +32,12 @@ public:
 	Camera* getCamera() const { return camera; }
 	FontLibrary* getFontLibrary() const { return fontLibrary; }
 
+	void setMap(WorldMap* map) { world->setMap(map); }
+
 private:
 	Manager();
   void loadHero();
   void loadEnemies();
-  void loadTerrain();
   bool collision();
 
 	SDL_Surface* screen;

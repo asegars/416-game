@@ -5,6 +5,7 @@
  *      Author: luke
  */
 #include <string>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include "Terrain.h"
@@ -34,20 +35,24 @@ Terrain* MapReader::getTileType(int mapVal) {
 WorldMap* MapReader::readMap(std::string filename) {
 	std::ifstream infile(filename.c_str());
 	int cellWidth, cellHeight;
-	char mapline[4096];
+//	char mapline[4096];
 	int nextTileVal;
 	std::stringstream lineStream;
 
 	infile >> cellWidth >> cellHeight;
-	map = new WorldMap(cellWidth, cellHeight, Terrain::getSize());
+	WorldMap* map = new WorldMap(cellWidth, cellHeight, Terrain::getSize());
 
+	std::cout << "Loading map [" << filename << "]   (" << cellWidth << ", " << cellHeight << ")" << std::endl;
+
+	// Loop through each row of the map
 	for (int height = 0; height < cellHeight; ++height) {
-		infile.getline(mapline, 4096);
-		lineStream.str(mapline);
+		// Loop through each column of the map
 		for (int width = 0; width < cellWidth; ++width) {
-			lineStream >> nextTileVal;
+			infile >> nextTileVal;
 			map->setCell(width, height, getTileType(nextTileVal));
 		}
 		lineStream.str("");
 	}
+
+	return map;
 }

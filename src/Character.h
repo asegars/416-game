@@ -41,6 +41,7 @@ protected:
   std::vector<Sprite*> *sprites;
   unsigned int curSprite;
 private:
+  bool checkLocationForCollision(float xLoc, float yLoc);
   World* world;
 };
 

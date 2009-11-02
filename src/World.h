@@ -30,10 +30,11 @@ public:
 	Sprite* getSprite() const { return background; }
 	virtual void updatePosition(Uint32) {}
 
+	void setMap(WorldMap* map);
+	WorldMap* getMap() const { return worldMap; }
 	Terrain** getTerrain() { return worldMap->getMap(); }
 private:
 	Sprite* background;
-//	std::vector<Terrain *> terrain;
 	WorldMap* worldMap;
 };
 

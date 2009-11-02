@@ -15,6 +15,15 @@ Character::Character() {
 Character::~Character() {
 }
 
+bool Character::checkLocationForCollision(float xLoc, float yLoc) {
+	int cellIndex = world->getMap()->locationToCell(xLoc, yLoc);
+	if (world->getMap()->getCell(cellIndex) == NULL) {
+		return false;
+	}
+	std::cout << "Collision..." << std::endl;
+	return true;
+}
+
 bool Character::collidesWithWorld(float xIncr, float yIncr) {
 	if (world == NULL) {
 		world = Manager::getInstance()->getWorld();
@@ -22,42 +31,10 @@ bool Character::collidesWithWorld(float xIncr, float yIncr) {
 
 	float newX = x + xIncr;
 	float newY = y + yIncr;
+	// If moving right, add the width of the character
+	if (xIncr > 0) { newX += getWidth(); }
+	// If falling down, add the height of the character
+	if (yIncr > 0) { newY += getHeight(); }
 
-	Terrain ** terrain = world->getTerrain();
-
-	int xCells = world->getXCells();
-	int yCells = world->getYCells();
-	int terrainWidth, terrainHeight, terrainX, terrainY;
-
-	int index = 0;
-	for (int yIndex = 0; yIndex < yCells; ++yIndex) {
-		for (int xIndex = 0; xIndex < xCells; ++xIndex) {
-			index = yIndex * xCells + xIndex;
-			Terrain* current = terrain[index];
-
-			if (terrain[index] == NULL) {
-				continue;
-			}
-
-			terrainWidth = current->getWidth();
-			terrainHeight = current->getHeight();
-			terrainX = xIndex * terrainWidth;
-			terrainY = yIndex * terrainHeight;
-
-			if (terrainX + terrainWidth - 2 < newX) {
-				continue;
-			}
-			if (terrainX > newX + getWidth() - 2) {
-				continue;
-			}
-			if (terrainY + terrainHeight - 2 < newY) {
-				continue;
-			}
-			if (terrainY > newY + getHeight() - 2) {
-				continue;
-			}
-			return true;
-		}
-	}
-	return false;
+	return checkLocationForCollision(newX, newY);
 }

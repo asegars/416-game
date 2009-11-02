@@ -30,26 +30,27 @@ Manager::Manager() {
 
 	srand(time(NULL));
 	world = new World("images/background-full.png");
+
 	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/heros.png", 50, 800);
+	player = new Player("images/heros.png", 175, 400);
 	enemy = new Enemy("images/heckran.png", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
 	loadHero();
 	loadEnemies();
-	loadTerrain();
 	for(unsigned int i = 0; i < enemies.size(); ++i) {
 	  camera->observe(enemies.at(i));
 	}
 	camera->observe(player);
 	camera->follow(player);
+
+	std::cout << "Manager created." << std::endl;
 }
 
 // TODO: Fix segfault here.
 Manager::~Manager() {
 	SDL_Quit();
 
-	std::cout << "Clearing" << std::endl;
-//	if (screen != NULL) { delete screen; }
+	std::cout << "Clearing." << std::endl;
 	if (world != NULL) { delete world; }
 	if (camera != NULL) { delete camera; }
 	if (player != NULL) { delete player; }
@@ -68,7 +69,7 @@ Manager::~Manager() {
   for(unsigned int k = 0; k < enemies.size(); ++k) {
     if (enemies.at(k) != NULL) delete enemies.at(k);
   }
-   std::cout << "Clearing" << std::endl;
+   std::cout << "Memory cleared." << std::endl;
 }
 
 void Manager::loadHero() {
@@ -132,11 +133,6 @@ bool Manager::collision() {
   }
   
   return false;
-}
-
-void Manager::loadTerrain() {
-	SolidTerrain* terrain = new SolidTerrain();
-	world->add(terrain, 2, 9);
 }
 
 void Manager::play() {

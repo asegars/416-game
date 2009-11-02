@@ -56,8 +56,8 @@ void Player::updatePosition(Uint32 ticks) {
 	//   bottom border of the world.
 	if (y >= Manager::getInstance()->getWorld()->getHeight() - height && ySpeed > 0) {
 		ySpeed = 0;
-    y = Manager::getInstance()->getWorld()->getHeight() - height;
-    falling = false;
+		y = Manager::getInstance()->getWorld()->getHeight() - height;
+		falling = false;
 	}
 	float yIncr = ySpeed * static_cast<float> (ticks) * 0.001;
 
@@ -79,17 +79,18 @@ void Player::updatePosition(Uint32 ticks) {
 		x += xIncr;
 		y += yIncr;
 	}
-	// If the player does collide, bounce off.
 	else {
-		if (abs(xIncr) > abs(yIncr)) {
-			xSpeed = -xSpeed;
+		if (!collidesWithWorld(xIncr, 0)) {
+			x += xIncr;
 		}
-		else {
-			ySpeed = -ySpeed;
+		if (collidesWithWorld(0, yIncr)) {
+			if (yIncr > 0) falling = false;
+			else ySpeed = -ySpeed;
 		}
 	}
 
-  advanceFrame(ticks);
+//	std::cout << "Falling: " << falling << std::endl;
+	advanceFrame(ticks);
 }
 
 void Player::advanceFrame(Uint32 ticks) {

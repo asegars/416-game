@@ -16,11 +16,10 @@ public:
 	MapReader();
 	virtual ~MapReader();
 
-	WorldMap* readMap(std::string filename);
-	Terrain* getTileType(int mapVal);
+	static WorldMap* readMap(std::string filename);
 
 private:
-	WorldMap* map;
+	static Terrain* getTileType(int mapVal);
 };
 
 #endif /* MAPREADER_H_ */

@@ -18,6 +18,8 @@ public:
 
 	void setCell(int x, int y, Terrain* t) { map[y * cellWidth + x] = t; }
 	Terrain* getCell(int x, int y) const { return map[y * cellWidth + x]; }
+	Terrain* getCell(int loc) const { return map[loc]; }
+	int locationToCell(float x, float y);
 	int getCellDim() const { return cellDim; }
 	int getCellWidth() const { return cellWidth; }
 	int getCellHeight() const { return cellHeight; }
