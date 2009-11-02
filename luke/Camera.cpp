@@ -77,7 +77,6 @@ void Camera::observe(Drawable* item) {
 }
 
 void Camera::setX(int x) {
-	std::cout << x << std::endl;
 	if (x < 0) { x = 0; return; }
 	if (x > viewWidth) { x = viewWidth; return; }
 

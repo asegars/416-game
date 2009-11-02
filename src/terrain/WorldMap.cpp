@@ -27,7 +27,5 @@ int WorldMap::locationToCell(float x, float y) {
 	int xCell = floor(x / cellDim);
 	int yCell = floor(y / cellDim);
 
-	std::cout << "Location on map: (" << xCell << ", " << yCell << ")" << std::endl;
-
 	return yCell * cellWidth + xCell;
 }

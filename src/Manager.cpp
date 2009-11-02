@@ -32,7 +32,7 @@ Manager::Manager() {
 	world = new World("images/background1.png");
   	background = new Background();
 	camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/heros.png", 50, 800);
+	player = new Player("images/heros.png", 50, 400);
 	enemy = new Enemy("images/heckran.png", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
 	loadHero();
@@ -43,7 +43,6 @@ Manager::Manager() {
 	camera->observe(player);
 	camera->follow(player);
 
-	std::cout << "Manager created." << std::endl;
 }
 
 // TODO: Fix segfault here.

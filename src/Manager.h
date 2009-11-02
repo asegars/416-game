@@ -19,7 +19,6 @@ class Manager {
 public:
 	static Manager* getInstance() {
 		if (instance == NULL) {
-			std::cout << "Creating new manager" << std::endl;
 			instance = new Manager();
 		}
 		return instance;

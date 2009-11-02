@@ -51,28 +51,30 @@ void Camera::follow(Player* player) {
 }
 
 void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
-	SDL_Rect srcBounds, destBounds;
-	// Blit the world
-	Sprite* worldSprite = world->getSprite();
-	srcBounds.x = cameraX / 2.2;
-	srcBounds.y = 0;//cameraY;
-	srcBounds.w = 0;//viewWidth;
-	srcBounds.h = 0;//viewHeight;
-
-	destBounds.x = 0;
-	destBounds.y = viewHeight - background->getHeight();
-	destBounds.w = 0;
-	destBounds.h = 0;
-	SDL_BlitSurface(worldSprite->getSurface(), &srcBounds, screen, NULL);
-
 	// If the item that was just updated is what's being tracked,
 	// readjust the camera location.
 	relocate();
 
-	srcBounds.x = float(cameraX);// / 2.2;
-	srcBounds.y = cameraY;//0;
-	srcBounds.w = viewWidth;//background->getWidth();
-	srcBounds.h = viewHeight;//background->getHeight();
+	SDL_Rect srcBounds, destBounds;
+	// Blit the world
+	Sprite* worldSprite = world->getSprite();
+	srcBounds.x = cameraX / 2.2;
+	srcBounds.y = cameraY / 2.2;
+	srcBounds.w = viewWidth;
+	srcBounds.h = viewHeight;
+
+	destBounds.x = 0;
+	destBounds.y = 0;
+	destBounds.w = 0;
+	destBounds.h = 0;
+	SDL_BlitSurface(worldSprite->getSurface(), &srcBounds, screen, &destBounds);
+
+	srcBounds.x = cameraX;
+	srcBounds.y = cameraY;
+	srcBounds.w = viewWidth;
+	srcBounds.h = viewHeight;
+
+	destBounds.x = 0;
 	destBounds.y = 0;//viewHeight - background->getHeight();
 	SDL_BlitSurface(background->getSprite()->getSurface(), &srcBounds, screen,
 			&destBounds);
@@ -81,7 +83,6 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	// readjust the camera location.
 	relocate();
 
-	unsigned int i = 0;
 	// Blit each drawable figure onto the world.
 	std::vector<Drawable *>::const_iterator iter = subjects.begin();
 	while (iter != subjects.end()) {
@@ -100,12 +101,27 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 
 		SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
 		++iter;
-		++i;
 	}
 
-//	SDL_Rect terrainSrcBounds = { cameraX, cameraY, viewWidth, viewHeight };
-//	SDL_Rect terrainDestBounds = { 0, 0, 0, 0 };
-//	SDL_BlitSurface(world->getSurface(), &terrainSrcBounds, screen, &terrainDestBounds);
+	WorldMap* map = world->getMap();
+	int cellDim = map->getCellDim();
+	SDL_Rect terrainBounds = {0, 0, cellDim, cellDim};
+	for (int height = 0; height < map->getCellHeight(); ++height) {
+		for (int width = 0; width < map->getCellWidth(); ++width) {
+			int realX = width * cellDim;
+			int realY = height * cellDim;
+
+			// Convert from world coords to camera coords
+			SDL_Rect terrainPos = {realX - cameraX, realY - cameraY, 0, 0};
+			// If the cell has terrain in it, blit it
+			if (map->getCell(width, height) != NULL) {
+				SDL_BlitSurface(map->getCell(width, height)->getSprite()->getSurface(),
+						&terrainBounds,
+						screen,
+						&terrainPos);
+			}
+		}
+	}
 }
 
 void Camera::observe(Drawable* item) {
@@ -113,7 +129,6 @@ void Camera::observe(Drawable* item) {
 }
 
 void Camera::setX(int x) {
-	std::cout << x << std::endl;
 	if (x < 0) {
 		x = 0;
 		return;

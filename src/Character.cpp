@@ -16,12 +16,6 @@ Character::~Character() {
 }
 
 bool Character::checkLocationForCollision(float xLoc, float yLoc) {
-	if (world->getMap() == NULL) {
-		std::cout << " NULL " << std::endl;
-	}
-	else {
-		std::cout << " NOT NULL " << std::endl;
-	}
 	int cellIndex = world->getMap()->locationToCell(xLoc, yLoc);
 
 	if (world->getTerrain()[cellIndex] == NULL) {

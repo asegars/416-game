@@ -28,7 +28,6 @@ Player::Player(std::string filename, float xw, float yw) : Character(),
 	y = yw;
 	xSpeed = 0;
 	ySpeed = 0;
-	std::cout << "Creating player" << std::endl;
 }
 
 Player::~Player() {
@@ -89,7 +88,6 @@ void Player::updatePosition(Uint32 ticks) {
 		}
 	}
 
-//	std::cout << "Falling: " << falling << std::endl;
 	advanceFrame(ticks);
 }
 
