@@ -6,6 +6,7 @@
  */
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "Sprite.h"
 #include "Drawable.h"
@@ -33,8 +34,10 @@ public:
 	void setMap(WorldMap* map);
 	WorldMap* getMap() const { return worldMap; }
 	Terrain** getTerrain() { return worldMap->getMap(); }
+	SDL_Surface* getSurface() { return worldSurface; }
 private:
 	Sprite* background;
+	SDL_Surface* worldSurface;
 	WorldMap* worldMap;
 };
 

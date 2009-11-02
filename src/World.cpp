@@ -17,13 +17,16 @@ World::World(std::string filename) {
 	int heightCells = ceil(static_cast<float>(background->getHeight()) / Terrain::getSize());
 	std::cout << "World is composed of " << widthCells * heightCells << " cells." << std::endl;
 
-//	worldMap = new WorldMap(widthCells, heightCells, Terrain::getSize());
 	worldMap = NULL;
+//	worldSurface = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, getWidth(), getHeight(), 32, 0, 200, 0, 0);
+//	SDL_FillRect(worldSurface, NULL, SDL_MapRGBA(worldSurface->format, 0, 0, 0, 0));
 }
 
 World::~World() {
 	if (background != NULL) delete background;
 	if (worldMap != NULL) delete worldMap;
+
+	if (worldSurface != NULL) SDL_FreeSurface(worldSurface);
 }
 
 void World::add(Terrain* t, int cellX, int cellY) {
@@ -53,7 +56,7 @@ void World::setMap(WorldMap* map) {
 			if (map->getCell(width, height) != NULL) {
 				SDL_BlitSurface(map->getCell(width, height)->getSprite()->getSurface(),
 						&terrainBounds,
-						background->getSurface(),
+						worldSurface,
 						&terrainPos);
 			}
 		}

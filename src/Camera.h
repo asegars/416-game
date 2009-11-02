@@ -42,8 +42,11 @@ private:
 
 	vector<Drawable*> subjects;
 	World* world;
-  Background *background;
+	Background *background;
 	Player* tracker;	// the unit that the camera is following
+
+	SDL_Surface* backSurface;
+
 	int viewWidth;
 	int viewHeight;
 	int cameraX;
