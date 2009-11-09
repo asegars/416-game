@@ -2,7 +2,6 @@
  * MapReader.cpp
  *
  *  Created on: Nov 1, 2009
- *      Author: luke
  */
 #include <string>
 #include <iostream>
@@ -14,12 +13,10 @@
 #include "WorldMap.h"
 
 MapReader::MapReader() {
-	// TODO Auto-generated constructor stub
 
 }
 
 MapReader::~MapReader() {
-	// TODO Auto-generated destructor stub
 }
 
 Terrain* MapReader::getTileType(int mapVal) {

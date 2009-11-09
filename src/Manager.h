@@ -2,7 +2,6 @@
  * Manager.h
  *
  *  Created on: Oct 6, 2009
- *      Author: luke
  */
 #include <iostream>
 #include "Camera.h"

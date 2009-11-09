@@ -2,7 +2,6 @@
  * Character.h
  *
  *  Created on: Oct 25, 2009
- *      Author: luke
  */
 
 #ifndef CHARACTER_H_

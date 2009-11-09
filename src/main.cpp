@@ -2,7 +2,6 @@
  * main.cpp
  *
  *  Created on: Oct 6, 2009
- *      Author: luke
  */
 #include <string>
 #include <iostream>
@@ -23,8 +22,9 @@ int main(int argc, char* argv[]) {
 
 	try {
 		Manager* manager = Manager::getInstance();
+		std::cout << "[Loading map...";
 		manager->setMap(MapReader::readMap("maps/" + mapName));
-		std::cout << "[Map loaded]" << std::endl;
+		std::cout << "done]" << std::endl;
 		manager->play();
 
 		delete manager;

@@ -2,7 +2,6 @@
  * Camera.cpp
  *
  *  Created on: Oct 6, 2009
- *      Author: luke
  */
 #include <iostream>
 #include "Camera.h"
@@ -14,7 +13,6 @@ Camera::Camera(World* world, unsigned int width, unsigned int height) : cameraX(
 }
 
 Camera::~Camera() {
-	// TODO Auto-generated destructor stub
 }
 
 void Camera::relocate() {

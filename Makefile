@@ -1,5 +1,5 @@
 # Compiler flags
-SDL_LIB = `sdl-config --libs` -lSDL_ttf -lSDL_image
+SDL_LIB = `sdl-config --libs` -lSDL_ttf -lSDL_image -lSDL_mixer
 CFLAGS = `sdl-config --cflags` -W -Wall -ggdb -O0
 
 # The name of the executable to make.

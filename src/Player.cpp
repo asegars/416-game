@@ -2,7 +2,6 @@
  * Player.cpp
  *
  *  Created on: Oct 5, 2009
- *      Author: luke
  */
 
 #include <iostream>

@@ -2,7 +2,6 @@
  * Enemy.h
  *
  *  Created on: Oct 25, 2009
- *      Author: luke
  */
 
 #ifndef ENEMY_H_
