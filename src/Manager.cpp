@@ -32,8 +32,8 @@ Manager::Manager() {
 	world = new World("images/background1.bmp");
   	background = new Background();
 	camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/heros.png", 50, 400);
-	enemy = new Enemy("images/heckran.png", 0, 0);
+	player = new Player("images/heros.bmp", 50, 400);
+	enemy = new Enemy("images/heckran.bmp", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
 	loadHero();
 	loadEnemies();
@@ -102,7 +102,7 @@ void Manager::loadEnemies() {
   enemySprites.push_back( new Sprite(172, 0, 43, 48, enemy->getEnemy()));
   enemySprites.push_back( new Sprite(215, 0, 43, 48, enemy->getEnemy()));
   for(unsigned int i = 0; i < NUM_ENEMIES; ++i) {
-    enemies.push_back(new Enemy("images/heckran.png", 
+    enemies.push_back(new Enemy("images/heckran.bmp",
                                 (rand() % 2400), 1152));
     enemies.at(i)->setSprites(enemySprites);
   }
