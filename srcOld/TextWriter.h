@@ -2,7 +2,6 @@
  * TextWriter.h
  *
  *  Created on: Oct 25, 2009
- *      Author: luke
  */
 
 #ifndef TEXTWRITER_H_

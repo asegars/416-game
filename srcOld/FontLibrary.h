@@ -23,6 +23,7 @@ using std::vector;
 
 enum Font { FREE_SANS = 0, AGENT = 1 };
 
+// TODO: Convert this to the ResourceManager family tree.
 class FontLibrary {
 public:
 	static FontLibrary* getInstance();

@@ -2,7 +2,6 @@
  * Manager.cpp
  *
  *  Created on: Oct 6, 2009
- *      Author: luke
  */
 #include <SDL/SDL.h>
 #include <string>
@@ -19,9 +18,10 @@
 #define NUM_ENEMIES   5
 
 Manager::Manager() {
+	try {
 	screen = SDL_SetVideoMode(WORLD_WIDTH, WORLD_HEIGHT, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);
 
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
 		throw std::string("Unable to initialize SDL: ");
 	}
 	if (screen == NULL) {
@@ -29,11 +29,11 @@ Manager::Manager() {
 	}
 
   	srand(time(NULL));
-	world = new World("images/background1.png");
+	world = new World("images/background1.bmp");
   	background = new Background();
 	camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/heros.png", 50, 400);
-	enemy = new Enemy("images/heckran.png", 0, 0);
+	player = new Player("images/heros.bmp", 50, 400);
+	enemy = new Enemy("images/heckran.bmp", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
 	loadHero();
 	loadEnemies();
@@ -42,7 +42,11 @@ Manager::Manager() {
 	}
 	camera->observe(player);
 	camera->follow(player);
-
+	}
+	catch (std::string e) {
+		std::cerr << "Initialization exception: " << e << std::endl;
+		exit(1);
+	}
 }
 
 // TODO: Fix segfault here.
@@ -98,7 +102,7 @@ void Manager::loadEnemies() {
   enemySprites.push_back( new Sprite(172, 0, 43, 48, enemy->getEnemy()));
   enemySprites.push_back( new Sprite(215, 0, 43, 48, enemy->getEnemy()));
   for(unsigned int i = 0; i < NUM_ENEMIES; ++i) {
-    enemies.push_back(new Enemy("images/heckran.png", 
+    enemies.push_back(new Enemy("images/heckran.bmp",
                                 (rand() % 2400), 1152));
     enemies.at(i)->setSprites(enemySprites);
   }

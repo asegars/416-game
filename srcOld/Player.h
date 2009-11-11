@@ -2,7 +2,6 @@
  * Player.h
  *
  *  Created on: Oct 5, 2009
- *      Author: luke
  */
 #include "Sprite.h"
 #include "Character.h"
