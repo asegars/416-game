@@ -28,8 +28,43 @@ void Player::update(Uint32 ticks) {
 		ySpeed = 0;
     falling = false;
 	}
+  if(!justFired)
+    advanceFrame(ticks);
+  else
+    advanceFireFrame(ticks);
+}
 
-  advanceFrame(ticks);
+void Player::advanceFireFrame(Uint32 ticks) {
+  fireInterval += ticks;
+
+  if(curFrame == 0)
+    fireDir = 1;
+  
+  if(fireDir > 0) {
+    if(fireInterval < 150)
+      curFrame = 14;
+    else if(fireInterval < 300)
+      curFrame = 15;
+    else
+      curFrame = 16;
+  }
+  else {
+    if(fireInterval < 150)
+      curFrame = 17;
+    else if(fireInterval < 300)
+      curFrame = 18;
+    else
+      curFrame = 19; 
+  }
+
+  if(fireInterval > 450) {
+    justFired = false;
+    fireInterval = 0;
+    if(fireDir > 0)
+      curFrame = 0;
+    else
+      curFrame = 7;
+  }
 }
 
 void Player::advanceFrame(Uint32 ticks) {
@@ -42,7 +77,7 @@ void Player::advanceFrame(Uint32 ticks) {
   }
   else if (fabs(interval * xSpeed) > 15000 && xSpeed < 0) { 
     curFrame = (++curFrame) % (frames->size());
-    if(curFrame < 8 || curFrame == 0)
+    if(curFrame < 8 || curFrame > 13)
       curFrame = 8;
     interval = 0;
   }

@@ -18,7 +18,7 @@ Manager::Manager() :
   cur_ticks(0), prev_ticks(0), ticks(0),
   screen(SDL_SetVideoMode(VIEW_WIDTH, VIEW_HEIGHT, 16, SDL_HWSURFACE|SDL_DOUBLEBUF)),
   bgSurface(SDL_LoadBMP("images/background.bmp")),
-  playerSurface(SDL_LoadBMP("images/heros.bmp")),
+  playerSurface(SDL_LoadBMP("images/hero.bmp")),
   enemySurface(SDL_LoadBMP("images/heckran.bmp")),
   player(50, 1052, 0, 0),
   world(new Frame(bgSurface, screen, WORLD_HEIGHT, WORLD_WIDTH, 0, 0)),
@@ -48,7 +48,9 @@ void Manager::play() {
   cur_ticks = SDL_GetTicks();
 
   bool done = false;
-  float hit = 0.0;
+  float hitTimer = 0.0;
+  float fireTimer = 1000.0;
+  float fireDir = 0.0;
   unsigned int frames = 0;
   float seconds;
   float fps;
@@ -62,6 +64,8 @@ void Manager::play() {
     ticks = cur_ticks-prev_ticks;
     tick_sum += ticks;
     total_ticks += ticks;
+
+    fireTimer += ticks;
 
     seconds = total_ticks * 0.001;
     ++frames;
@@ -77,14 +81,17 @@ void Manager::play() {
     drawEnemies();
     if(collision()) {
       player.setHit(true);
-      hit = 0;
-    }
-    if(player.wasHit() && (hit * .001) < 1.5) {
+      hitTimer = 0.0;
+    } else
+      player.setHit(false);
+
+    if(player.wasHit() && (hitTimer * .001) < 1.5) {
       if(total_ticks % 100 > 50) 
         player.draw();
-      hit += ticks;
+      hitTimer += ticks;
     } else
-      player.draw(); 
+      player.draw();
+
     world.update();
     updateEnemies(ticks);
     player.update(ticks);
@@ -102,16 +109,24 @@ void Manager::play() {
 		if(event.type == SDL_KEYDOWN && keystate[SDLK_q])
       done = true;
 
-    if (keystate[SDLK_LEFT])
-        player.decrSpeedX();
-    if (keystate[SDLK_RIGHT])
-        player.incrSpeedX();
-    if (keystate[SDLK_UP] && !player.isFalling())
-        player.jump();
-    if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT] && !player.isFalling())
-        player.decelX();
+    if(fireTimer > 450) {
+		  if (keystate[SDLK_LEFT])
+		    player.decrSpeedX();
+		  if (keystate[SDLK_RIGHT])
+		    player.incrSpeedX();
+		  if (keystate[SDLK_UP] && !player.isFalling())
+		    player.jump();
+		  if (keystate[SDLK_SPACE] && !player.isFalling()) {
+		    fireDir = player.getXSpeed();
+		    player.setXSpeed(0.0);
+		    player.setFire(true, fireDir);
+        fireTimer = 0.0;      
+		  }
+		  if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT] && !player.isFalling())
+		    player.decelX();
+    }
     if (player.isFalling())
-        player.decelY();
+      player.decelY();
   }
 }
 
@@ -131,6 +146,12 @@ void Manager::loadHero() {
   playerFrames->push_back( Frame(playerSurface, screen, 37, 48, 258, 0));
   playerFrames->push_back( Frame(playerSurface, screen, 33, 48, 225, 0));
   playerFrames->push_back( Frame(playerSurface, screen, 25, 48, 200, 0));
+  playerFrames->push_back( Frame(playerSurface, screen, 43, 48, 400, 0));
+  playerFrames->push_back( Frame(playerSurface, screen, 43, 48, 443, 0));
+  playerFrames->push_back( Frame(playerSurface, screen, 44, 48, 486, 0));
+  playerFrames->push_back( Frame(playerSurface, screen, 43, 48, 617, 0));
+  playerFrames->push_back( Frame(playerSurface, screen, 43, 48, 574, 0));
+  playerFrames->push_back( Frame(playerSurface, screen, 44, 48, 530, 0));
   player.setFrames(playerFrames);
 }
 
