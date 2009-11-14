@@ -28,6 +28,7 @@ private:
 
   SDL_Surface *screen;
   SDL_Surface *bgSurface;
+  SDL_Surface *bg2Surface;
   SDL_Surface *playerSurface;
   SDL_Surface *enemySurface;
 

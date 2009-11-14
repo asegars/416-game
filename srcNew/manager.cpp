@@ -6,6 +6,7 @@ const unsigned int NUM_ENEMIES = 5;
 Manager::~Manager() {
   SDL_FreeSurface(screen);
   SDL_FreeSurface(bgSurface);
+  SDL_FreeSurface(bg2Surface);
   SDL_FreeSurface(playerSurface);
   SDL_FreeSurface(enemySurface);
   playerFrames->clear();
@@ -18,10 +19,12 @@ Manager::Manager() :
   cur_ticks(0), prev_ticks(0), ticks(0),
   screen(SDL_SetVideoMode(VIEW_WIDTH, VIEW_HEIGHT, 16, SDL_HWSURFACE|SDL_DOUBLEBUF)),
   bgSurface(SDL_LoadBMP("images/background.bmp")),
+  bg2Surface(SDL_LoadBMP("images/background1.bmp")),
   playerSurface(SDL_LoadBMP("images/hero.bmp")),
   enemySurface(SDL_LoadBMP("images/heckran.bmp")),
   player(50, 1052, 0, 0),
-  world(new Frame(bgSurface, screen, WORLD_HEIGHT, WORLD_WIDTH, 0, 0)),
+  world(new Frame(bgSurface, screen, WORLD_HEIGHT, WORLD_WIDTH, 0, 0),
+        new Frame(bg2Surface, screen, 1200, 900, 0, 0)),
   view(Viewport::getViewport())
   {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -29,9 +32,12 @@ Manager::Manager() :
     }
     if (screen == NULL) { throw string("Unable to set video mode!"); }
     if (bgSurface == NULL) { throw string("No background surface!"); }
+    if (bg2Surface == NULL) { throw string("No background2 surface!"); }
     if (playerSurface == NULL) { throw string("No player surface!"); }
     if (enemySurface == NULL) { throw string("No Enemy surface!"); }
 
+    SDL_SetColorKey(bg2Surface, SDL_SRCCOLORKEY|SDL_RLEACCEL, 
+      SDL_MapRGB(bg2Surface->format, 0, 0 ,255));
     SDL_SetColorKey(playerSurface, SDL_SRCCOLORKEY|SDL_RLEACCEL, 
       SDL_MapRGB(playerSurface->format, 255, 0 ,0));
     SDL_SetColorKey(enemySurface, SDL_SRCCOLORKEY|SDL_RLEACCEL, 
@@ -77,25 +83,26 @@ void Manager::play() {
     cout << "Seconds: " << seconds << endl;
     cout << "FPS : " << fps << endl;
 
+    world.update();
+    updateEnemies(ticks);
+    player.update(ticks);
+    view->update();
+
     world.draw();
     drawEnemies();
     if(collision()) {
       player.setHit(true);
       hitTimer = 0.0;
-    } else
-      player.setHit(false);
+    }
 
     if(player.wasHit() && (hitTimer * .001) < 1.5) {
       if(total_ticks % 100 > 50) 
         player.draw();
       hitTimer += ticks;
-    } else
+    } else {
       player.draw();
-
-    world.update();
-    updateEnemies(ticks);
-    player.update(ticks);
-    view->update();
+      player.setHit(false);
+    }
 
     SDL_Flip(screen);
 
@@ -116,7 +123,7 @@ void Manager::play() {
 		    player.incrSpeedX();
 		  if (keystate[SDLK_UP] && !player.isFalling())
 		    player.jump();
-		  if (keystate[SDLK_SPACE] && !player.isFalling()) {
+		  if (keystate[SDLK_SPACE] && !player.isFalling() && fireTimer > 1000) {
 		    fireDir = player.getXSpeed();
 		    player.setXSpeed(0.0);
 		    player.setFire(true, fireDir);

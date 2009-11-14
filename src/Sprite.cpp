@@ -9,8 +9,11 @@
 #include "Sprite.h"
 
 Sprite::Sprite(std::string filename) {
-	image = IMG_Load(filename.c_str());
+	image = SDL_LoadBMP(filename.c_str());
 	if (!image) { throw std::string("Error loading image file: ") + filename; }
+
+  SDL_SetColorKey(image, SDL_SRCCOLORKEY|SDL_RLEACCEL, 
+    SDL_MapRGB(image->format, 255, 0 ,0));
 
 	posX = 0;
 	posY = 0;

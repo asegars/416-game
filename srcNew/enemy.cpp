@@ -10,6 +10,8 @@ void Enemy::update(Uint32 ticks) {
   if ( xCoordinate >= WORLD_WIDTH - width) {
     xSpeed = -abs(xSpeed);
   }
+
+  yCoordinate = WORLD_HEIGHT - getHeight();
   advanceFrame(ticks);
 }
 

@@ -2,7 +2,7 @@
 #include "viewport.h"
 
 const int MAX_SPEED = 200;
-const int MAX_JUMP = 400;
+const int MAX_JUMP = 500;
 const int DECEL = 0.95;
 
 class Player : public Drawable {

@@ -30,9 +30,9 @@ Manager::Manager() {
 
   	srand(time(NULL));
 	world = new World("images/background1.bmp");
-  	background = new Background();
+  background = new Background();
 	camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
-	player = new Player("images/heros.bmp", 50, 400);
+	player = new Player("images/hero.bmp", 50, 400);
 	enemy = new Enemy("images/heckran.bmp", 0, 0);
 	fontLibrary = FontLibrary::getInstance();
 	loadHero();
@@ -90,6 +90,12 @@ void Manager::loadHero() {
   heroSprites.push_back( new Sprite(258, 0, 37, 48, player->getPlayer()));
   heroSprites.push_back( new Sprite(225, 0, 33, 48, player->getPlayer()));
   heroSprites.push_back( new Sprite(200, 0, 25, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(400, 0, 43, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(443, 0, 43, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(486, 0, 44, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(617, 0, 43, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(574, 0, 43, 48, player->getPlayer()));
+  heroSprites.push_back( new Sprite(530, 0, 44, 48, player->getPlayer()))
   player->setSprites(heroSprites);
 }
 
@@ -119,16 +125,16 @@ bool Manager::collision() {
     Enemy *current = enemies.at(i);
     enemyWidth = current->getWidth();
     enemyHeight = current->getHeight();   
-    if(current->getX() + enemyWidth - 2 < player->getX()) {
+    if(current->getX() + enemyWidth - 5 < player->getX()) {
       continue;
     }
-    if(current->getX() > player->getX() + playerWidth - 2) {
+    if(current->getX() > player->getX() + playerWidth - 5) {
       continue;
     }
-    if(current->getY() + enemyHeight - 2 < player->getY()) {
+    if(current->getY() + enemyHeight - 5 < player->getY()) {
       continue;
     }
-    if(current->getY() > player->getY() + playerHeight - 2) {
+    if(current->getY() > player->getY() + playerHeight - 5) {
       continue;
     }
     return true;
@@ -146,7 +152,7 @@ void Manager::play() {
 	done = false;
 	bool pause = false;
 	unsigned int tick_sum = 0;
-	unsigned int frameCount = 0;
+	unsigned int new SpriteCount = 0;
 
 	std::stringstream outputStream;
 
@@ -163,18 +169,18 @@ void Manager::play() {
         camera->setCollision(false);
 			camera->snapshot(screen, ticks);
 
-			// Print the runtime & framerate
+			// Print the runtime & new Spriterate
 			outputStream << "Sec: " << (cur_ticks - start_ticks) * .001;
 			writer.write(outputStream.str().c_str(), screen, 650, 50);
 			outputStream.str("");
 
-			outputStream << "FPS: " << frameCount / ((cur_ticks - start_ticks) * .001);
+			outputStream << "FPS: " << new SpriteCount / ((cur_ticks - start_ticks) * .001);
 			writer.write(outputStream.str().c_str(), screen, 650, 70);
 			outputStream.str("");
 		}
 
 		SDL_Flip(screen);
-		++frameCount;
+		++new SpriteCount;
    
     SDL_PollEvent(&event);
     Uint8 *keystate = SDL_GetKeyState(NULL);

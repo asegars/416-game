@@ -28,6 +28,7 @@ void Player::update(Uint32 ticks) {
 		ySpeed = 0;
     falling = false;
 	}
+
   if(!justFired)
     advanceFrame(ticks);
   else

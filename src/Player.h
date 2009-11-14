@@ -25,6 +25,7 @@ public:
 	void draw();
 	void update(Uint32 ticks);
   void advanceFrame(Uint32 ticks);
+  void advanceFireFrame(Uint32 ticks);
 
   // Functions specific to user key movements
   void incrSpeedX();
@@ -36,6 +37,14 @@ public:
   int getSize() const { return sprites.size(); }
 
   void setYSpeed(float s) { ySpeed = s; }
+  void setXSpeed(const float f) { xSpeed = f; }
+  void setHit(bool hit) { isHit = hit; }
+  void setFire(bool fire, float d) {
+    justFired = fire; 
+    fireDir = d;
+  }
+  bool wasHit() const { return isHit; }
+  bool recentlyFired() const { return justFired; }
   bool isFalling() const { return falling; }
 
   virtual SDL_Surface* getPlayer() const { return sprite->getSurface(); }
@@ -45,10 +54,14 @@ public:
 private:
 	void adjustViewport();
 	int interval;
+  int fireInterval;
+  float fireDir;
 	Sprite* sprite;
 
 	bool loadedSprite;
 	bool falling;
+  bool isHit;
+  bool justFired;
 };
 
 #endif /* PLAYER_H_ */
