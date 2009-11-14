@@ -95,7 +95,7 @@ void Manager::loadHero() {
   heroSprites.push_back( new Sprite(486, 0, 44, 48, player->getPlayer()));
   heroSprites.push_back( new Sprite(617, 0, 43, 48, player->getPlayer()));
   heroSprites.push_back( new Sprite(574, 0, 43, 48, player->getPlayer()));
-  heroSprites.push_back( new Sprite(530, 0, 44, 48, player->getPlayer()))
+  heroSprites.push_back( new Sprite(530, 0, 44, 48, player->getPlayer()));
   player->setSprites(heroSprites);
 }
 
@@ -151,8 +151,11 @@ void Manager::play() {
 
 	done = false;
 	bool pause = false;
+  float hitTimer = 0.0;
+  float fireTimer = 1000.0;
+  float fireDir = 0.0;
 	unsigned int tick_sum = 0;
-	unsigned int new SpriteCount = 0;
+	float frames = 0.0;
 
 	std::stringstream outputStream;
 
@@ -174,13 +177,13 @@ void Manager::play() {
 			writer.write(outputStream.str().c_str(), screen, 650, 50);
 			outputStream.str("");
 
-			outputStream << "FPS: " << new SpriteCount / ((cur_ticks - start_ticks) * .001);
+			outputStream << "FPS: " << frames / ((cur_ticks - start_ticks) * .001);
 			writer.write(outputStream.str().c_str(), screen, 650, 70);
 			outputStream.str("");
 		}
 
 		SDL_Flip(screen);
-		++new SpriteCount;
+		++frames;
    
     SDL_PollEvent(&event);
     Uint8 *keystate = SDL_GetKeyState(NULL);
@@ -192,15 +195,23 @@ void Manager::play() {
     if(event.type == SDL_KEYDOWN && keystate[SDLK_q])
       done = true;
 
-    if (keystate[SDLK_LEFT])
-      player->decrSpeedX();
-    if (keystate[SDLK_RIGHT])
-      player->incrSpeedX();
-    if (keystate[SDLK_SPACE] && !player->isFalling())
-      player->jump();
-    if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT] && !player->isFalling())
-      player->decelX();
-    if(player->isFalling())
+    if(fireTimer > 450) {
+		  if (keystate[SDLK_LEFT])
+		    player->decrSpeedX();
+		  if (keystate[SDLK_RIGHT])
+		    player->incrSpeedX();
+		  if (keystate[SDLK_UP] && !player->isFalling())
+		    player->jump();
+		  if (keystate[SDLK_SPACE] && !player->isFalling() && fireTimer > 1000) {
+		    fireDir = player->getXSpeed();
+		    player->setXSpeed(0.0);
+		    player->setFire(true, fireDir);
+        fireTimer = 0.0;      
+		  }
+		  if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT] && !player->isFalling())
+		    player->decelX();
+    }
+    if (player->isFalling())
       player->decelY();
 	}
 }

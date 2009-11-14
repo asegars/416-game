@@ -93,33 +93,33 @@ void Player::updatePosition(Uint32 ticks) {
 void Player::advanceFireFrame(Uint32 ticks) {
   fireInterval += ticks;
 
-  if(curFrame == 0)
+  if(curSprite == 0)
     fireDir = 1;
   
   if(fireDir > 0) {
     if(fireInterval < 150)
-      curFrame = 14;
+      curSprite = 14;
     else if(fireInterval < 300)
-      curFrame = 15;
+      curSprite = 15;
     else
-      curFrame = 16;
+      curSprite = 16;
   }
   else {
     if(fireInterval < 150)
-      curFrame = 17;
+      curSprite = 17;
     else if(fireInterval < 300)
-      curFrame = 18;
+      curSprite = 18;
     else
-      curFrame = 19; 
+      curSprite = 19; 
   }
 
   if(fireInterval > 450) {
     justFired = false;
     fireInterval = 0;
     if(fireDir > 0)
-      curFrame = 0;
+      curSprite = 0;
     else
-      curFrame = 7;
+      curSprite = 7;
   }
 }
 
@@ -127,22 +127,22 @@ void Player::advanceFireFrame(Uint32 ticks) {
 void Player::advanceFrame(Uint32 ticks) {
   interval += ticks;
   if (fabs(interval * xSpeed) > 15000 && xSpeed > 0) {   
-    curFrame = (++curFrame) % (frames->size()/2);
-    if(curFrame > 6 || curFrame == 0)
-      curFrame = 1;
+    curSprite = (++curSprite) % (sprites.size()/2);
+    if(curSprite > 6 || curSprite == 0)
+      curSprite = 1;
     interval = 0;
   }
   else if (fabs(interval * xSpeed) > 15000 && xSpeed < 0) { 
-    curFrame = (++curFrame) % (frames->size());
-    if(curFrame < 8 || curFrame > 13)
-      curFrame = 8;
+    curSprite = (++curSprite) % (sprites.size());
+    if(curSprite < 8 || curSprite > 13)
+      curSprite = 8;
     interval = 0;
   }
   else if (xSpeed == 0) {
-    if(curFrame < 7)
-      curFrame = 0;
+    if(curSprite < 7)
+      curSprite = 0;
     else
-      curFrame = 7;
+      curSprite = 7;
   }
 }
 
