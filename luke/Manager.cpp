@@ -22,7 +22,7 @@ Manager::Manager() {
 		throw std::string("Unable to set video mode!");
 	}
 
-	world = new World("images/background-full.png");
+	world = new World("images/waterfall.bmp");
 	camera = new Camera(world, WORLD_WIDTH, WORLD_HEIGHT);
 	player = new Player("images/flying-saucer.png", 50, 150);
 

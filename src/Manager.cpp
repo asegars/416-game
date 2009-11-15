@@ -13,6 +13,7 @@
 #include "FontLibrary.h"
 #include "terrain/SolidTerrain.h"
 #include "resources/SoundManager.h"
+#include "resources/GraphicManager.h"
 #include "TextWriter.h"
 
 #define WORLD_WIDTH 	800
@@ -32,19 +33,17 @@ Manager::Manager() {
 		}
 
 		srand(time(NULL));
-		world = new World("images/background1.bmp");
+		world = new World("waterfall.bmp");
 		background = new Background();
 		camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
-		player = new Player("images/hero.bmp", 50, 400);
-		enemy = new Enemy("images/heckran.bmp", 0, 0);
+		player = new Player("hero.bmp", 50, 400);
+		enemy = new Enemy("heckran.bmp", 0, 0);
 		fontLibrary = FontLibrary::getInstance();
 		loadHero();
 		loadEnemies();
 		for (unsigned int i = 0; i < enemies.size(); ++i) {
 			camera->observe(enemies.at(i));
 		}
-//		camera->observe(player);
-//		camera->follow(enemies.at(2));
 	} catch (std::string e) {
 		std::cerr << "Initialization exception: " << e << std::endl;
 		exit(1);
@@ -53,7 +52,9 @@ Manager::Manager() {
 
 // TODO: Fix segfault here.
 Manager::~Manager() {
-	std::cout << "Cleaning up...";
+	delete SoundManager::getInstance();
+	delete GraphicManager::getInstance();
+
 	if (world != NULL) {
 		delete world;
 	}
@@ -88,7 +89,6 @@ Manager::~Manager() {
 			delete enemies.at(k);
 	}
 	SDL_Quit();
-	std::cout << "done." << std::endl;
 }
 
 void Manager::loadHero() {
@@ -126,7 +126,7 @@ void Manager::loadEnemies() {
 	enemySprites.push_back(new Sprite(215, 0, 43, 48, enemy->getEnemy()));
 	for (unsigned int i = 0; i < NUM_ENEMIES; ++i) {
 		enemies.push_back(
-				new Enemy("images/heckran.bmp", (rand() % 2400), 1152));
+				new Enemy("heckran.bmp", (rand() % 2400), 1152));
 		enemies.at(i)->setSprites(enemySprites);
 	}
 }
@@ -178,13 +178,10 @@ void Manager::play() {
 
 	camera->setScrollDelay(14100);
 
-//	SoundManager* soundManager = new SoundManager();
-//	Mix_Music* bgMusic = soundManager->load("background-music.mp3");
+	SoundManager* soundManager = SoundManager::getInstance();
+	Mix_Music* bgMusic = soundManager->load("background-music.mp3");
 
-	// TODO: This needs to be put into the managers.  Its gross right now...
-	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, AUDIO_S16SYS, 2, 4096);
-	Mix_Music* bgMusic = Mix_LoadMUS("music/background-music.mp3");
-	Mix_PlayMusic(bgMusic, -1);
+	soundManager->play(bgMusic);
 
 	while (!done) {
 		prev_ticks = cur_ticks;

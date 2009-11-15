@@ -8,6 +8,7 @@
 #ifndef WORLDMAP_H_
 #define WORLDMAP_H_
 
+#include <vector>
 #include "Terrain.h"
 
 
@@ -16,17 +17,15 @@ public:
 	WorldMap(int w, int h, int cd);
 	virtual ~WorldMap();
 
-	void setCell(int x, int y, Terrain* t) { map[y * cellWidth + x] = t; }
-	Terrain* getCell(int x, int y) const { return map[y * cellWidth + x]; }
-	Terrain* getCell(int loc) const { return map[loc]; }
+	void setCell(int x, int y, Terrain* t);
 	int locationToCell(float x, float y);
 	int getCellDim() const { return cellDim; }
 	int getCellWidth() const { return cellWidth; }
 	int getCellHeight() const { return cellHeight; }
-	Terrain** getMap() const { return map; }
+	const std::vector<Terrain *>& getMap() const { return terrainMap; }
 private:
 	int cellWidth, cellHeight, cellDim;
-	Terrain** map;
+	std::vector<Terrain *> terrainMap;
 };
 
 #endif /* WORLDMAP_H_ */

@@ -16,7 +16,7 @@ Camera::Camera(World* world, Background* back, unsigned int width,
 	viewWidth = width;
 	viewHeight = height;
 
-	cameraX = world->getWidth() - viewWidth;
+	cameraX = 0;
 	cameraY = world->getHeight() - viewHeight;
 
 	delayScroll = 0;
@@ -28,8 +28,10 @@ Camera::~Camera() {
 /**
  * Relocates the camera to point higher and higher as time progresses.
  */
-void Camera::relocate() {
-	cameraY = cameraY - 1;
+void Camera::relocate(unsigned int ticks) {
+	// TODO: Test this on other systems.  Will the camera scroll at
+	//   an acceptable rate?
+	cameraY = cameraY - round(.05 * ticks);
 	int highYlimit = world->getHeight();
 
 	if (cameraY < 0) {
@@ -40,22 +42,27 @@ void Camera::relocate() {
 	}
 }
 
-//void Camera::follow(Player* player) {
-//	tracker = player;
-//}
+// Returns true if the boundingBox (in CAMERA COORDINATES) is visible.
+bool Camera::isVisible(SDL_Rect& boundingBox) {
+	// Too far to the left
+	if (boundingBox.x + boundingBox.w < 0) return false;
+	// Too far to the right
+	if (boundingBox.x > viewWidth) return false;
+	// Too far up
+	if (boundingBox.y + boundingBox.h < 0) return false;
+	// Too far down
+	if (boundingBox.y > viewHeight) return false;
 
-void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
-	// If the item that was just updated is what's being tracked,
-	// readjust the camera location.
-	if (SDL_GetTicks() > delayScroll) {
-		relocate();
-	}
+	return true;
+}
 
+
+void Camera::blitWorld(SDL_Surface* screen, unsigned int ticks) {
 	SDL_Rect srcBounds, destBounds;
 	// Blit the world
 	Sprite* worldSprite = world->getSprite();
-	srcBounds.x = cameraX / 2.2;
-	srcBounds.y = cameraY / 2.2;
+	srcBounds.x = cameraX;// / 2.2;
+	srcBounds.y = cameraY;// / 2.2;
 	srcBounds.w = viewWidth;
 	srcBounds.h = viewHeight;
 
@@ -63,18 +70,44 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	destBounds.y = 0;
 	destBounds.w = 0;
 	destBounds.h = 0;
-	SDL_BlitSurface(worldSprite->getSurface(), &srcBounds, screen, &destBounds);
+	SDL_BlitSurface(worldSprite->getSurface(), &srcBounds, screen, NULL);
 
+	/*
 	srcBounds.x = cameraX;
 	srcBounds.y = cameraY;
 	srcBounds.w = viewWidth;
 	srcBounds.h = viewHeight;
 
 	destBounds.x = 0;
-	destBounds.y = 0;//viewHeight - background->getHeight();
-	SDL_BlitSurface(background->getSprite()->getSurface(), &srcBounds, screen,
-			&destBounds);
+	destBounds.y = 0;
+//	SDL_BlitSurface(background->getSprite()->getSurface(), &srcBounds, screen,
+//			&destBounds);
+ */
+}
 
+void Camera::blitTerrain(SDL_Surface* screen, unsigned int ticks) {
+	std::vector<Terrain *> terrain = world->getMap()->getMap();
+	int cellDim = world->getMap()->getCellDim();
+
+	std::vector<Terrain *>::const_iterator iter = terrain.begin();
+	SDL_Rect terrainBounds = {0, 0, cellDim, cellDim};
+	SDL_Rect terrainPos = {0, 0, cellDim, cellDim};
+	while (iter != terrain.end()) {
+		terrainPos.x = (*iter)->getX() - cameraX;
+		terrainPos.y = (*iter)->getY() - cameraY;
+
+		if (isVisible(terrainBounds)) {
+			SDL_BlitSurface((*iter)->getSprite()->getSurface(),
+					&terrainBounds,
+					screen,
+					&terrainPos);
+		}
+		++iter;
+	}
+}
+
+void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
+	SDL_Rect srcBounds, destBounds;
 	// Blit each drawable figure onto the world.
 	std::vector<Drawable *>::const_iterator iter = subjects.begin();
 	while (iter != subjects.end()) {
@@ -90,30 +123,26 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 		srcBounds.h = sprite->getHeight();
 		destBounds.x = x - cameraX;
 		destBounds.y = y - cameraY;
+		destBounds.w = srcBounds.w;
+		destBounds.h = srcBounds.h;
 
-		SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
+		if (isVisible(destBounds)) {
+			SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
+		}
 		++iter;
 	}
+}
 
-	WorldMap* map = world->getMap();
-	int cellDim = map->getCellDim();
-	SDL_Rect terrainBounds = {0, 0, cellDim, cellDim};
-	for (int height = 0; height < map->getCellHeight(); ++height) {
-		for (int width = 0; width < map->getCellWidth(); ++width) {
-			int realX = width * cellDim;
-			int realY = height * cellDim;
-
-			// Convert from world coords to camera coords
-			SDL_Rect terrainPos = {realX - cameraX, realY - cameraY, 0, 0};
-			// If the cell has terrain in it, blit it
-			if (map->getCell(width, height) != NULL) {
-				SDL_BlitSurface(map->getCell(width, height)->getSprite()->getSurface(),
-						&terrainBounds,
-						screen,
-						&terrainPos);
-			}
-		}
+void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
+	// If the item that was just updated is what's being tracked,
+	// readjust the camera location.
+	if (SDL_GetTicks() > delayScroll) {
+		relocate(ticks);
 	}
+
+	blitWorld(screen, ticks);
+	blitDrawables(screen, ticks);
+	blitTerrain(screen, ticks);
 }
 
 void Camera::observe(Drawable* item) {

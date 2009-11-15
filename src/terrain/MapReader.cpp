@@ -31,8 +31,9 @@ Terrain* MapReader::getTileType(int mapVal) {
 
 WorldMap* MapReader::readMap(std::string filename) {
 	std::ifstream infile(filename.c_str());
-	int cellWidth, cellHeight;
-	int nextTileVal;
+	int cellWidth = 0;
+	int cellHeight = 0;
+	int nextTileVal = 0;
 	std::stringstream lineStream;
 
 	infile >> cellWidth >> cellHeight;
@@ -45,10 +46,19 @@ WorldMap* MapReader::readMap(std::string filename) {
 		// Loop through each column of the map
 		for (int width = 0; width < cellWidth; ++width) {
 			infile >> nextTileVal;
-			map->setCell(width, height, getTileType(nextTileVal));
+			Terrain * nextTileType = getTileType(nextTileVal);
+			if (nextTileType != NULL) {
+				map->setCell(width, height, nextTileType);
+			}
 		}
 		lineStream.str("");
 	}
+
+	/*
+	for (int width = 0; width < cellWidth; ++width) {
+		map->setCell(width, cellHeight - 1, getTileType(1));
+	}
+	*/
 
 	return map;
 }

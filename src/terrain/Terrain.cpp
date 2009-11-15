@@ -7,8 +7,8 @@
 
 #include "Terrain.h"
 
-int Terrain::width = 80;
-int Terrain::height = 80;
+int Terrain::width = 30;
+int Terrain::height = 30;
 
 Terrain::Terrain(Sprite* terrainSprite) : sprite(terrainSprite) {
 	width = sprite->getWidth();
@@ -16,5 +16,5 @@ Terrain::Terrain(Sprite* terrainSprite) : sprite(terrainSprite) {
 }
 
 Terrain::~Terrain() {
-	if (sprite != NULL) { delete sprite; }
+//	if (sprite != NULL) { delete sprite; }
 }

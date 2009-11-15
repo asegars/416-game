@@ -32,13 +32,18 @@ public:
 	void snapshot(SDL_Surface* screen, Uint32 ticks);
 	void observe(Drawable* item);
 	void setScrollDelay(unsigned int ticks) { delayScroll = ticks; }
-//	void follow(Player* player);
-  void setCollision(bool);
+	void setCollision(bool);
 
 	Player* getFollowedPlayer() const { return tracker; }
 
 private:
-	void relocate();
+	void relocate(unsigned int ticks);
+	bool isVisible(SDL_Rect& boundingBox);
+
+	// Blitting methods
+	void blitWorld(SDL_Surface* screen, unsigned int ticks);
+	void blitTerrain(SDL_Surface* screen, unsigned int ticks);
+	void blitDrawables(SDL_Surface* screen, unsigned int ticks);
 
 	vector<Drawable*> subjects;
 	World* world;

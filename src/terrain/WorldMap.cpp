@@ -13,17 +13,23 @@ WorldMap::WorldMap(int w, int h, int cd) {
 	cellHeight = h;
 	cellDim = cd;
 
-	map = new Terrain*[cellHeight * cellWidth];
-	for (int i = 0; i < cellHeight * cellWidth; ++i) {
-		map[i] = NULL;
-	}
+//	map = new Terrain*[cellHeight * cellWidth];
+//	for (int i = 0; i < cellHeight * cellWidth; ++i) {
+//		map[i] = NULL;
+//	}
 }
 
 WorldMap::~WorldMap() {
-	for (int i = 0; i < cellHeight * cellWidth; ++i) {
-		delete map[i];
+	for (unsigned int i = 0; i < terrainMap.size(); ++i) {
+		if (terrainMap[i] != NULL) delete terrainMap[i];
 	}
-	if (map != NULL) delete [] map;
+}
+
+
+void WorldMap::setCell(int x, int y, Terrain* t) {
+	t->setLocation(x * cellDim, y * cellDim);
+
+	terrainMap.push_back(t);
 }
 
 int WorldMap::locationToCell(float x, float y) {

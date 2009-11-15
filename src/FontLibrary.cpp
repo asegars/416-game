@@ -11,6 +11,7 @@
 // Reserve space for the FontLibrary instance.
 FontLibrary* FontLibrary::instance = NULL;
 
+// TODO: Convert to new manager framework to standardize interface & improve memory management.
 FontLibrary::FontLibrary() {
 	if (TTF_Init() == -1) {
 		throw std::string("TTF error: ") + TTF_GetError();

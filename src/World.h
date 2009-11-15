@@ -32,7 +32,7 @@ public:
 
 	void setMap(WorldMap* map);
 	WorldMap* getMap() const { return worldMap; }
-	Terrain** getTerrain() { return worldMap->getMap(); }
+	std::vector<Terrain *> getTerrain() { return worldMap->getMap(); }
 private:
 	Sprite* background;
 	WorldMap* worldMap;

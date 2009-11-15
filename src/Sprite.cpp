@@ -6,10 +6,11 @@
 
 #include <iostream>
 #include <SDL/SDL_image.h>
+#include "resources/GraphicManager.h"
 #include "Sprite.h"
 
 Sprite::Sprite(std::string filename) {
-	image = SDL_LoadBMP(filename.c_str());
+	image = GraphicManager::getInstance()->load(filename.c_str());
 	if (!image) { throw std::string("Error loading image file: ") + filename; }
 
   SDL_SetColorKey(image, SDL_SRCCOLORKEY|SDL_RLEACCEL, 
@@ -26,8 +27,8 @@ Sprite::Sprite(std::string filename) {
 }
 
 Sprite::~Sprite() {
-	if (image != NULL) {
-		SDL_FreeSurface(image);
-		image = NULL;
-	}
+//	if (image != NULL) {
+//		SDL_FreeSurface(image);
+//		image = NULL;
+//	}
 }

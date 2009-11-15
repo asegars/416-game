@@ -1,6 +1,6 @@
 # Change the following values to suit your system.
 
-CFLAGS=`sdl-config --cflags` -W -Wall -ggdb -O0
+CFLAGS=`sdl-config --cflags` -W -Wall -ggdb -O0 -pg
 SDL_LIB=`sdl-config --libs` -lSDL_ttf -lSDL_image -lSDL_mixer
 CCC=g++
 
