@@ -10,49 +10,46 @@
 #include "terrain/SolidTerrain.h"
 
 Camera::Camera(World* world, Background* back, unsigned int width,
-		unsigned int height) :
-	cameraX(0), cameraY(0) {
+		unsigned int height) {
 	this->world = world;
 	this->background = back;
 	viewWidth = width;
 	viewHeight = height;
+
+	cameraX = world->getWidth() - viewWidth;
+	cameraY = world->getHeight() - viewHeight;
+
+	delayScroll = 0;
 }
 
 Camera::~Camera() {
 }
 
+/**
+ * Relocates the camera to point higher and higher as time progresses.
+ */
 void Camera::relocate() {
-	cameraX = tracker->getX() - (viewWidth / 2);
-	cameraY = tracker->getY() - (viewHeight / 2);
+	cameraY = cameraY - 1;
+	int highYlimit = world->getHeight();
 
-	// Compute the upper bounds of the camera location
-	int highXlimit = world->getWidth() - viewWidth;
-	int highYlimit = world->getHeight() - viewHeight;
-
-	// Check the bounds
-	if (cameraX < 0) {
-		cameraX = 0;
-	}
-	if (cameraX > highXlimit) {
-		cameraX = highXlimit;
-	}
 	if (cameraY < 0) {
 		cameraY = 0;
 	}
 	if (cameraY > highYlimit) {
 		cameraY = highYlimit;
 	}
-
 }
 
-void Camera::follow(Player* player) {
-	tracker = player;
-}
+//void Camera::follow(Player* player) {
+//	tracker = player;
+//}
 
 void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	// If the item that was just updated is what's being tracked,
 	// readjust the camera location.
-	relocate();
+	if (SDL_GetTicks() > delayScroll) {
+		relocate();
+	}
 
 	SDL_Rect srcBounds, destBounds;
 	// Blit the world
@@ -77,10 +74,6 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	destBounds.y = 0;//viewHeight - background->getHeight();
 	SDL_BlitSurface(background->getSprite()->getSurface(), &srcBounds, screen,
 			&destBounds);
-
-	// If the item that was just updated is what's being tracked,
-	// readjust the camera location.
-	relocate();
 
 	// Blit each drawable figure onto the world.
 	std::vector<Drawable *>::const_iterator iter = subjects.begin();

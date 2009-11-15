@@ -1,7 +1,7 @@
 #include "Background.h"
 
 Background::Background() {
-  bgs.push_back(new Sprite("images/background2.png"));
+  bgs.push_back(new Sprite("images/background2.bmp"));
 }
 
 Background::~Background() {

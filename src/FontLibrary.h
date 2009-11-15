@@ -29,7 +29,7 @@ public:
 	static FontLibrary* getInstance();
 	virtual ~FontLibrary();
 
-	TTF_Font* getFont(Font, int) const;
+	TTF_Font* getFont(Font, unsigned int) const;
 
 private:
 	std::vector<TTF_Font *> fonts;

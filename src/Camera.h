@@ -31,7 +31,8 @@ public:
 
 	void snapshot(SDL_Surface* screen, Uint32 ticks);
 	void observe(Drawable* item);
-	void follow(Player* player);
+	void setScrollDelay(unsigned int ticks) { delayScroll = ticks; }
+//	void follow(Player* player);
   void setCollision(bool);
 
 	Player* getFollowedPlayer() const { return tracker; }
@@ -45,6 +46,8 @@ private:
 	Player* tracker;	// the unit that the camera is following
 
 	SDL_Surface* backSurface;
+
+	unsigned int delayScroll;
 
 	int viewWidth;
 	int viewHeight;
