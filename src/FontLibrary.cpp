@@ -49,6 +49,7 @@ void FontLibrary::loadFonts() {
  * Note: the pixel size is currently ignored.
  */
 TTF_Font* FontLibrary::getFont(Font font, unsigned int size) const {
+  size = fonts.size();
 	// TODO: Dynamically load fonts if they are requested and not stored.
 	if (font >= 0 && font < fonts.size()) {
 		return fonts[font];

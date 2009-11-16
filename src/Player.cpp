@@ -10,7 +10,7 @@
 #include "Manager.h"
 
 Player::Player(Sprite* spr) :
-	sprite(spr), loadedSprite(false) {
+	sprite(spr), loadedSprite(false), falling(true) {
 	x = 0;
 	y = 48;
 

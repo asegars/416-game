@@ -15,15 +15,13 @@ Character::~Character() {
 }
 
 bool Character::checkLocationForCollision(float xLoc, float yLoc) {
-	if (world == NULL) {
-		world = Manager::getInstance()->getWorld();
-	}
+  world = Manager::getInstance()->getWorld();
 	WorldMap* map = world->getMap();
 
 	if (map != NULL) {
 		int cellIndex = map->locationToCell(xLoc, yLoc);
 
-		if (world->getTerrain()[cellIndex] == NULL) {
+		if (world->getTerrain()[cellIndex] == 0) {
 			return false;
 		}
 		return true;

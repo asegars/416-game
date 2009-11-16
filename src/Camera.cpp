@@ -4,6 +4,7 @@
  *  Created on: Oct 6, 2009
  */
 #include <iostream>
+#include <sstream>
 #include <cmath>
 #include "Camera.h"
 #include "terrain/Terrain.h"
@@ -57,12 +58,12 @@ bool Camera::isVisible(SDL_Rect& boundingBox) {
 }
 
 
-void Camera::blitWorld(SDL_Surface* screen, unsigned int ticks) {
+void Camera::blitWorld(SDL_Surface* screen) {
 	SDL_Rect srcBounds, destBounds;
 	// Blit the world
 	Sprite* worldSprite = world->getSprite();
-	srcBounds.x = cameraX;// / 2.2;
-	srcBounds.y = cameraY;// / 2.2;
+	srcBounds.x = cameraX; // / 2.2;
+	srcBounds.y = cameraY; // / 2.2;
 	srcBounds.w = viewWidth;
 	srcBounds.h = viewHeight;
 
@@ -85,7 +86,7 @@ void Camera::blitWorld(SDL_Surface* screen, unsigned int ticks) {
  */
 }
 
-void Camera::blitTerrain(SDL_Surface* screen, unsigned int ticks) {
+void Camera::blitTerrain(SDL_Surface* screen) {
 	std::vector<Terrain *> terrain = world->getMap()->getMap();
 	int cellDim = world->getMap()->getCellDim();
 
@@ -108,6 +109,9 @@ void Camera::blitTerrain(SDL_Surface* screen, unsigned int ticks) {
 
 void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
 	SDL_Rect srcBounds, destBounds;
+  TextWriter writer;
+  std::stringstream outputStream;
+  unsigned int playerCount = 0;
 	// Blit each drawable figure onto the world.
 	std::vector<Drawable *>::const_iterator iter = subjects.begin();
 	while (iter != subjects.end()) {
@@ -127,9 +131,16 @@ void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
 		destBounds.h = srcBounds.h;
 
 		if (isVisible(destBounds)) {
+      if(playerCount == 0 && playerCollision) {
+				outputStream << "I've been hit!";
+				writer.write(outputStream.str().c_str(), screen, destBounds.x - 30, 
+          destBounds.y - 20);
+				outputStream.str("");
+      }
 			SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
 		}
 		++iter;
+    ++playerCount;
 	}
 }
 
@@ -140,9 +151,9 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 		relocate(ticks);
 	}
 
-	blitWorld(screen, ticks);
+	blitWorld(screen);
 	blitDrawables(screen, ticks);
-	blitTerrain(screen, ticks);
+	blitTerrain(screen);
 }
 
 void Camera::observe(Drawable* item) {

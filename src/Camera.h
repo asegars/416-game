@@ -41,8 +41,8 @@ private:
 	bool isVisible(SDL_Rect& boundingBox);
 
 	// Blitting methods
-	void blitWorld(SDL_Surface* screen, unsigned int ticks);
-	void blitTerrain(SDL_Surface* screen, unsigned int ticks);
+	void blitWorld(SDL_Surface* screen);
+	void blitTerrain(SDL_Surface* screen);
 	void blitDrawables(SDL_Surface* screen, unsigned int ticks);
 
 	vector<Drawable*> subjects;

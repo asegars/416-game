@@ -18,7 +18,7 @@
 
 #define WORLD_WIDTH 	800
 #define WORLD_HEIGHT 	600
-#define NUM_ENEMIES   5
+#define NUM_ENEMIES   3
 
 Manager::Manager() {
 	try {
@@ -36,11 +36,12 @@ Manager::Manager() {
 		world = new World("waterfall.bmp");
 		background = new Background();
 		camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
-		player = new Player("hero.bmp", 50, 400);
+		player = new Player("hero.bmp", 50, 2920);
 		enemy = new Enemy("heckran.bmp", 0, 0);
 		fontLibrary = FontLibrary::getInstance();
 		loadHero();
 		loadEnemies();
+    camera->observe(player);
 		for (unsigned int i = 0; i < enemies.size(); ++i) {
 			camera->observe(enemies.at(i));
 		}
@@ -50,7 +51,6 @@ Manager::Manager() {
 	}
 }
 
-// TODO: Fix segfault here.
 Manager::~Manager() {
 	delete SoundManager::getInstance();
 	delete GraphicManager::getInstance();
@@ -126,7 +126,7 @@ void Manager::loadEnemies() {
 	enemySprites.push_back(new Sprite(215, 0, 43, 48, enemy->getEnemy()));
 	for (unsigned int i = 0; i < NUM_ENEMIES; ++i) {
 		enemies.push_back(
-				new Enemy("heckran.bmp", (rand() % 2400), 1152));
+				new Enemy("heckran.bmp", (rand() % 800), 2922));
 		enemies.at(i)->setSprites(enemySprites);
 	}
 }
@@ -168,7 +168,7 @@ void Manager::play() {
 
 	done = false;
 	bool pause = false;
-	float hitTimer = 0.0;
+  float hitTimer = 0.0;
 	float fireTimer = 1000.0;
 	float fireDir = 0.0;
 	unsigned int tick_sum = 0;
@@ -188,11 +188,14 @@ void Manager::play() {
 		cur_ticks = SDL_GetTicks();
 		ticks = cur_ticks - prev_ticks;
 		tick_sum += ticks;
+    fireTimer += ticks;
+    hitTimer += ticks;
 
 		if (!pause) {
-			if (collision())
+			if (collision()) {
 				camera->setCollision(true);
-			else
+        hitTimer = 0.0;
+			} else if ((hitTimer * .001) > 1.5)
 				camera->setCollision(false);
 			camera->snapshot(screen, ticks);
 
@@ -201,8 +204,7 @@ void Manager::play() {
 			writer.write(outputStream.str().c_str(), screen, 650, 50);
 			outputStream.str("");
 
-			outputStream << "FPS: " << frames / ((cur_ticks - start_ticks)
-					* .001);
+			outputStream << "FPS: " << frames / ((cur_ticks - start_ticks) * .001);
 			writer.write(outputStream.str().c_str(), screen, 650, 70);
 			outputStream.str("");
 		}
@@ -227,8 +229,7 @@ void Manager::play() {
 				player->incrSpeedX();
 			if (keystate[SDLK_UP] && !player->isFalling())
 				player->jump();
-			if (keystate[SDLK_SPACE] && !player->isFalling() && fireTimer
-					> 1000) {
+			if (keystate[SDLK_SPACE] && !player->isFalling() && fireTimer > 1000) {
 				fireDir = player->getXSpeed();
 				player->setXSpeed(0.0);
 				player->setFire(true, fireDir);

@@ -57,9 +57,6 @@ private:
 	static Manager* instance;
 	vector<Sprite*> heroSprites;
 	vector<Sprite*> enemySprites;
-
-	int xVel;	// passed as a parameter to move()
-	int yVel;	// passed as a parameter to move()
 };
 
 #endif /* MANAGER_H_ */

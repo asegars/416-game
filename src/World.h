@@ -31,8 +31,8 @@ public:
 	virtual void updatePosition(Uint32) {}
 
 	void setMap(WorldMap* map);
-	WorldMap* getMap() const { return worldMap; }
-	std::vector<Terrain *> getTerrain() { return worldMap->getMap(); }
+	WorldMap* getMap() { return worldMap; }
+	std::vector<Terrain*> getTerrain() { return worldMap->getMap(); }
 private:
 	Sprite* background;
 	WorldMap* worldMap;

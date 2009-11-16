@@ -22,10 +22,10 @@ public:
 	int getCellDim() const { return cellDim; }
 	int getCellWidth() const { return cellWidth; }
 	int getCellHeight() const { return cellHeight; }
-	const std::vector<Terrain *>& getMap() const { return terrainMap; }
+	std::vector<Terrain*> getMap() const { return terrainMap; }
 private:
 	int cellWidth, cellHeight, cellDim;
-	std::vector<Terrain *> terrainMap;
+	std::vector<Terrain*> terrainMap;
 };
 
 #endif /* WORLDMAP_H_ */
