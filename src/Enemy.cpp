@@ -8,13 +8,23 @@
 #include "Enemy.h"
 #include "Manager.h"
 
-Enemy::Enemy(Sprite* spr) :
-	sprite(spr), x(0), y(48), xSpeed(ENEMY_SPEED), ySpeed(0), loadedSprite(false) 
-  { interval = 0; }
+Enemy::Enemy(Sprite* spr) :	sprite(spr) {
+	x = 0;
+	y = 48;
+	xSpeed = ENEMY_SPEED;
+	ySpeed = 0;
+	loadedSprite = false;
+	interval = 0;
+}
 
-Enemy::Enemy(std::string filename, float xw, float yw) :
-	sprite(new Sprite(filename)), x(xw), y(yw), xSpeed(ENEMY_SPEED), ySpeed(0), 
-  loadedSprite(true) { interval = 0; }
+Enemy::Enemy(std::string filename, float xw, float yw) : sprite(new Sprite(filename)) {
+	x = xw;
+	y = yw;
+	xSpeed = ENEMY_SPEED;
+	ySpeed = 0;
+	loadedSprite = true;
+	interval = 0;
+}
 
 Enemy::~Enemy() {
 	if (sprite != NULL) { delete sprite; }

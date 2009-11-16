@@ -3,10 +3,10 @@
  *
  *  Created on: Oct 5, 2009
  */
+#include <list>
 #include "Sprite.h"
+#include "Bullet.h"
 #include "Character.h"
-#include <vector>
-using std::vector;
 
 #ifndef PLAYER_H_
 #define PLAYER_H_
@@ -34,6 +34,8 @@ public:
 	void decelY();
   void jump();
 
+  void fire(float dx, float dy);
+
   int getSize() const { return sprites.size(); }
 
   void setYSpeed(float s) { ySpeed = s; }
@@ -46,6 +48,7 @@ public:
   bool wasHit() const { return isHit; }
   bool recentlyFired() const { return justFired; }
   bool isFalling() const { return falling; }
+  bool isFacingRight() const { return facingRight; }
 
   virtual SDL_Surface* getPlayer() const { return sprite->getSurface(); }
   virtual Sprite* getSprite() const { return sprites.at(curSprite); }
@@ -53,6 +56,9 @@ public:
 
 private:
 	void adjustViewport();
+
+	std::list<Bullet *> bullets;
+
 	int interval;
   int fireInterval;
   float fireDir;
@@ -62,6 +68,7 @@ private:
 	bool falling;
   bool isHit;
   bool justFired;
+  bool facingRight;
 };
 
 #endif /* PLAYER_H_ */

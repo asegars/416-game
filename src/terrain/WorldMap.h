@@ -8,7 +8,7 @@
 #ifndef WORLDMAP_H_
 #define WORLDMAP_H_
 
-#include <vector>
+#include <list>
 #include "Terrain.h"
 
 
@@ -22,10 +22,12 @@ public:
 	int getCellDim() const { return cellDim; }
 	int getCellWidth() const { return cellWidth; }
 	int getCellHeight() const { return cellHeight; }
-	std::vector<Terrain*> getMap() const { return terrainMap; }
+	std::list<Terrain*> getMap() const { return terrainMap; }
+	Terrain** getMapArray() { return arrayMap; }
 private:
 	int cellWidth, cellHeight, cellDim;
-	std::vector<Terrain*> terrainMap;
+	std::list<Terrain*> terrainMap;
+	Terrain** arrayMap;
 };
 
 #endif /* WORLDMAP_H_ */

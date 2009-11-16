@@ -13,28 +13,34 @@ WorldMap::WorldMap(int w, int h, int cd) {
 	cellHeight = h;
 	cellDim = cd;
 
-//	map = new Terrain*[cellHeight * cellWidth];
-//	for (int i = 0; i < cellHeight * cellWidth; ++i) {
-//		map[i] = NULL;
-//	}
+	arrayMap = new Terrain*[cellHeight * cellWidth];
+	for (int i = 0; i < cellHeight * cellWidth; ++i) {
+		arrayMap[i] = NULL;
+	}
 }
 
 WorldMap::~WorldMap() {
-	for (unsigned int i = 0; i < terrainMap.size(); ++i) {
-		if (terrainMap[i] != NULL) delete terrainMap[i];
+	std::list<Terrain *>::iterator iter;
+
+	for (iter = terrainMap.begin(); iter != terrainMap.end(); ++iter) {
+		delete *iter;
 	}
+
+	terrainMap.clear();
+	delete arrayMap;
 }
 
 
 void WorldMap::setCell(int x, int y, Terrain* t) {
 	t->setLocation(x * cellDim, y * cellDim);
 
+	arrayMap[y * cellWidth + x] = t;
 	terrainMap.push_back(t);
 }
 
 int WorldMap::locationToCell(float x, float y) {
-	int xCell = floor(x / cellDim);
-	int yCell = floor(y / cellDim);
+	int xCell = ceil(x / cellDim);
+	int yCell = ceil(y / cellDim);
 
 	return yCell * cellWidth + xCell;
 }

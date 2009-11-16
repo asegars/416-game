@@ -30,7 +30,6 @@ public:
 	int getY() const { return cameraY; }
 
 	void snapshot(SDL_Surface* screen, Uint32 ticks);
-	void observe(Drawable* item);
 	void setScrollDelay(unsigned int ticks) { delayScroll = ticks; }
 	void setCollision(bool);
 

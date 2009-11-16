@@ -16,9 +16,10 @@
 #include "resources/GraphicManager.h"
 #include "TextWriter.h"
 
-#define WORLD_WIDTH 	800
-#define WORLD_HEIGHT 	600
-#define NUM_ENEMIES   3
+#define WORLD_WIDTH 	640
+#define WORLD_HEIGHT 	480
+
+#define NUM_ENEMIES   	3
 
 Manager::Manager() {
 	try {
@@ -37,14 +38,17 @@ Manager::Manager() {
 		background = new Background();
 		camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
 		player = new Player("hero.bmp", 50, 2920);
+
 		enemy = new Enemy("heckran.bmp", 0, 0);
 		fontLibrary = FontLibrary::getInstance();
 		loadHero();
 		loadEnemies();
-    camera->observe(player);
+
+		world->assignPlayer(player);
 		for (unsigned int i = 0; i < enemies.size(); ++i) {
-			camera->observe(enemies.at(i));
+			world->addEnemy(enemies[i]);
 		}
+		std::cout << "Finished manager constructor" << std::endl;
 	} catch (std::string e) {
 		std::cerr << "Initialization exception: " << e << std::endl;
 		exit(1);
@@ -179,7 +183,7 @@ void Manager::play() {
 	camera->setScrollDelay(14100);
 
 	SoundManager* soundManager = SoundManager::getInstance();
-	Mix_Music* bgMusic = soundManager->load("background-music.mp3");
+	Mix_Chunk* bgMusic = soundManager->load("background-music.wav");
 
 	soundManager->play(bgMusic);
 
@@ -201,11 +205,11 @@ void Manager::play() {
 
 			// Print the runtime & new Spriterate
 			outputStream << "Sec: " << (cur_ticks - start_ticks) * .001;
-			writer.write(outputStream.str().c_str(), screen, 650, 50);
+			writer.write(outputStream.str().c_str(), screen, 500, 50);
 			outputStream.str("");
 
 			outputStream << "FPS: " << frames / ((cur_ticks - start_ticks) * .001);
-			writer.write(outputStream.str().c_str(), screen, 650, 70);
+			writer.write(outputStream.str().c_str(), screen, 500, 70);
 			outputStream.str("");
 		}
 
@@ -232,7 +236,8 @@ void Manager::play() {
 			if (keystate[SDLK_SPACE] && !player->isFalling() && fireTimer > 1000) {
 				fireDir = player->getXSpeed();
 				player->setXSpeed(0.0);
-				player->setFire(true, fireDir);
+				player->fire((player->isFacingRight()) ? 160.0 : -160.0, 0);
+
 				fireTimer = 0.0;
 			}
 			if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT]

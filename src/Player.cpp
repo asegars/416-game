@@ -6,7 +6,10 @@
 
 #include <iostream>
 #include <cmath>
+#include "resources/SoundManager.h"
 #include "Player.h"
+#include "World.h"
+#include "Bullet.h"
 #include "Manager.h"
 
 Player::Player(Sprite* spr) :
@@ -16,6 +19,7 @@ Player::Player(Sprite* spr) :
 
 	xSpeed = 0;
 	ySpeed = 0;
+	facingRight = true;
 }
 
 Player::Player(std::string filename, float xw, float yw) : Character(),
@@ -24,11 +28,16 @@ Player::Player(std::string filename, float xw, float yw) : Character(),
 	y = yw;
 	xSpeed = 0;
 	ySpeed = 0;
+	facingRight = true;
 }
 
 Player::~Player() {
 	if (sprite != NULL) { delete sprite; }
-//	if (sprites != NULL) { delete sprites; }
+
+	std::list<Bullet *>::iterator iter;
+	for (iter = bullets.begin(); iter != bullets.end(); ++iter) {
+		delete *iter;
+	}
 }
 
 void Player::setSprites(vector<Sprite*> &s) {
@@ -39,6 +48,20 @@ void Player::setSprites(vector<Sprite*> &s) {
   curSprite = 0;
   interval = 0;
   fireInterval = 0;
+}
+
+void Player::fire(float dx, float dy) {
+	Bullet* b = new Bullet(dx, dy);
+	b->setX( (dx > 0) ? (x + sprites[curSprite]->getWidth()) : x );
+	// drop the bullet a bit so it looks like its leaving the gun.
+	b->setY(y + 10);
+	world->addDrawable(b);
+	bullets.push_back(b);
+
+	setFire(true, dx);
+
+	Mix_Chunk* shot = SoundManager::getInstance()->load("laser-shot.wav");
+	SoundManager::getInstance()->play(shot, 0);
 }
 
 void Player::updatePosition(Uint32 ticks) {
@@ -71,16 +94,22 @@ void Player::updatePosition(Uint32 ticks) {
 	float xIncr = xSpeed * static_cast<float> (ticks) * 0.001;
 
 	// If the player isn't colliding with terrain, proceed like normal.
+//	if (!collidesWithWorld(x, y, getWidth(), getHeight(), xIncr, yIncr)) {
 	if (!collidesWithWorld(xIncr, yIncr)) {
 		x += xIncr;
 		y += yIncr;
 	}
 	else {
 		if (!collidesWithWorld(xIncr, 0)) {
+//		if (!collidesWithWorld(x, y, getWidth(), getHeight(), xIncr, 0)) {
 			x += xIncr;
 		}
+
+//	if (collidesWithWorld(x, y, getWidth(), getHeight(), 0, yIncr)) {
 		if (collidesWithWorld(0, yIncr)) {
-			if (yIncr > 0) falling = false;
+			if (yIncr > 0) {
+				falling = false;
+			}
 			else ySpeed = -ySpeed;
 		}
 	}
@@ -126,13 +155,18 @@ void Player::advanceFireFrame(Uint32 ticks) {
 
 void Player::advanceFrame(Uint32 ticks) {
   interval += ticks;
+
+  // If moving to the right
   if (fabs(interval * xSpeed) > 15000 && xSpeed > 0) {   
+	  facingRight = true;
     curSprite = (++curSprite) % (sprites.size()/2);
     if(curSprite > 6 || curSprite == 0)
       curSprite = 1;
     interval = 0;
   }
+  // else if moving to the left
   else if (fabs(interval * xSpeed) > 15000 && xSpeed < 0) { 
+	  facingRight = false;
     curSprite = (++curSprite) % (sprites.size());
     if(curSprite < 8 || curSprite > 13)
       curSprite = 8;

@@ -12,7 +12,7 @@
 #include <SDL/SDL_mixer.h>
 #include "ResourceManager.h"
 
-class SoundManager : public ResourceManager<Mix_Music *> {
+class SoundManager : public ResourceManager<Mix_Chunk *> {
 public:
 	static SoundManager* getInstance() {
 		if (manager == NULL) {
@@ -23,15 +23,15 @@ public:
 	}
 	virtual ~SoundManager();
 
-	void play(Mix_Music* music);
-	void play(Mix_Music* music, int repeats);
+	void play(Mix_Chunk* music);
+	void play(Mix_Chunk* music, int repeats);
 	void stop();
 
 protected:
 	SoundManager();
 
-	Mix_Music* read(std::string resName);
-	virtual void clear(Mix_Music* resource);
+	Mix_Chunk* read(std::string resName);
+	virtual void clear(Mix_Chunk* resource);
 
 private:
 	static SoundManager* manager;

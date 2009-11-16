@@ -21,6 +21,7 @@ Camera::Camera(World* world, Background* back, unsigned int width,
 	cameraY = world->getHeight() - viewHeight;
 
 	delayScroll = 0;
+	playerCollision = false;
 }
 
 Camera::~Camera() {
@@ -87,10 +88,10 @@ void Camera::blitWorld(SDL_Surface* screen) {
 }
 
 void Camera::blitTerrain(SDL_Surface* screen) {
-	std::vector<Terrain *> terrain = world->getMap()->getMap();
+	std::list<Terrain *> terrain = world->getMap()->getMap();
 	int cellDim = world->getMap()->getCellDim();
 
-	std::vector<Terrain *>::const_iterator iter = terrain.begin();
+	std::list<Terrain *>::const_iterator iter = terrain.begin();
 	SDL_Rect terrainBounds = {0, 0, cellDim, cellDim};
 	SDL_Rect terrainPos = {0, 0, cellDim, cellDim};
 	while (iter != terrain.end()) {
@@ -111,10 +112,13 @@ void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
 	SDL_Rect srcBounds, destBounds;
   TextWriter writer;
   std::stringstream outputStream;
+
+  std::list<Drawable *> drawables = world->getDrawables();
+
   unsigned int playerCount = 0;
 	// Blit each drawable figure onto the world.
-	std::vector<Drawable *>::const_iterator iter = subjects.begin();
-	while (iter != subjects.end()) {
+	std::list<Drawable *>::const_iterator iter = drawables.begin();
+	while (iter != drawables.end()) {
 		(*iter)->updatePosition(ticks);
 
 		Sprite* sprite = (*iter)->getSprite();
@@ -131,16 +135,17 @@ void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
 		destBounds.h = srcBounds.h;
 
 		if (isVisible(destBounds)) {
-      if(playerCount == 0 && playerCollision) {
-				outputStream << "I've been hit!";
-				writer.write(outputStream.str().c_str(), screen, destBounds.x - 30, 
-          destBounds.y - 20);
-				outputStream.str("");
-      }
+			// TODO: This probably needs to be moved somewhere else...
+			if(playerCount == 0 && playerCollision) {
+				writer.write("I've been hit!", screen, destBounds.x - 30,
+						destBounds.y - 20);
+						outputStream.str("");
+			}
+
 			SDL_BlitSurface(sprite->getSurface(), &srcBounds, screen, &destBounds);
 		}
 		++iter;
-    ++playerCount;
+		++playerCount;
 	}
 }
 
@@ -154,10 +159,6 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	blitWorld(screen);
 	blitDrawables(screen, ticks);
 	blitTerrain(screen);
-}
-
-void Camera::observe(Drawable* item) {
-	subjects.push_back(item);
 }
 
 void Camera::setX(int x) {

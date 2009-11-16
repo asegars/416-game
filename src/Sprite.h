@@ -4,6 +4,7 @@
  *  Created on: Oct 6, 2009
  */
 #include <SDL/SDL.h>
+#include <iostream>
 #include <string>
 
 #ifndef SPRITE_H_
@@ -13,7 +14,7 @@ class Sprite {
 public:
 	Sprite(std::string filename);
   Sprite(float x, float y, int w, int h, SDL_Surface* i) : posX(x), 
-     posY(y), width(w), height(h), image(i) {}
+     posY(y), width(w), height(h), image(i) { }
 	virtual ~Sprite();
 
 	unsigned int getWidth() const { return width; }

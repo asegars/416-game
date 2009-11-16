@@ -41,15 +41,15 @@ public:
 
 private:
 	void adjustViewport();
-  vector<Sprite*> sprites;
-  unsigned int curSprite;
+//  vector<Sprite*> sprites;
+//  unsigned int curSprite;
   int interval;
 	Sprite* sprite;
 
-	float x; 
-  float y;
-	float xSpeed;
-	float ySpeed;
+//	float x;
+//  float y;
+//	float xSpeed;
+//	float ySpeed;
 
 	bool loadedSprite;
 };
