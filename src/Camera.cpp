@@ -33,7 +33,8 @@ Camera::~Camera() {
 void Camera::relocate(unsigned int ticks) {
 	// TODO: Test this on other systems.  Will the camera scroll at
 	//   an acceptable rate?
-	cameraY = cameraY - round(.05 * ticks);
+	float scroll_rate = .03;
+	cameraY = cameraY - round(scroll_rate * ticks);
 	int highYlimit = world->getHeight();
 
 	if (cameraY < 0) {

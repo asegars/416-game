@@ -63,7 +63,7 @@ CollisionType Character::checkRectForCollision(float tlx, float tly, float brx, 
 	int numChecks = 8;
 	int cellIndex[numChecks];
 
-	std::cout << "[" << tlx << ", " << tly << "] - [" << brx << ", " << bry << "]" << std::endl;
+//	std::cout << "[" << tlx << ", " << tly << "] - [" << brx << ", " << bry << "]" << std::endl;
 
 	if (map != NULL) {
 		// Check the four corners
@@ -86,6 +86,7 @@ CollisionType Character::checkRectForCollision(float tlx, float tly, float brx, 
 			if (terrain[cellIndex[i]] != NULL) return true;
 		}
 		return false;
+	}
 		/*
 		if (terrain[cellIndex[0]] != NULL) {
 //			collision = collision | (COLLIDE_LEFT | COLLIDE_TOP);
@@ -134,7 +135,6 @@ CollisionType Character::checkRectForCollision(float tlx, float tly, float brx, 
 		return collision;
 		*/
 //		return (collision != NO_COLLISION) ? true : false;
-	}
 	else {
 		throw std::string("No map defined for the game world!");
 		return false;

@@ -16,8 +16,8 @@
 #include "resources/GraphicManager.h"
 #include "TextWriter.h"
 
-#define WORLD_WIDTH 	640
-#define WORLD_HEIGHT 	480
+#define WORLD_WIDTH 	800
+#define WORLD_HEIGHT 	600
 
 #define NUM_ENEMIES   	3
 

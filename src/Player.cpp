@@ -102,18 +102,32 @@ void Player::updatePosition(Uint32 ticks) {
 		y += yIncr;
 	}
 	else {
+		// If the player can freely move in the xIncr direction, move.
 		if (!collidesWithWorld(xIncr, 0)) {
 			x += xIncr;
 		}
+		// Otherwise, you're hitting a wall.
+		else {
+//			x -= xIncr / 4;
+//			x = (round(x / world->getMap()->getCellWidth()) + 1) * world->getMap()->getCellWidth();
+//			x -= getWidth() / 2;
+//			x-= 15;
+//			xSpeed = (abs(xSpeed - 1) >= 0) ? xSpeed - 1 : 0;
+//			xSpeed = 0;
+			xSpeed = (falling) ? xSpeed * .1 : 0;
+		}
 
-//	if (collidesWithWorld(x, y, getWidth(), getHeight(), 0, yIncr)) {
+		// If the player collides with the world in the yIncr direction
 		if (collidesWithWorld(0, yIncr)) {
+			// Downwards falling indicates that the floor has been hit.
 			if (yIncr > 0) {
 				falling = false;
 			}
-			else ySpeed = -ySpeed;
+			// Upwards "falling" indicates that a ceiling has been hit.
+			else {
+				ySpeed = -(ySpeed / 2);
+			}
 		}
-
 	}
 
   if(!justFired)
