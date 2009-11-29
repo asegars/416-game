@@ -12,10 +12,17 @@
 #include "Sprite.h"
 //#include "World.h"
 
+#define NO_COLLISION	0
+#define COLLIDE_LEFT	1
+#define COLLIDE_TOP		2
+#define COLLIDE_RIGHT	4
+#define COLLIDE_BOTTOM	8
+
 class World;
 
 // TODO: These constants should be stored somewhere else.
-enum CollisionType {NO_COLLIDE, COLLIDE_TOP, COLLIDE_BOTTOM, COLLIDE_LEFT, COLLIDE_RIGHT};
+//enum CollisionType {NO_COLLIDE, COLLIDE_TOP, COLLIDE_BOTTOM, COLLIDE_LEFT, COLLIDE_RIGHT};
+typedef int CollisionType;
 
 
 class Character : public Drawable {
@@ -23,7 +30,7 @@ public:
 	Character();
 	virtual ~Character();
 
-  bool collidesWithWorld(float xIncr, float yIncr);
+  CollisionType collidesWithWorld(float xIncr, float yIncr);
   bool collidesWithWorld(float x, float y, float w, float h, float dx, float dy);
   virtual float getX() const { return x; }
   virtual float getY() const { return y; }
@@ -54,6 +61,7 @@ protected:
 
 private:
   bool checkLocationForCollision(float xLoc, float yLoc);
+  CollisionType checkRectForCollision(float tlx, float tly, float brx, float bry);
 };
 
 #endif /* CHARACTER_H_ */

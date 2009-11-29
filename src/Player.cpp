@@ -8,6 +8,7 @@
 #include <cmath>
 #include "resources/SoundManager.h"
 #include "Player.h"
+#include "Character.h"
 #include "World.h"
 #include "Bullet.h"
 #include "Manager.h"
@@ -95,13 +96,13 @@ void Player::updatePosition(Uint32 ticks) {
 
 	// If the player isn't colliding with terrain, proceed like normal.
 //	if (!collidesWithWorld(x, y, getWidth(), getHeight(), xIncr, yIncr)) {
-	if (!collidesWithWorld(xIncr, yIncr)) {
+	CollisionType collision = collidesWithWorld(xIncr, yIncr);
+	if (collision == NO_COLLISION) {
 		x += xIncr;
 		y += yIncr;
 	}
 	else {
 		if (!collidesWithWorld(xIncr, 0)) {
-//		if (!collidesWithWorld(x, y, getWidth(), getHeight(), xIncr, 0)) {
 			x += xIncr;
 		}
 
@@ -112,6 +113,7 @@ void Player::updatePosition(Uint32 ticks) {
 			}
 			else ySpeed = -ySpeed;
 		}
+
 	}
 
   if(!justFired)

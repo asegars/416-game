@@ -39,8 +39,10 @@ void WorldMap::setCell(int x, int y, Terrain* t) {
 }
 
 int WorldMap::locationToCell(float x, float y) {
-	int xCell = ceil(x / cellDim);
-	int yCell = ceil(y / cellDim);
+//	int xCell = ceil(x / cellDim);
+//	int yCell = ceil(y / cellDim);
+	int xCell = floor(x / cellDim);
+	int yCell = floor(y / cellDim);
 
 	return yCell * cellWidth + xCell;
 }
