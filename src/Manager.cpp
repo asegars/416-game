@@ -198,18 +198,28 @@ void Manager::play() {
 		if (!pause) {
 			if (collision()) {
 				camera->setCollision(true);
-        hitTimer = 0.0;
-			} else if ((hitTimer * .001) > 1.5)
+				hitTimer = 0.0;
+			}
+			else if ((hitTimer * .001) > 1.5) {
 				camera->setCollision(false);
+			}
 			camera->snapshot(screen, ticks);
 
+			writer.switchFont(AGENT);
+			writer.switchSize(32);
+			outputStream << (cur_ticks - start_ticks) * .001;
+			writer.write(outputStream.str().c_str(), screen, 325, 25);
+			outputStream.str("");
+
+			writer.switchFont(FREE_SANS);
+			writer.switchSize(16);
 			// Print the runtime & new Spriterate
 			outputStream << "Sec: " << (cur_ticks - start_ticks) * .001;
-			writer.write(outputStream.str().c_str(), screen, 500, 50);
+			writer.write(outputStream.str().c_str(), screen, 600, 50);
 			outputStream.str("");
 
 			outputStream << "FPS: " << frames / ((cur_ticks - start_ticks) * .001);
-			writer.write(outputStream.str().c_str(), screen, 500, 70);
+			writer.write(outputStream.str().c_str(), screen, 600, 70);
 			outputStream.str("");
 		}
 

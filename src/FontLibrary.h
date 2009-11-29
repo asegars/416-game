@@ -18,8 +18,8 @@
 #define FONTLIBRARY_H_
 
 #include <SDL/SDL_ttf.h>
-#include <vector>
-using std::vector;
+#include <map>
+#include <utility>
 
 enum Font { FREE_SANS = 0, AGENT = 1 };
 
@@ -29,14 +29,16 @@ public:
 	static FontLibrary* getInstance();
 	virtual ~FontLibrary();
 
-	TTF_Font* getFont(Font, unsigned int) const;
+	TTF_Font* getFont(Font, unsigned int);
 
 private:
-	std::vector<TTF_Font *> fonts;
+	std::map<std::pair<Font, unsigned int>, TTF_Font*> fonts;
 	static FontLibrary* instance;
 
 	FontLibrary();
 	void loadFonts();
+
+	unsigned int toKey(Font font, unsigned int size);
 };
 
 #endif /* FONTLIBRARY_H_ */

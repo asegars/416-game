@@ -6,6 +6,8 @@
 
 #include <string>
 #include <iostream>
+#include <map>
+#include <SDL/SDL_ttf.h>
 #include "FontLibrary.h"
 
 // Reserve space for the FontLibrary instance.
@@ -24,11 +26,13 @@ FontLibrary::FontLibrary() {
  * Free all of the fonts in the library when the class is killed.
  */
 FontLibrary::~FontLibrary() {
-	for (unsigned int i = 0; i < fonts.size(); ++i) {
-		if (fonts[i] != NULL) {
-			TTF_CloseFont(fonts[i]);
-		}
+	std::map<std::pair<Font, unsigned int>, TTF_Font*>::iterator iter = fonts.begin();
+
+	while (iter != fonts.end()) {
+		TTF_CloseFont(iter->second);
+		iter++;
 	}
+	fonts.clear();
 }
 
 FontLibrary* FontLibrary::getInstance() {
@@ -39,8 +43,10 @@ FontLibrary* FontLibrary::getInstance() {
 }
 
 void FontLibrary::loadFonts() {
-	fonts.push_back(TTF_OpenFont("fonts/FreeSansBold.ttf", 16));
-  fonts.push_back(TTF_OpenFont("fonts/AgentOrange.ttf", 20));
+}
+
+unsigned int FontLibrary::toKey(Font font, unsigned int size) {
+	return (font * 1000) + size;
 }
 
 /*
@@ -48,14 +54,22 @@ void FontLibrary::loadFonts() {
  *
  * Note: the pixel size is currently ignored.
  */
-TTF_Font* FontLibrary::getFont(Font font, unsigned int size) const {
-  size = fonts.size();
-	// TODO: Dynamically load fonts if they are requested and not stored.
-	if (font >= 0 && font < fonts.size()) {
-		return fonts[font];
+TTF_Font* FontLibrary::getFont(Font font, unsigned int size) {
+	std::pair<Font, unsigned int> key;
+	key.first = font;
+	key.second = size;
+
+	if (fonts.find(key) != fonts.end()) {
+		return fonts[key];
 	}
 	else {
-		throw std::string("Invalid font requested!");
+		// Attempt to load the font.
+		if (font == FREE_SANS) {
+			fonts[key] = TTF_OpenFont("fonts/FreeSansBold.ttf", size);
+		}
+		else if (font == AGENT) {
+			fonts[key] = TTF_OpenFont("fonts/AgentOrange.ttf", size);
+		}
 	}
 }
 

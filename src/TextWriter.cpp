@@ -24,7 +24,7 @@ TextWriter::TextWriter() {
 TextWriter::~TextWriter() {}
 
 void TextWriter::write(const char* message, SDL_Surface* surface, int x, int y) {
-	SDL_Surface* textSurface = TTF_RenderText_Solid(activeFont, message, color);
+	SDL_Surface* textSurface = TTF_RenderText_Solid(fontLib->getFont(font, size), message, color);
 	SDL_Rect location = {x, y, 0, 0};
 	SDL_BlitSurface(textSurface, NULL, surface, &location);
 	SDL_FreeSurface(textSurface);
