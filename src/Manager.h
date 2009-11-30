@@ -38,7 +38,6 @@ private:
 	Manager();
   void loadHero();
   void loadEnemies();
-  bool collision();
 
 	SDL_Surface* screen;
 	Camera* camera;

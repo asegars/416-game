@@ -9,19 +9,23 @@
 #define EXPLODABLE_H_
 
 #include <list>
-#include "Chunk.h"
+#include "ExplodingCharacter.h"
 
-class Chunk;
+const int CHUNKS = 20;
 
-class Explodable {
+class Explodable : public Character {
 public:
-	Explodable();
+  Explodable() {}
+	Explodable(Sprite *s);
 	virtual ~Explodable();
 
-	virtual const std::list<Chunk>& getChunks() const = 0;
-	virtual float getX() const = 0;
-	virtual float getY() const = 0;
-	virtual void updatePosition(Uint32 ticks) = 0;
+  void makeChunks(unsigned int);
+  unsigned int chunkCount() const { return chunks.size(); }
+	virtual void updatePosition(Uint32);
+  virtual Sprite* getSprite() const { return sprites.at(0); }
+
+private:
+  std::vector<ExplodingCharacter> chunks;
 };
 
 #endif /* EXPLODABLE_H_ */

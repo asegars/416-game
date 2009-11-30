@@ -31,7 +31,6 @@ public:
 
 	void snapshot(SDL_Surface* screen, Uint32 ticks);
 	void setScrollDelay(unsigned int ticks) { delayScroll = ticks; }
-	void setCollision(bool);
 
 	Player* getFollowedPlayer() const { return tracker; }
 
@@ -55,10 +54,8 @@ private:
 
 	int viewWidth;
 	int viewHeight;
-	int cameraX;
-	int cameraY;
-
-  bool playerCollision;
+	float cameraX;
+	float cameraY;
 };
 
 #endif /* CAMERA_H_ */

@@ -58,24 +58,40 @@ void World::removeDrawable(Drawable* d) {
 
 void World::addExplodable(Explodable* e) {
 	dying.push_back(e);
-
-	std::list<Chunk>::const_iterator iter = e->getChunks().begin();
-
-	while (iter != e->getChunks().end()) {
-		drawables.push_back( const_cast<Chunk *>(&(*iter)) );
-		++iter;
-	}
-/*
-	std::list<Drawable *>::const_iterator iter2 = drawables.begin();
-	while (iter2 != drawables.end()) {
-		if (dynamic_cast<Chunk *>(*iter2)) {
-			std::cout << dynamic_cast<Chunk *>(*iter2)->getWidth() << std::endl;
-		}
-		++iter2;
-	}
-	*/
+  drawables.push_back(e);
 }
 
 void World::removeExplodable(Explodable* e) {
 	dying.remove(e);
+  drawables.remove(e);
+}
+
+bool World::playerCollision() {
+
+	float enemyWidth;
+	float enemyHeight;
+	float playerWidth = player->getWidth();
+	float playerHeight = player->getHeight();
+
+  std::list<Enemy*>::iterator iter = enemies.begin();
+
+	for (iter = enemies.begin(); iter != enemies.end(); ++iter) {
+		enemyWidth = (*iter)->getWidth();
+		enemyHeight = (*iter)->getHeight();
+		if ((*iter)->getX() + enemyWidth - 5 < player->getX()) {
+			continue;
+		}
+		if ((*iter)->getX() > player->getX() + playerWidth - 5) {
+			continue;
+		}
+		if ((*iter)->getY() + enemyHeight - 5 < player->getY()) {
+			continue;
+		}
+		if ((*iter)->getY() > player->getY() + playerHeight - 5) {
+			continue;
+		}
+		return true;
+	}
+
+	return false;
 }

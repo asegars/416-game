@@ -21,7 +21,6 @@ Camera::Camera(World* world, Background* back, unsigned int width,
 	cameraY = world->getHeight() - viewHeight;
 
 	delayScroll = 0;
-	playerCollision = false;
 }
 
 Camera::~Camera() {
@@ -64,8 +63,8 @@ void Camera::blitWorld(SDL_Surface* screen) {
 	SDL_Rect srcBounds, destBounds;
 	// Blit the world
 	Sprite* worldSprite = world->getSprite();
-	srcBounds.x = cameraX; // / 2.2;
-	srcBounds.y = cameraY; // / 2.2;
+	srcBounds.x = cameraX / 2.0;
+	srcBounds.y = cameraY / 2.0;
 	srcBounds.w = viewWidth;
 	srcBounds.h = viewHeight;
 
@@ -115,6 +114,7 @@ void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
   std::stringstream outputStream;
 
   std::list<Drawable *> drawables = world->getDrawables();
+  //std::cout << drawables.size() << std::endl;
 
   unsigned int playerCount = 0;
 	// Blit each drawable figure onto the world.
@@ -137,7 +137,7 @@ void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
 
 		if (isVisible(destBounds)) {
 			// TODO: This probably needs to be moved somewhere else...
-			if(playerCount == 0 && playerCollision) {
+			if(playerCount == 0 && world->playerCollision()) {
 				writer.write("I've been hit!", screen, destBounds.x - 30,
 						destBounds.y - 20);
 						outputStream.str("");
@@ -186,8 +186,4 @@ void Camera::setY(int y) {
 	}
 
 	cameraY = y;
-}
-
-void Camera::setCollision(bool indicator) {
-	playerCollision = indicator;
 }

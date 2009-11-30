@@ -56,7 +56,6 @@ protected:
   std::vector<Sprite*> sprites;
   unsigned int curSprite;
 
-protected:
   World* world;
 
 private:

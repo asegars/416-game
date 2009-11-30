@@ -9,11 +9,9 @@
 #include "Manager.h"
 #include "ExplodingCharacter.h"
 
-Character::Character() {
-}
+Character::Character() {}
 
-Character::~Character() {
-}
+Character::~Character() {}
 
 bool Character::checkLocationForCollision(float xLoc, float yLoc) {
 	WorldMap* map = world->getMap();
@@ -172,12 +170,12 @@ void Character::updatePosition(Uint32 ticks) {
 void Character::explode() {
 	if (world == NULL) world = Manager::getInstance()->getWorld();
 
-//	ExplodingCharacter* exploder = new ExplodingCharacter(this);
-//	world->addExplodable(exploder);
+  world->addExplodable(new Explodable(sprites.at(curSprite)));
 
 	// TODO: Get rid of the dynamic_cast
 	Enemy* e_ptr = dynamic_cast<Enemy *>(this);
 	if (e_ptr != NULL) {
 		world->removeEnemy(e_ptr);
+    world->removeDrawable(e_ptr);
 	}
 }

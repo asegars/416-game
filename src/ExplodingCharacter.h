@@ -8,27 +8,36 @@
 #ifndef EXPLODINGCHARACTER_H_
 #define EXPLODINGCHARACTER_H_
 
-#include "Chunk.h"
-#include "Explodable.h"
+#include "Character.h"
 
-class ExplodingCharacter : public Explodable {
+const int MAX_DISTANCE = 200;
+
+class ExplodingCharacter : public Character {
 public:
-	ExplodingCharacter(Character* w, unsigned int chunks = 20);
-	virtual ~ExplodingCharacter();
+	ExplodingCharacter(float nx, float ny, float sX, float sY, Sprite *s) {
+    setX(nx);
+    setY(ny);
+    setXSpeed(sX);
+    setYSpeed(sY);
+    distance = 0;
+    tooFar = false;
+    sprites.push_back(s);
+  }
+	virtual ~ExplodingCharacter() {}
 
-	virtual float getX() const;
-	virtual float getY() const;
 	virtual void updatePosition(Uint32 ticks);
-	virtual const std::list<Chunk>& getChunks() const;
+  bool goneTooFar() const { return tooFar; }
+  void reset() {
+    tooFar = false;
+    distance = 0;
+  }
+  virtual Sprite* getSprite() const { return sprites.at(0); }
+  // virtual float getX() { return x; }
+  // virtual float getY() { return y; }
 
 private:
-	void createChunks();
-
-	Character* whole;
-	unsigned int numChunks;
-	std::list<Chunk> chunks;
-
-	float x, y;
+  float distance;
+  bool tooFar;
 };
 
 #endif /* EXPLODINGCHARACTER_H_ */

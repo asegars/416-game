@@ -135,35 +135,6 @@ void Manager::loadEnemies() {
 	}
 }
 
-bool Manager::collision() {
-
-	float enemyWidth;
-	float enemyHeight;
-	float playerWidth = player->getWidth();
-	float playerHeight = player->getHeight();
-
-	for (unsigned int i = 0; i < enemies.size(); ++i) {
-		Enemy *current = enemies.at(i);
-		enemyWidth = current->getWidth();
-		enemyHeight = current->getHeight();
-		if (current->getX() + enemyWidth - 5 < player->getX()) {
-			continue;
-		}
-		if (current->getX() > player->getX() + playerWidth - 5) {
-			continue;
-		}
-		if (current->getY() + enemyHeight - 5 < player->getY()) {
-			continue;
-		}
-		if (current->getY() > player->getY() + playerHeight - 5) {
-			continue;
-		}
-		return true;
-	}
-
-	return false;
-}
-
 void Manager::play() {
 	SDL_Event event;
 	TextWriter writer;
@@ -177,6 +148,7 @@ void Manager::play() {
 	float fireDir = 0.0;
 	unsigned int tick_sum = 0;
 	float frames = 0.0;
+  int score = 0;
 
 	std::stringstream outputStream;
 
@@ -194,20 +166,14 @@ void Manager::play() {
 		tick_sum += ticks;
     fireTimer += ticks;
     hitTimer += ticks;
+    score += (int(ticks * 0.1));
 
 		if (!pause) {
-			if (collision()) {
-				camera->setCollision(true);
-				hitTimer = 0.0;
-			}
-			else if ((hitTimer * .001) > 1.5) {
-				camera->setCollision(false);
-			}
 			camera->snapshot(screen, ticks);
 
 			writer.switchFont(AGENT);
 			writer.switchSize(32);
-			outputStream << (cur_ticks - start_ticks) * .001;
+			outputStream << score;
 			writer.write(outputStream.str().c_str(), screen, 325, 25);
 			outputStream.str("");
 
@@ -243,11 +209,11 @@ void Manager::play() {
 				player->incrSpeedX();
 			if (keystate[SDLK_UP] && !player->isFalling())
 				player->jump();
-			if (keystate[SDLK_SPACE] && !player->isFalling() && fireTimer > 1000) {
+      // Can only fire once every 2 seconds... it's a big gun
+			if (keystate[SDLK_SPACE] && !player->isFalling() && fireTimer > 2000) {
 				fireDir = player->getXSpeed();
 				player->setXSpeed(0.0);
-				player->fire((player->isFacingRight()) ? 160.0 : -160.0, 0);
-
+				player->fire((player->isFacingRight()) ? 250.0 : -250.0, 0);
 				fireTimer = 0.0;
 			}
 			if (!keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT]

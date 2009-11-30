@@ -50,8 +50,11 @@ public:
 	void removeExplodable(Explodable* e);
 	const std::list<Enemy *>& getEnemies() const { return enemies; }
 	const std::list<Explodable *>& getExplodables() const { return dying; }
-
 	const std::list<Drawable *>& getDrawables() { return drawables; }
+
+  // Collision with enemies
+  bool playerCollision();
+
 private:
 	Sprite* background;
 	WorldMap* worldMap;

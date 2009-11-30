@@ -42,15 +42,12 @@ void Bullet::updatePosition(Uint32 ticks) {
 			 (x <= (*iter)->getX() + (*iter)->getWidth()) &&
 			 (y + getHeight() >= (*iter)->getY()) &&
 			 (y <= (*iter)->getY() + (*iter)->getHeight()) ) {
-			// Make the monster explode.
-//			(*iter)->explode();
-//			temp = iter++;
-			world->removeEnemy(*iter);
-			iter = world->getEnemies().begin();
-//			iter = temp;
-			// Get rid of bullet.
-			world->removeDrawable(this);
-		}
-		++iter;
+			   // Make the monster explode.
+			   (*iter)->explode();
+         iter = world->getEnemies().begin(); 
+			   // Get rid of bullet.
+			   world->removeDrawable(this);
+		} else
+		  ++iter;
 	}
 }
