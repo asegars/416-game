@@ -44,6 +44,7 @@ void Bullet::updatePosition(Uint32 ticks) {
 			 (y <= (*iter)->getY() + (*iter)->getHeight()) ) {
 			   // Make the monster explode.
 			   (*iter)->explode();
+         Manager::getInstance()->incrPlayerScore(500);
          iter = world->getEnemies().begin(); 
 			   // Get rid of bullet.
 			   world->removeDrawable(this);

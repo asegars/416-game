@@ -34,7 +34,7 @@ public:
 
 	void reportVictory() { if (!defeat) victory = true; }
 	void reportDefeat() { if (!victory) defeat = true; }
-
+  void incrPlayerScore(int score) { playerScore += score; }
 	void setMap(WorldMap* map) { world->setMap(map); }
 
 private:

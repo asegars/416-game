@@ -66,9 +66,11 @@ TTF_Font* FontLibrary::getFont(Font font, unsigned int size) {
 		// Attempt to load the font.
 		if (font == FREE_SANS) {
 			fonts[key] = TTF_OpenFont("fonts/FreeSansBold.ttf", size);
+      return fonts[key];
 		}
-		else if (font == AGENT) {
+		else /*if (font == AGENT)*/ {
 			fonts[key] = TTF_OpenFont("fonts/AgentOrange.ttf", size);
+      return fonts[key];
 		}
 	}
 }

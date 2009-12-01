@@ -11,16 +11,17 @@
 Enemy::Enemy(Sprite* spr) :	sprite(spr) {
 	x = 0;
 	y = 48;
-	xSpeed = ENEMY_SPEED;
+	xSpeed = rand() % ENEMY_SPEED + 50;
 	ySpeed = 0;
 	loadedSprite = false;
 	interval = 0;
 }
 
-Enemy::Enemy(std::string filename, float xw, float yw) : sprite(new Sprite(filename)) {
+Enemy::Enemy(std::string filename, float xw, float yw, float xs) : 
+    sprite(new Sprite(filename)) {
 	x = xw;
 	y = yw;
-	xSpeed = ENEMY_SPEED;
+	xSpeed = xs;
 	ySpeed = 0;
 	loadedSprite = true;
 	interval = 0;
@@ -43,13 +44,13 @@ void Enemy::updatePosition(Uint32 ticks) {
 	float width = static_cast<float> (sprites.at(curSprite)->getWidth());
 	// Cap the player's motion if they are trying to move off of the
 	//   left border of the world.
-	if (x <= 0 && xSpeed < 0) {
-		xSpeed = ENEMY_SPEED;
+	if (x <= player->getX()) {
+		xSpeed = abs(xSpeed);
 	}
 	// Cap the player's motion if they are trying to move off of the
 	//   right border of the world.
-	if (x >= Manager::getInstance()->getWorld()->getWidth() - width && xSpeed > 0) {
-		xSpeed = -ENEMY_SPEED;
+	if (x >= player->getX()) {
+		xSpeed = -fabs(xSpeed);
 	}
 	float incr = xSpeed * static_cast<float> (ticks) * 0.001;
 	x += incr;

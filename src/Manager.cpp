@@ -39,7 +39,7 @@ Manager::Manager() {
 		camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
 		player = new Player("hero.bmp", 400, 2920);
 
-		enemy = new Enemy("heckran.bmp", 0, 0);
+		enemy = new Enemy("heckran.bmp", 0, 0, ENEMY_SPEED);
 		fontLibrary = FontLibrary::getInstance();
 		loadHero();
 		loadEnemies();
@@ -135,9 +135,12 @@ void Manager::loadEnemies() {
 	enemySprites.push_back(new Sprite(215, 0, 43, 48, enemy->getEnemy()));
 	for (unsigned int i = 0; i < NUM_ENEMIES; ++i) {
     if(i < 2)
-		  enemies.push_back(new Enemy("heckran.bmp", (rand() % 250), 2922));
+		  enemies.push_back(new Enemy("heckran.bmp", (rand() % 250), 2922, 
+        (rand() % ENEMY_SPEED + 50)));
     else
-      enemies.push_back(new Enemy("heckran.bmp", (rand() % 250 + 550), 2922));
+      enemies.push_back(new Enemy("heckran.bmp", (rand() % 250 + 550), 2922,
+        (rand() % ENEMY_SPEED + 50)));
+    enemies.at(i)->playerToAttack(player);
 		enemies.at(i)->setSprites(enemySprites);
 	}
 }
@@ -195,7 +198,7 @@ void Manager::play() {
 
 			writer.switchFont(FREE_SANS);
 			writer.switchSize(16);
-			// Print the runtime & new Spriterate
+			// Print the runtime & new framerate
 			outputStream << "Sec: " << (cur_ticks - start_ticks) * .001;
 			writer.write(outputStream.str().c_str(), screen, 485, 15);
 			outputStream.str("");
@@ -279,6 +282,7 @@ void Manager::checkDeathConditions() {
       health -= 2;
 	  std::cout << "You've been mauled!  Remaining Health: " << health 
       << std::endl;
+    playerScore -= 10;
   }
 
   if(health <= 0) {

@@ -9,21 +9,21 @@
 
 #include <vector>
 #include "Character.h"
+#include "Player.h"
 #include "Sprite.h"
 using std::vector;
 
-const int ENEMY_SPEED = 100;
+const int ENEMY_SPEED = 50;
 
 class Enemy : public Character {
 public:
 	Enemy(Sprite* sprite);
-	Enemy(std::string filename, float xw, float yw);
+	Enemy(std::string filename, float xw, float yw, float xs);
 	virtual ~Enemy();
   void setSprites(vector<Sprite*> &s);
 
-	void draw();
-	void update(Uint32 ticks);
   void advanceFrame(Uint32 ticks);
+  void playerToAttack(Player *p) { player = p; }
 
 	float getX() const { return x; }
 	float getY() const { return y; }
@@ -45,6 +45,7 @@ private:
 //  unsigned int curSprite;
   int interval;
 	Sprite* sprite;
+  Player* player; 
 
 //	float x;
 //  float y;
