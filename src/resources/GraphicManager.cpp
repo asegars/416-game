@@ -5,6 +5,7 @@
  *      Author: alsegars
  */
 
+#include <SDL/SDL_image.h>
 #include "GraphicManager.h"
 
 GraphicManager* GraphicManager::manager = NULL;
@@ -34,6 +35,7 @@ GraphicManager::~GraphicManager() {
 
 SDL_Surface* GraphicManager::read(std::string resName) {
 	return SDL_LoadBMP((baseDir + resName).c_str());
+//	return IMG_Load((baseDir + resName).c_str());
 }
 
 void GraphicManager::clear(SDL_Surface* resource) {

@@ -21,6 +21,8 @@ public:
 	unsigned int getHeight() const { return height; }
   float getPosX() const { return posX; }
   float getPosY() const { return posY; }
+  void setPosX(float pos) { posX = pos; }
+  void setPosY(float pos) { posY = pos; }
 	SDL_Surface* getSurface() const { return image; }
 private:
   float posX; 

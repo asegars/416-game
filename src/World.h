@@ -40,6 +40,11 @@ public:
 	std::list<Terrain*> getTerrain() { return worldMap->getMap(); }
 	Terrain** getTerrainArray() { return worldMap->getMapArray(); }
 
+	const std::vector<Sprite *>& getWaves() { return waves; }
+	float getWaveDirection(int index) { return waveVelocity[index]; }
+	void setWaveDirection(int index, float direction) {	waveVelocity[index] = direction; }
+
+
 	// Drawables and individual units
 	void assignPlayer(Player* p);
 	void addEnemy(Enemy* e);
@@ -63,6 +68,8 @@ private:
 	std::list<Enemy *> enemies;
 	std::list<Drawable *> drawables;
 	std::list<Explodable *> dying;
+	std::vector<Sprite *> waves;
+	float waveVelocity[3];
 };
 
 #endif /* WORLD_H_ */

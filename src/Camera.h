@@ -42,7 +42,7 @@ private:
 	void blitWorld(SDL_Surface* screen);
 	void blitTerrain(SDL_Surface* screen);
 	void blitDrawables(SDL_Surface* screen, unsigned int ticks);
-
+	void blitWaves(SDL_Surface* screen);
 	vector<Drawable*> subjects;
 	World* world;
 	Background *background;
@@ -56,6 +56,8 @@ private:
 	int viewHeight;
 	float cameraX;
 	float cameraY;
+
+	float waveHeight;
 };
 
 #endif /* CAMERA_H_ */

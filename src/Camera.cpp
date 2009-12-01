@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <ctime>
 #include "Camera.h"
 #include "terrain/Terrain.h"
 #include "terrain/SolidTerrain.h"
@@ -21,6 +22,9 @@ Camera::Camera(World* world, Background* back, unsigned int width,
 	cameraY = world->getHeight() - viewHeight;
 
 	delayScroll = 0;
+	waveHeight = 0;
+
+	srand(time(NULL));
 }
 
 Camera::~Camera() {
@@ -32,8 +36,8 @@ Camera::~Camera() {
 void Camera::relocate(unsigned int ticks) {
 	// TODO: Test this on other systems.  Will the camera scroll at
 	//   an acceptable rate?
-	float scroll_rate = .03;
-	cameraY = cameraY - round(scroll_rate * ticks);
+	float scroll_rate = .01;
+	cameraY = cameraY - (scroll_rate * ticks);
 	int highYlimit = world->getHeight();
 
 	if (cameraY < 0) {
@@ -41,6 +45,14 @@ void Camera::relocate(unsigned int ticks) {
 	}
 	if (cameraY > highYlimit) {
 		cameraY = highYlimit;
+	}
+
+	// Scroll the waves up as well.
+	if (waveHeight < 1) {
+		waveHeight += (ticks * .0001);
+	}
+	else {
+		waveHeight = 1;
 	}
 }
 
@@ -150,6 +162,49 @@ void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
 	}
 }
 
+void Camera::blitWaves(SDL_Surface* screen) {
+	std::vector<Sprite *> waves = world->getWaves();
+
+	int xLoc, width;
+	SDL_Rect srcBounds;
+	SDL_Rect destBounds;
+
+	srcBounds.y = 0;
+	srcBounds.w = viewWidth;
+
+	destBounds.x = 0;
+
+	for (unsigned int i = 0; i < waves.size(); ++i) {
+		xLoc = waves[i]->getPosX();
+		width = waves[i]->getWidth();
+
+		srcBounds.h = waveHeight * waves[i]->getHeight();
+		destBounds.y = viewHeight - srcBounds.h;
+//		srcBounds.h = waves[i]->getHeight();
+
+		// if the wave is moving right, move the wave unless its gone too far.
+		//   then reverse it and move it the other direction.
+		if (world->getWaveDirection(i) > 0) {
+			// If the wave scrolls too far, turn it around.
+			if (xLoc > width - viewWidth) { //width - xLoc < viewWidth) {
+				world->setWaveDirection(i, - (rand() % 100 + 50) / 50);
+			}
+			waves[i]->setPosX(waves[i]->getPosX() + world->getWaveDirection(i));
+		}
+		else {
+			// If the wave scrolls too far, turn it around.
+			if (xLoc <= 0) {
+				world->setWaveDirection(i, (rand() % 100 + 50) / 50);
+			}
+			waves[i]->setPosX(waves[i]->getPosX() + world->getWaveDirection(i));
+		}
+
+		srcBounds.x = waves[i]->getPosX();
+		// blit the wave
+		SDL_BlitSurface(waves[i]->getSurface(), &srcBounds, screen, &destBounds);
+	}
+}
+
 void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	// If the item that was just updated is what's being tracked,
 	// readjust the camera location.
@@ -160,6 +215,8 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	blitWorld(screen);
 	blitDrawables(screen, ticks);
 	blitTerrain(screen);
+
+	blitWaves(screen);
 }
 
 void Camera::setX(int x) {

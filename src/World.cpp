@@ -15,11 +15,23 @@ World::World(std::string filename) {
 	background = new Sprite(filename);
 
 	worldMap = NULL;
+
+	waves.push_back(new Sprite("wave/wave-dark.bmp"));
+	waves.push_back(new Sprite("wave/wave-light.bmp"));
+	waves.push_back(new Sprite("wave/wave-mid.bmp"));
+
+	waveVelocity[0] = 1.0;
+	waveVelocity[1] = 1.2;
+	waveVelocity[2] = 1.4;
 }
 
 World::~World() {
 	if (background != NULL) delete background;
 	if (worldMap != NULL) delete worldMap;
+
+	for (unsigned int i = 0; i < waves.size(); ++i) {
+		delete waves[i];
+	}
 }
 
 void World::add(Terrain* t, int cellX, int cellY) {

@@ -16,8 +16,8 @@
 #include "resources/GraphicManager.h"
 #include "TextWriter.h"
 
-#define WORLD_WIDTH 	800
-#define WORLD_HEIGHT 	600
+#define WORLD_WIDTH 	640
+#define WORLD_HEIGHT 	480
 
 #define NUM_ENEMIES   	3
 
@@ -174,18 +174,18 @@ void Manager::play() {
 			writer.switchFont(AGENT);
 			writer.switchSize(32);
 			outputStream << score;
-			writer.write(outputStream.str().c_str(), screen, 325, 25);
+			writer.write(outputStream.str().c_str(), screen, 300, 25);
 			outputStream.str("");
 
 			writer.switchFont(FREE_SANS);
 			writer.switchSize(16);
 			// Print the runtime & new Spriterate
 			outputStream << "Sec: " << (cur_ticks - start_ticks) * .001;
-			writer.write(outputStream.str().c_str(), screen, 600, 50);
+			writer.write(outputStream.str().c_str(), screen, 485, 15);
 			outputStream.str("");
 
 			outputStream << "FPS: " << frames / ((cur_ticks - start_ticks) * .001);
-			writer.write(outputStream.str().c_str(), screen, 600, 70);
+			writer.write(outputStream.str().c_str(), screen, 485, 35);
 			outputStream.str("");
 		}
 
