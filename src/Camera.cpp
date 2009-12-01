@@ -24,7 +24,7 @@ Camera::Camera(World* world, Background* back, unsigned int width,
 
 	delayScroll = 0;
 	waveHeight = 0;
-	scrollRate = .01;
+	scrollRate = .02;
 
 	tracker = NULL;
 
@@ -64,11 +64,11 @@ void Camera::relocate(unsigned int ticks) {
 	// The camera can always move in the X direction -- this is player-dependent.
 	if (tracker->getX() + tracker->getWidth() + buffer > cameraX + viewWidth) {
 		cameraX += 2;
-		std::cout << "Moving camera right to " << cameraX << std::endl;
+		//std::cout << "Moving camera right to " << cameraX << std::endl;
 	}
 	if (tracker->getX() - buffer < cameraX) {
 		cameraX -= 2;
-		std::cout << "Moving camera left to " << cameraX << std::endl;
+		//std::cout << "Moving camera left to " << cameraX << std::endl;
 	}
 
 	if (cameraX < 0) {
@@ -229,7 +229,6 @@ void Camera::snapshot(SDL_Surface* screen, Uint32 ticks) {
 	blitWorld(screen);
 	blitDrawables(screen, ticks);
 	blitTerrain(screen);
-
 	blitWaves(screen);
 }
 

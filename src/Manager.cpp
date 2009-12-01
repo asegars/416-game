@@ -19,7 +19,7 @@
 #define WORLD_WIDTH 	640
 #define WORLD_HEIGHT 	480
 
-#define NUM_ENEMIES   	3
+#define NUM_ENEMIES   	4
 
 Manager::Manager() {
 	try {
@@ -37,7 +37,7 @@ Manager::Manager() {
 		world = new World("waterfall.bmp");
 		background = new Background();
 		camera = new Camera(world, background, WORLD_WIDTH, WORLD_HEIGHT);
-		player = new Player("hero.bmp", 50, 2920);
+		player = new Player("hero.bmp", 400, 2920);
 
 		enemy = new Enemy("heckran.bmp", 0, 0);
 		fontLibrary = FontLibrary::getInstance();
@@ -52,6 +52,7 @@ Manager::Manager() {
 		victory = false;
 		defeat = false;
 		playerScore = 0;
+    health = 100;
 
 	} catch (std::string e) {
 		std::cerr << "Initialization exception: " << e << std::endl;
@@ -133,8 +134,10 @@ void Manager::loadEnemies() {
 	enemySprites.push_back(new Sprite(172, 0, 43, 48, enemy->getEnemy()));
 	enemySprites.push_back(new Sprite(215, 0, 43, 48, enemy->getEnemy()));
 	for (unsigned int i = 0; i < NUM_ENEMIES; ++i) {
-		enemies.push_back(
-				new Enemy("heckran.bmp", (rand() % 800), 2922));
+    if(i < 2)
+		  enemies.push_back(new Enemy("heckran.bmp", (rand() % 250), 2922));
+    else
+      enemies.push_back(new Enemy("heckran.bmp", (rand() % 250 + 550), 2922));
 		enemies.at(i)->setSprites(enemySprites);
 	}
 }
@@ -153,6 +156,7 @@ void Manager::play() {
 	Uint32 start_ticks = cur_ticks;
 
 	done = false;
+  stopped = false;
 	bool pause = false;
   float hitTimer = 0.0;
 	float fireTimer = 1000.0;
@@ -162,7 +166,7 @@ void Manager::play() {
 
 	std::stringstream outputStream;
 
-	camera->setScrollDelay(14100);
+	camera->setScrollDelay(10000);
 
 	SoundManager* soundManager = SoundManager::getInstance();
 	Mix_Chunk* bgMusic = soundManager->load("background-music.wav");
@@ -199,6 +203,11 @@ void Manager::play() {
 			outputStream << "FPS: " << frames / ((cur_ticks - start_ticks) * .001);
 			writer.write(outputStream.str().c_str(), screen, 485, 35);
 			outputStream.str("");
+
+      if(frames / ((cur_ticks - start_ticks) * .001) < 50)
+        player->setJump(300);
+      else
+        player->setJump(450);
 		}
 
 		SDL_Flip(screen);
@@ -214,7 +223,7 @@ void Manager::play() {
 		if (event.type == SDL_KEYDOWN && keystate[SDLK_q])
 			done = true;
 
-		if (fireTimer > 450) {
+		if (fireTimer > 450 && !defeat) {
 			if (keystate[SDLK_LEFT])
 				player->decrSpeedX();
 			if (keystate[SDLK_RIGHT])
@@ -236,20 +245,23 @@ void Manager::play() {
 			player->decelY();
 		}
 
-		checkDeathConditions();
+    if(!defeat)
+		  checkDeathConditions();
 
-		if (victory) {
+		if (victory && !stopped) {
 			// Proceed to the next level?
 			// Display something on screen?
 			std::cout << "You win!" << std::endl;
+      stopped = true;
 		}
 
-		if (defeat) {
+		if (defeat && !stopped) {
 			// Stop the camera movement?
 			// Display something on screen?
 			std::cout << "Sorry, you lose!" << std::endl;
 			camera->setScrollRate(0.0);
 			player->setVisible(false);
+      stopped = true;
 		}
 	}
 }
@@ -257,14 +269,21 @@ void Manager::play() {
 void Manager::checkDeathConditions() {
 	// Check to see if the player drowned.
 	if (player->getY() > camera->getY() + camera->getHeight()) {
+    std::cout << "You have drowned..." << std::endl;
 		reportDefeat();
 	}
 
 	// Check to see if the player has been killed by a monster.
-	for (unsigned int i = 0; i < enemies.size(); ++i) {
-		if (player->collidesWith(enemies[i])) {
-			std::cout << "Ouch!" << std::endl;
-		}
-	}
+  if (world->playerCollision()) {
+    if(health > 0)
+      health -= 2;
+	  std::cout << "You've been mauled!  Remaining Health: " << health 
+      << std::endl;
+  }
+
+  if(health <= 0) {
+    reportDefeat();
+    std::cout << "You've been killed..." << std::endl;
+  }
 
 }

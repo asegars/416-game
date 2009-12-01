@@ -21,6 +21,7 @@ Player::Player(Sprite* spr) :
 	xSpeed = 0;
 	ySpeed = 0;
 	facingRight = true;
+  MAX_JUMP = 450;
 }
 
 Player::Player(std::string filename, float xw, float yw) : Character(),
@@ -30,6 +31,7 @@ Player::Player(std::string filename, float xw, float yw) : Character(),
 	xSpeed = 0;
 	ySpeed = 0;
 	facingRight = true;
+  MAX_JUMP = 450;
 }
 
 Player::~Player() {
@@ -94,7 +96,7 @@ void Player::updatePosition(Uint32 ticks) {
 	}
 	float xIncr = xSpeed * static_cast<float> (ticks) * 0.001;
 
-	// If the player isn't colliding with terrain, proceed like normal.
+// If the player isn't colliding with terrain, proceed like normal.
 //	if (!collidesWithWorld(x, y, getWidth(), getHeight(), xIncr, yIncr)) {
 	CollisionType collision = collidesWithWorld(xIncr, yIncr);
 	if (collision == NO_COLLISION) {

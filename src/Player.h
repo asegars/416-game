@@ -12,7 +12,6 @@
 #define PLAYER_H_
 
 const int MAX_SPEED = 200;
-const int MAX_JUMP = 375;
 const int DECEL = 0.95;
 
 class Player : public Character {
@@ -45,6 +44,7 @@ public:
     justFired = fire; 
     fireDir = d;
   }
+  void setJump(const int j) { MAX_JUMP = j; }
 
   bool wasHit() const { return isHit; }
   bool recentlyFired() const { return justFired; }
@@ -70,6 +70,9 @@ private:
   bool isHit;
   bool justFired;
   bool facingRight;
+
+  int MAX_JUMP;           // Not constant, can be changed based on fps
+                          // (Performance reasons)
 };
 
 #endif /* PLAYER_H_ */

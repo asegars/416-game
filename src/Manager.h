@@ -57,8 +57,9 @@ private:
 	Uint32 prev_ticks;
 	Uint32 ticks;
 
-	bool done;
+	bool done, stopped;
 	int playerScore;
+  int health;
 	bool victory, defeat;
 	static Manager* instance;
 	vector<Sprite*> heroSprites;

@@ -35,7 +35,7 @@ void Bullet::updatePosition(Uint32 ticks) {
 	y += yIncr;
 
 	std::list<Enemy *>::const_iterator iter = world->getEnemies().begin();
-	std::list<Enemy *>::const_iterator temp;
+	//std::list<Enemy *>::const_iterator temp;
 
 	while (iter != world->getEnemies().end()) {
 		if ( (x + getWidth() >= (*iter)->getX()) &&
