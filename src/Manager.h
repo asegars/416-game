@@ -26,11 +26,14 @@ public:
 	void play();
 
 	World* getWorld() const { return world; }
-  Background* getBack() const { return background; }
+	Background* getBack() const { return background; }
 	Player* getPlayer() const { return player; }
-  Enemy* getEnemy() const { return enemy; }
+	Enemy* getEnemy() const { return enemy; }
 	Camera* getCamera() const { return camera; }
 	FontLibrary* getFontLibrary() const { return fontLibrary; }
+
+	void reportVictory() { if (!defeat) victory = true; }
+	void reportDefeat() { if (!victory) defeat = true; }
 
 	void setMap(WorldMap* map) { world->setMap(map); }
 
@@ -38,6 +41,8 @@ private:
 	Manager();
   void loadHero();
   void loadEnemies();
+  int getScore();
+  void checkDeathConditions();
 
 	SDL_Surface* screen;
 	Camera* camera;
@@ -53,6 +58,8 @@ private:
 	Uint32 ticks;
 
 	bool done;
+	int playerScore;
+	bool victory, defeat;
 	static Manager* instance;
 	vector<Sprite*> heroSprites;
 	vector<Sprite*> enemySprites;

@@ -25,6 +25,7 @@ public:
 
 	void setX(int x);
 	void setY(int y);
+	void setScrollRate(float rate) { scrollRate = rate; }
 
 	int getX() const { return cameraX; }
 	int getY() const { return cameraY; }
@@ -58,6 +59,7 @@ private:
 	float cameraY;
 
 	float waveHeight;
+	float scrollRate;
 };
 
 #endif /* CAMERA_H_ */

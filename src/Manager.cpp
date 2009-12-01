@@ -48,7 +48,11 @@ Manager::Manager() {
 		for (unsigned int i = 0; i < enemies.size(); ++i) {
 			world->addEnemy(enemies[i]);
 		}
-		std::cout << "Finished manager constructor" << std::endl;
+
+		victory = false;
+		defeat = false;
+		playerScore = 0;
+
 	} catch (std::string e) {
 		std::cerr << "Initialization exception: " << e << std::endl;
 		exit(1);
@@ -135,6 +139,13 @@ void Manager::loadEnemies() {
 	}
 }
 
+int Manager::getScore() {
+	if (!defeat && !victory) {
+		playerScore += ticks * 0.1;
+	}
+	return playerScore;
+}
+
 void Manager::play() {
 	SDL_Event event;
 	TextWriter writer;
@@ -148,7 +159,6 @@ void Manager::play() {
 	float fireDir = 0.0;
 	unsigned int tick_sum = 0;
 	float frames = 0.0;
-  int score = 0;
 
 	std::stringstream outputStream;
 
@@ -166,14 +176,16 @@ void Manager::play() {
 		tick_sum += ticks;
     fireTimer += ticks;
     hitTimer += ticks;
-    score += (int(ticks * 0.1));
 
 		if (!pause) {
 			camera->snapshot(screen, ticks);
 
+			///////
+			// Write text to the screen
+			///////
 			writer.switchFont(AGENT);
 			writer.switchSize(32);
-			outputStream << score;
+			outputStream << getScore();
 			writer.write(outputStream.str().c_str(), screen, 300, 25);
 			outputStream.str("");
 
@@ -220,7 +232,39 @@ void Manager::play() {
 					&& !player->isFalling())
 				player->decelX();
 		}
-		if (player->isFalling())
+		if (player->isFalling()) {
 			player->decelY();
+		}
+
+		checkDeathConditions();
+
+		if (victory) {
+			// Proceed to the next level?
+			// Display something on screen?
+			std::cout << "You win!" << std::endl;
+		}
+
+		if (defeat) {
+			// Stop the camera movement?
+			// Display something on screen?
+			std::cout << "Sorry, you lose!" << std::endl;
+			camera->setScrollRate(0.0);
+			player->setVisible(false);
+		}
 	}
+}
+
+void Manager::checkDeathConditions() {
+	// Check to see if the player drowned.
+	if (player->getY() > camera->getY() + camera->getHeight()) {
+		reportDefeat();
+	}
+
+	// Check to see if the player has been killed by a monster.
+	for (unsigned int i = 0; i < enemies.size(); ++i) {
+		if (player->collidesWith(enemies[i])) {
+			std::cout << "Ouch!" << std::endl;
+		}
+	}
+
 }

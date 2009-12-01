@@ -7,7 +7,7 @@
 #include "Drawable.h"
 
 Drawable::Drawable() {
-
+	visible = true;
 }
 
 Drawable::~Drawable() {

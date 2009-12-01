@@ -32,6 +32,9 @@ public:
 
   CollisionType collidesWithWorld(float xIncr, float yIncr);
   bool collidesWithWorld(float x, float y, float w, float h, float dx, float dy);
+
+  bool collidesWith(Character* c);
+
   virtual float getX() const { return x; }
   virtual float getY() const { return y; }
   void setX(float nx) { x = nx; }

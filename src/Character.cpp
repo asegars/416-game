@@ -54,14 +54,28 @@ bool Character::collidesWithWorld(float x, float y, float w, float h, float dx, 
 	}
 }
 
+bool Character::collidesWith(Character* c) {
+	if (x > c->getX() &&
+		x < c->getX() + c->getWidth() &&
+		y > c->getY() &&
+		y < c->getY() + c->getHeight()) {
+			return true;
+	}
+
+	if (x + getWidth()  > c->getX() &&
+		x + getWidth()  < c->getX() + c->getWidth() &&
+		y + getHeight() > c->getY() &&
+		y + getHeight() < c->getY() + c->getHeight()) {
+			return true;
+	}
+	return false;
+}
+
 CollisionType Character::checkRectForCollision(float tlx, float tly, float brx, float bry) {
 	WorldMap* map = world->getMap();
 	Terrain** terrain = world->getTerrainArray();
-	CollisionType collision = NO_COLLISION;
 	int numChecks = 8;
 	int cellIndex[numChecks];
-
-//	std::cout << "[" << tlx << ", " << tly << "] - [" << brx << ", " << bry << "]" << std::endl;
 
 	if (map != NULL) {
 		// Check the four corners
@@ -85,54 +99,6 @@ CollisionType Character::checkRectForCollision(float tlx, float tly, float brx, 
 		}
 		return false;
 	}
-		/*
-		if (terrain[cellIndex[0]] != NULL) {
-//			collision = collision | (COLLIDE_LEFT | COLLIDE_TOP);
-//			std::cout << collision << std::endl;
-//			std::cout << "Colliding in TL" << std::endl;
-//			return true;
-		}
-		if (terrain[cellIndex[1]] != NULL) {
-//			collision = collision | (COLLIDE_RIGHT | COLLIDE_TOP);
-//			std::cout << "Colliding in TR" << std::endl;
-//			return true;
-		}
-		if (terrain[cellIndex[2]] != NULL) {
-//			collision = collision | (COLLIDE_BOTTOM | COLLIDE_LEFT);
-//			std::cout << collision << std::endl;
-//			std::cout << "Colliding in BL" << std::endl;
-//			return true;
-		}
-		if (terrain[cellIndex[3]] != NULL) {
-//			collision = collision | (COLLIDE_RIGHT | COLLIDE_BOTTOM);
-//			std::cout << "Colliding in BR" << std::endl;
-//			return true;
-		}
-		if (terrain[cellIndex[4]] != NULL) {
-			collision = collision | COLLIDE_LEFT;
-//			std::cout << collision << std::endl;
-//			std::cout << "Colliding in ML" << std::endl;
-//			return true;
-		}
-		if (terrain[cellIndex[5]] != NULL) {
-			collision = collision | COLLIDE_TOP;
-//			std::cout << "Colliding in MT" << std::endl;
-//			return true;
-		}
-		if (terrain[cellIndex[6]] != NULL) {
-			collision = collision | COLLIDE_RIGHT;
-//			std::cout << "Colliding in MR" << std::endl;
-//			return true;
-		}
-		if (terrain[cellIndex[7]] != NULL) {
-			collision = collision | COLLIDE_BOTTOM;
-//			std::cout << "Colliding in MB" << std::endl;
-//			return true;
-		}
-
-		return collision;
-		*/
-//		return (collision != NO_COLLISION) ? true : false;
 	else {
 		throw std::string("No map defined for the game world!");
 		return false;
@@ -149,13 +115,7 @@ CollisionType Character::collidesWithWorld(float xIncr, float yIncr) {
 	brx = tlx + getWidth();
 	bry = tly + getHeight();
 
-	// If moving right, add the width of the character
-//	if (xIncr > 0) { newX += getWidth(); }
-	// If falling down, add the height of the character
-//	if (yIncr > 0) { newY += getHeight(); }
-
 	return checkRectForCollision(tlx, tly, brx, bry);
-//	return checkLocationForCollision(newX, newY);
 }
 
 void Character::updatePosition(Uint32 ticks) {
