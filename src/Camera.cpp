@@ -25,6 +25,7 @@ Camera::Camera(World* world, Background* back, unsigned int width,
 	delayScroll = 0;
 	waveHeight = 0;
 	scrollRate = .02;
+	alpha = 255;
 
 	tracker = NULL;
 
@@ -96,6 +97,7 @@ bool Camera::isVisible(SDL_Rect& boundingBox) {
 
 void Camera::blitWorld(SDL_Surface* screen) {
 	SDL_Rect srcBounds, destBounds;
+
 	// Blit the world
 	Sprite* worldSprite = world->getSprite();
 	srcBounds.x = cameraX / 2.0;
@@ -137,7 +139,6 @@ void Camera::blitDrawables(SDL_Surface* screen, unsigned int ticks) {
   std::stringstream outputStream;
 
   std::list<Drawable *> drawables = world->getDrawables();
-  //std::cout << drawables.size() << std::endl;
 
   unsigned int playerCount = 0;
 	// Blit each drawable figure onto the world.

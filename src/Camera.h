@@ -29,6 +29,7 @@ public:
 
 	int getX() const { return cameraX; }
 	int getY() const { return cameraY; }
+	float getScrollRate() { return scrollRate; }
 
 	void snapshot(SDL_Surface* screen, Uint32 ticks);
 	void setScrollDelay(unsigned int ticks) { delayScroll = ticks; }
@@ -60,6 +61,7 @@ private:
 
 	float waveHeight;
 	float scrollRate;
+	float alpha;
 };
 
 #endif /* CAMERA_H_ */

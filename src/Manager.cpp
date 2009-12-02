@@ -5,16 +5,21 @@
  */
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
+
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <time.h>
+
+#include <ctime>
+#include <cmath>
+
 #include "Manager.h"
 #include "FontLibrary.h"
 #include "terrain/SolidTerrain.h"
 #include "resources/SoundManager.h"
 #include "resources/GraphicManager.h"
 #include "TextWriter.h"
+#include "Target.h"
 
 #define WORLD_WIDTH 	640
 #define WORLD_HEIGHT 	480
@@ -32,6 +37,7 @@ Manager::Manager() {
 		if (screen == NULL) {
 			throw std::string("Unable to set video mode!");
 		}
+		SDL_WM_SetCaption("Rising Tide", NULL);
 
 		srand(time(NULL));
 		world = new World("waterfall.bmp");
@@ -52,7 +58,12 @@ Manager::Manager() {
 		victory = false;
 		defeat = false;
 		playerScore = 0;
-    health = 100;
+		victorySprite = new Sprite("victory.bmp");
+		defeatSprite = new Sprite("defeat.bmp");
+		target = new Target();
+		world->addDrawable(target);
+		health = 100;
+		overlayAlpha = 0;
 
 	} catch (std::string e) {
 		std::cerr << "Initialization exception: " << e << std::endl;
@@ -149,6 +160,7 @@ int Manager::getScore() {
 	if (!defeat && !victory) {
 		playerScore += ticks * 0.1;
 	}
+
 	return playerScore;
 }
 
@@ -159,7 +171,6 @@ void Manager::play() {
 	Uint32 start_ticks = cur_ticks;
 
 	done = false;
-  stopped = false;
 	bool pause = false;
   float hitTimer = 0.0;
 	float fireTimer = 1000.0;
@@ -190,6 +201,7 @@ void Manager::play() {
 			///////
 			// Write text to the screen
 			///////
+			writer.switchColor(0, 0, 0);
 			writer.switchFont(AGENT);
 			writer.switchSize(32);
 			outputStream << getScore();
@@ -207,12 +219,58 @@ void Manager::play() {
 			writer.write(outputStream.str().c_str(), screen, 485, 35);
 			outputStream.str("");
 
-      if(frames / ((cur_ticks - start_ticks) * .001) < 50)
-        player->setJump(300);
-      else if(frames / ((cur_ticks - start_ticks) * .001) >  100)
-        player->setJump(600);
-      else
-        player->setJump(450);
+			// Blit the victory screen on top.
+			if (victory) {
+				overlayAlpha = (overlayAlpha < 254) ? overlayAlpha + 2 : 255;
+				SDL_SetAlpha(victorySprite->getSurface(), SDL_SRCALPHA, overlayAlpha);
+
+				// copy the entire sprite
+				SDL_BlitSurface(victorySprite->getSurface(), NULL, screen, NULL);
+
+				writer.switchFont(FREE_SANS);
+				writer.switchSize(16);
+				writer.switchColor(255, 255, 255);
+				// Print the runtime & new framerate
+				outputStream << "Final Score ";
+				writer.write(outputStream.str().c_str(), screen, 257, 413);
+				outputStream.str("");
+
+				writer.switchFont(AGENT);
+				writer.switchSize(32);
+				writer.switchColor(255, 255, 255);
+				outputStream << getScore();
+				writer.write(outputStream.str().c_str(), screen, 237, 438);
+				outputStream.str("");
+			}
+			// Blit the defeat screen on top.
+			else if (defeat) {
+				overlayAlpha = (overlayAlpha < 254) ? overlayAlpha + 2 : 255;
+				SDL_SetAlpha(defeatSprite->getSurface(), SDL_SRCALPHA, round(overlayAlpha));
+
+				SDL_BlitSurface(defeatSprite->getSurface(), NULL, screen, NULL);
+
+				writer.switchFont(FREE_SANS);
+				writer.switchSize(16);
+				writer.switchColor(255, 255, 255);
+				// Print the runtime & new framerate
+				outputStream << "Final Score ";
+				writer.write(outputStream.str().c_str(), screen, 442, 346);
+				outputStream.str("");
+
+				writer.switchFont(AGENT);
+				writer.switchSize(32);
+				writer.switchColor(255, 255, 255);
+				outputStream << getScore();
+				writer.write(outputStream.str().c_str(), screen, 432, 376);
+				outputStream.str("");
+			}
+
+			if(frames / ((cur_ticks - start_ticks) * .001) < 50)
+				player->setJump(300);
+			else if(frames / ((cur_ticks - start_ticks) * .001) >  100)
+				player->setJump(600);
+			else
+				player->setJump(450);
 		}
 
 		SDL_Flip(screen);
@@ -250,24 +308,32 @@ void Manager::play() {
 			player->decelY();
 		}
 
-    if(!defeat)
-		  checkDeathConditions();
-
-		if (victory && !stopped) {
+		if (victory && fabs(camera->getScrollRate()) > .0001) {
 			// Proceed to the next level?
 			// Display something on screen?
 			std::cout << "You win!" << std::endl;
-      stopped = true;
-		}
+			camera->setScrollRate(0.0);
 
-		if (defeat && !stopped) {
+			incrPlayerScore(10000);
+		}
+		else if (defeat && fabs(camera->getScrollRate()) > .0001) {
 			// Stop the camera movement?
 			// Display something on screen?
 			std::cout << "Sorry, you lose!" << std::endl;
 			camera->setScrollRate(0.0);
 			player->setVisible(false);
-      stopped = true;
 		}
+		else if (fabs(camera->getScrollRate()) > .0001) {
+			checkDeathConditions();
+			checkVictoryConditions();
+		}
+	}
+}
+
+void Manager::checkVictoryConditions() {
+	if (player->collidesWith(target)) {
+		std::cout << "You have reached the life boat!" << std::endl;
+		reportVictory();
 	}
 }
 
@@ -282,14 +348,14 @@ void Manager::checkDeathConditions() {
   if (world->playerCollision()) {
     if(health > 0)
       health -= 2;
-	  std::cout << "You've been mauled!  Remaining Health: " << health 
-      << std::endl;
+	  std::cout << "You've been mauled!  Remaining Health: " << health;
+      std::cout << std::endl;
     playerScore -= 10;
   }
 
   if(health <= 0) {
+	std::cout << "You've been killed..." << std::endl;
     reportDefeat();
-    std::cout << "You've been killed..." << std::endl;
   }
 
 }

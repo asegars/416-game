@@ -11,7 +11,6 @@
 GraphicManager* GraphicManager::manager = NULL;
 
 GraphicManager::GraphicManager() {
-	std::cout << "Instantiating GraphicManager" << std::endl;
 	baseDir = "images/";
 }
 

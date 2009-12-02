@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include "FontLibrary.h"
 #include "Background.h"
+#include "Target.h"
 
 #ifndef MANAGER_H_
 #define MANAGER_H_
@@ -31,6 +32,7 @@ public:
 	Enemy* getEnemy() const { return enemy; }
 	Camera* getCamera() const { return camera; }
 	FontLibrary* getFontLibrary() const { return fontLibrary; }
+	Target* getTarget() { return target; }
 
 	void reportVictory() { if (!defeat) victory = true; }
 	void reportDefeat() { if (!victory) defeat = true; }
@@ -43,12 +45,14 @@ private:
   void loadEnemies();
   int getScore();
   void checkDeathConditions();
+  void checkVictoryConditions();
 
 	SDL_Surface* screen;
 	Camera* camera;
 	World* world;
 	Background* background;
 	Player* player;
+	Target* target;
 	Enemy* enemy;
 	vector<Enemy*> enemies;
 	FontLibrary* fontLibrary;
@@ -57,13 +61,18 @@ private:
 	Uint32 prev_ticks;
 	Uint32 ticks;
 
-	bool done, stopped;
+	bool done;
 	int playerScore;
   int health;
 	bool victory, defeat;
+	int overlayAlpha;
 	static Manager* instance;
 	vector<Sprite*> heroSprites;
 	vector<Sprite*> enemySprites;
+
+	// Special mode sprites
+	Sprite* victorySprite;
+	Sprite* defeatSprite;
 };
 
 #endif /* MANAGER_H_ */

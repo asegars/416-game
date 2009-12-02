@@ -9,6 +9,7 @@
 #include <sstream>
 #include "Terrain.h"
 #include "SolidTerrain.h"
+#include "../Manager.h"
 #include "MapReader.h"
 #include "WorldMap.h"
 
@@ -46,9 +47,17 @@ WorldMap* MapReader::readMap(std::string filename) {
 		// Loop through each column of the map
 		for (int width = 0; width < cellWidth; ++width) {
 			infile >> nextTileVal;
-			Terrain * nextTileType = getTileType(nextTileVal);
-			if (nextTileType != NULL) {
-				map->setCell(width, height, nextTileType);
+
+			// Special case -- victory condition
+			if (nextTileVal == 2) {
+				Manager::getInstance()->getTarget()->setLocation(width * Terrain::getSize(), height * Terrain::getSize());
+			}
+			// All other cases.
+			else {
+				Terrain * nextTileType = getTileType(nextTileVal);
+				if (nextTileType != NULL) {
+					map->setCell(width, height, nextTileType);
+				}
 			}
 		}
 		lineStream.str("");
