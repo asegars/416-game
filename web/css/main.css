@@ -1,0 +1,89 @@
+
+body {
+	width: 720px;
+	margin: 0 auto;
+	margin-top: 10px;
+	
+	font-family: Helvetica, sans-serif;
+	
+	background-image: url('../images/water-bg.jpg');
+}
+
+div#nav a {
+	color: white;	
+}
+
+div p {
+	font-size: 12px;
+	padding: 0px;
+	margin: 3px;
+}
+
+div h2 {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+}
+
+div h3 {
+	font-size: 12px;
+}
+
+div {
+	border: 1px solid black;
+	width: 100%;
+	-moz-border-radius: 10px;
+	margin: 3px;
+	background-color: white;
+}
+
+div.container {
+	display: inline;
+}
+
+div#header {
+	height: 180px;
+	background-image:url('../images/wave.png');
+}
+
+div#nav {
+	height: 50px;
+	background-color: black;
+	text-align: center;
+}
+
+div#news {
+	float: left;
+	width: 22%;
+	padding: 1%;
+}
+
+div#content {
+	float: left;
+	width: 71%;
+	padding: 1%;
+}
+
+div#content img {
+	margin: 8px;
+}
+
+div#content ul {
+	padding-left: 2.5em;
+}
+
+div#content li {
+	font-size: 12px;
+}
+
+div#footer {
+	clear: both;
+	text-align: center;
+}
+
+/* From http://css.maxdesign.com.au/listamatic/horizontal01.htm */
+#navlist li {
+	display: inline;
+	list-style-type: none;
+	padding-right: 20px;
+}
