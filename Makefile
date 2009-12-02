@@ -1,6 +1,6 @@
 # Change the following values to suit your system.
 
-CFLAGS=`sdl-config --cflags` -W -Wall -ggdb -O0 -pg
+CFLAGS=`sdl-config --cflags` -W -Wall -ggdb -O3 -pg
 SDL_LIB=`sdl-config --libs` -lSDL_ttf -lSDL_image -lSDL_mixer
 CCC=g++
 
@@ -9,8 +9,10 @@ EXECUTABLE = run
 CPP_FILES = src/*.cpp src/*/*.cpp
 
 all:
-	rm -f build/latest.zip
-	rm -f web/download/latest.zip
+	rm -rf build/
+	rm -rf web/download/
+	mkdir build
+	mkdir web/download/
 	zip -r latest.zip *
 	cp latest.zip web/download/latest.zip
 	mv latest.zip build/latest.zip
@@ -18,6 +20,7 @@ all:
 	
 
 clean:
+	rm -f gmon.out
 	rm -f $(EXECUTABLE)
 	rm -f src/*~
 	rm -f build/latest.zip

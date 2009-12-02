@@ -1,17 +1,20 @@
 Tim Curtis & Luke Segars
 November 16, 2009
 
-Platform Jumper
+Rising Tide
+
+=*= For the most up-to-date and complete information, please see the game's website. =*=
 
 ** Build & Execution Instructions **
 To use this application, first type 'make' and then './run'.  The application will require
-libSDL, libSDL_ttf, libSDL_mixer and libSDL_image to build.
+libSDL, libSDL_ttf, libSDL_mixer and libSDL_image to build.  A zip of the source will also
+be assembled and stored in build/ and web/download/.
 
 ** Goal **
 Control the player with the arrow keys.  You can jump with the up key and shoot with 
 the space bar.  Explore around the world, watching out for the monsters.  After about
 ten seconds the camera will start to scroll upward and player will have to jump from 
-platform to platform.
+platform to platform to avoid the impending flood
 
 ** Extra Features **
 Maps can be loaded from files (examples in maps/ subdirectory).  The map to load can be
@@ -21,8 +24,3 @@ not be specified as part of the parameter.
 	
 Memory manager classes have been implemented to optimize the loading of resources (currently
 sound and images).  
-
-Frame rate has been increase by ~20 fps on my (Luke's) laptop and desktop.
-
-** Known Flaws **
-- Collision detection with terrain is still shaky.
