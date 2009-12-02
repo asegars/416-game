@@ -24,7 +24,7 @@ public:
 
 	void setX(float nx) { x = nx; }
 	void setY(float ny) { y = ny; }
-	void setLocation(float nx, float ny) { std::cout << "Updating boat location." << std::endl; setX(nx); setY(ny); }
+	void setLocation(float nx, float ny) { setX(nx); setY(ny); }
 
 	virtual Sprite* getSprite() const;
 	virtual void updatePosition(Uint32 ticks);

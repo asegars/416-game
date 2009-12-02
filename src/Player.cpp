@@ -110,12 +110,6 @@ void Player::updatePosition(Uint32 ticks) {
 		}
 		// Otherwise, you're hitting a wall.
 		else {
-//			x -= xIncr / 4;
-//			x = (round(x / world->getMap()->getCellWidth()) + 1) * world->getMap()->getCellWidth();
-//			x -= getWidth() / 2;
-//			x-= 15;
-//			xSpeed = (abs(xSpeed - 1) >= 0) ? xSpeed - 1 : 0;
-//			xSpeed = 0;
 			xSpeed = (falling) ? xSpeed * .1 : 0;
 		}
 
@@ -128,6 +122,7 @@ void Player::updatePosition(Uint32 ticks) {
 			// Upwards "falling" indicates that a ceiling has been hit.
 			else {
 				ySpeed = -(ySpeed / 2);
+				falling = true;
 			}
 		}
 	}
