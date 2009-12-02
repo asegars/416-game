@@ -121,7 +121,7 @@ void Player::updatePosition(Uint32 ticks) {
 			}
 			// Upwards "falling" indicates that a ceiling has been hit.
 			else {
-				ySpeed = -(ySpeed / 2);
+				ySpeed = 50;
 				falling = true;
 			}
 		}

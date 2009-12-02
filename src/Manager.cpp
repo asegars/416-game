@@ -108,6 +108,15 @@ Manager::~Manager() {
 		if (enemies.at(k) != NULL)
 			delete enemies.at(k);
 	}
+
+	if (victorySprite != NULL) {
+		delete victorySprite;
+	}
+
+	if (defeatSprite != NULL) {
+		delete defeatSprite;
+	}
+
 	SDL_Quit();
 }
 
