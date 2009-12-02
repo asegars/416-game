@@ -15,5 +15,6 @@ void ExplodingCharacter::updatePosition(Uint32 ticks) {
   float xincr = xSpeed * static_cast<float>(ticks) * 0.001;
   x -= xincr;
   distance += (fabs(xincr) + fabs(yincr));
-  if (distance > MAX_DISTANCE) tooFar = true;
+  if (distance > MAX_DISTANCE)
+    world->removeDrawable(this);
 }

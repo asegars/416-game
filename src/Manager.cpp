@@ -209,6 +209,8 @@ void Manager::play() {
 
       if(frames / ((cur_ticks - start_ticks) * .001) < 50)
         player->setJump(300);
+      else if(frames / ((cur_ticks - start_ticks) * .001) >  100)
+        player->setJump(600);
       else
         player->setJump(450);
 		}

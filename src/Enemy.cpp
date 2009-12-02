@@ -41,7 +41,7 @@ void Enemy::setSprites(vector<Sprite*> &s) {
 }
 
 void Enemy::updatePosition(Uint32 ticks) {
-	float width = static_cast<float> (sprites.at(curSprite)->getWidth());
+	// float width = static_cast<float> (sprites.at(curSprite)->getWidth());
 	// Cap the player's motion if they are trying to move off of the
 	//   left border of the world.
 	if (x <= player->getX()) {

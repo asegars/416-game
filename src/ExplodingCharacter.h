@@ -9,18 +9,21 @@
 #define EXPLODINGCHARACTER_H_
 
 #include "Character.h"
+#include "World.h"
 
 const int MAX_DISTANCE = 200;
 
 class ExplodingCharacter : public Character {
 public:
-	ExplodingCharacter(float nx, float ny, float sX, float sY, Sprite *s) {
+	ExplodingCharacter(float nx, float ny, float sX, float sY, Sprite *s, 
+      World *w) {
     setX(nx);
     setY(ny);
     setXSpeed(sX);
     setYSpeed(sY);
     distance = 0;
     tooFar = false;
+    world = w;
     sprites.push_back(s);
   }
 	virtual ~ExplodingCharacter() {}
@@ -38,6 +41,7 @@ public:
 private:
   float distance;
   bool tooFar;
+  World* world;
 };
 
 #endif /* EXPLODINGCHARACTER_H_ */

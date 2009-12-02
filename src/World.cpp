@@ -70,12 +70,12 @@ void World::removeDrawable(Drawable* d) {
 
 void World::addExplodable(Explodable* e) {
 	dying.push_back(e);
-  drawables.push_back(e);
+  //drawables.push_back(e);
 }
 
 void World::removeExplodable(Explodable* e) {
 	dying.remove(e);
-  drawables.remove(e);
+  //drawables.remove(e);
 }
 
 bool World::playerCollision() {

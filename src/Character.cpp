@@ -130,7 +130,7 @@ void Character::updatePosition(Uint32 ticks) {
 void Character::explode() {
 	if (world == NULL) world = Manager::getInstance()->getWorld();
 
-  world->addExplodable(new Explodable(sprites.at(curSprite)));
+  world->addExplodable(new Explodable(x, y, sprites.at(curSprite), world));
 
 	// TODO: Get rid of the dynamic_cast
 	Enemy* e_ptr = dynamic_cast<Enemy *>(this);

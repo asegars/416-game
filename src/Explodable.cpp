@@ -6,27 +6,32 @@
  */
 
 #include "Explodable.h"
+#include "World.h"
 
 const int EXPLOSION_SPEED = 200;
 
-Explodable::Explodable(Sprite *s) {
+Explodable::Explodable(int xLoc, int yLoc, Sprite* s, World* w) : world(w){
+  setX(xLoc);
+  setY(yLoc);
   sprites.push_back(s);
   curSprite = 0;
+  makeChunks(CHUNKS);
 }
 
 Explodable::~Explodable() {
-	chunks.clear();
+	//chunks.clear();
 }
 
 void Explodable::updatePosition(Uint32 ticks) { 
-  std::vector<ExplodingCharacter>::iterator ptr = chunks.begin();
+  /*std::vector<ExplodingCharacter>::iterator ptr = chunks.begin();
   while (ptr != chunks.end()) {
     ptr->updatePosition(ticks);
     if (ptr->goneTooFar()) {
+      world->removeDrawable(&(*ptr));
       ptr = chunks.erase(ptr);
     }   
     else ++ptr;
-  }
+  }*/
 }
 
 void Explodable::makeChunks(unsigned int n) { 
@@ -38,14 +43,16 @@ void Explodable::makeChunks(unsigned int n) {
     for (unsigned int j = 0; j < n; ++j) {
       float speed_x = (rand() % EXPLOSION_SPEED + 40) * (rand()%2?-1:1); 
       float speed_y = (rand() % EXPLOSION_SPEED + 40) * (rand()%2?-1:1); 
-      ExplodingCharacter c(
+      world->addDrawable(new ExplodingCharacter(
                 getX()+i*chunk_width,  // x coord of destination 
                 getY()+j*chunk_height, // y coord of destination
                 speed_x, speed_y, new Sprite(
                 source_x+i*chunk_width, 
                 source_y+j*chunk_height,
-                chunk_width, chunk_height, sprites.at(0)->getSurface()));
-      chunks.push_back(c);
+                chunk_width, chunk_height, sprites.at(0)->getSurface()),
+                world));
+      // chunks.push_back(c);
+      // world->addDrawable(&c);
     }
   }
 }
