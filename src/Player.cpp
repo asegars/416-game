@@ -102,6 +102,10 @@ void Player::updatePosition(Uint32 ticks) {
 	if (collision == NO_COLLISION) {
 		x += xIncr;
 		y += yIncr;
+
+		if (yIncr > 0) {
+			falling = true;
+		}
 	}
 	else {
 		// If the player can freely move in the xIncr direction, move.
