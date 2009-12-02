@@ -10,10 +10,20 @@
 		<script type="text/javascript" src="content/download.js"></script>
 		<script type="text/javascript" src="content/about.js"></script>
 		
-		<script language="JavaScript">
-			function updateContent(newContent) {
-				document.getElementById("content").innerHTML = newContent;
-			}
+		<script type='text/javascript' src='https://media.dreamhost.com/mp4/swfobject.js'></script>
+		<script type='text/javascript'>
+		function loadPlayer() {
+			var swf = new SWFObject("https://media.dreamhost.com/mp4/player.swf", "mpl", "480", "380", 8);
+			swf.addParam("allowfullscreen", "true");
+			swf.addParam("allowscriptaccess", "always");
+			swf.addVariable("file", "http://www.lukesegars.com/rtide/media/video_480x360.flv");
+			swf.addVariable("image", "http://www.lukesegars.com/rtide/media/video_480x360.jpeg");
+			swf.write("v170");
+		}
+
+		function updateContent(newContent) {
+			document.getElementById("content").innerHTML = newContent;
+		}
 		</script>
 	</head>
 	
